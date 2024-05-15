@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = F, error = F, message = F, comment=
 ```
 
 
-# Location quotients and proportion plots in ONS 'GVA by industry by ITL region' data
+# Location quotients and proportion plots in ONS 'GVA by industry by ITL region' data 
 
 The ONS produces an [Excel document](https://www.ons.gov.uk/economy/grossvalueaddedgva/datasets/nominalandrealregionalgrossvalueaddedbalancedbyindustry) with GVA data at three different geographical scales, ITL1 to ITL3. Wikipedia has an [excellent explanation with maps](https://en.wikipedia.org/wiki/International_Territorial_Level) of the ITL regions.
 
