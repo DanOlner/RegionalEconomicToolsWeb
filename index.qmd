@@ -1,0 +1,11 @@
+---
+title: "UK Regional Economics tools and analysis"
+---
+
+# OPEN DATA AND METHODS FOR UK REGIONAL ECONOMIC ANALYSIS
+
+* This repository contains code and methods for analysing UK regional economics, mainly from ONS and NOMIS sources.
+* I'm continuing to add more sections over time. [This page]() illustrates how to analyse GVA data to produce location quotients, a discussion of what LQs don't show and proportion plots to solve that problem. (p.s. the best explanation of LQs I've found is in the notes to [this ONS excel sheet](https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locationquotientdataandindustrialspecialisationforlocalauthorities) on industrial specialisation.) [This page](gdp_gaps.html) looks at GVA/GDP gaps between places in the UK.
+* The original code is also [available here](https://github.com/DanOlner/ukcompare), though that repo isn't designed for public consumption.
+* This project was funded by [Y-PERN](https://y-pern.org.uk/) and supported SYMCA's [Plan for Good Growth](https://www.southyorkshire-ca.gov.uk/business/plan-for-good-growth) and [Skills Strategy](https://www.southyorkshire-ca.gov.uk/business/skills-strategy) 2024.
+* Any questions, please do get in touch via the issues tab or email: danolner at gmail dot com or d dot olner at sheffield.ac.uk.

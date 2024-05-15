@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>RegionalEcons_web - UK sectors: LQs &amp; proportion plots</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">RegionalEcons_web</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools ms-auto">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./sector_locationquotients_and_proportions.html">Sectors</a></li><li class="breadcrumb-item"><a href="./sector_locationquotients_and_proportions.html">UK sectors: LQs &amp; proportion plots</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">GDP and GVA</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gdp_gaps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">GDP regional gaps in the UK</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Sectors</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sector_locationquotients_and_proportions.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">UK sectors: LQs &amp; proportion plots</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#location-quotients-and-proportion-plots-in-ons-gva-by-industry-by-itl-region-data" id="toc-location-quotients-and-proportion-plots-in-ons-gva-by-industry-by-itl-region-data" class="nav-link active" data-scroll-target="#location-quotients-and-proportion-plots-in-ons-gva-by-industry-by-itl-region-data">Location quotients and proportion plots in ONS ‘GVA by industry by ITL region’ data</a>
+  <ul class="collapse">
+  <li><a href="#loading-in-data-and-finding-location-quotients" id="toc-loading-in-data-and-finding-location-quotients" class="nav-link" data-scroll-target="#loading-in-data-and-finding-location-quotients">Loading in data and finding location quotients</a></li>
+  <li><a href="#lq-change-and-growth-over-time" id="toc-lq-change-and-growth-over-time" class="nav-link" data-scroll-target="#lq-change-and-growth-over-time">LQ change and growth over time</a></li>
+  <li><a href="#looking-at-trends" id="toc-looking-at-trends" class="nav-link" data-scroll-target="#looking-at-trends">Looking at trends</a></li>
+  <li><a href="#d-location-quotient-plots" id="toc-d-location-quotient-plots" class="nav-link" data-scroll-target="#d-location-quotient-plots">2D location quotient plots</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">UK sectors: LQs &amp; proportion plots</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="location-quotients-and-proportion-plots-in-ons-gva-by-industry-by-itl-region-data" class="level1">
+<h1>Location quotients and proportion plots in ONS ‘GVA by industry by ITL region’ data</h1>
+<p>The ONS produces an <a href="https://www.ons.gov.uk/economy/grossvalueaddedgva/datasets/nominalandrealregionalgrossvalueaddedbalancedbyindustry">Excel document</a> with GVA data at three different geographical scales, ITL1 to ITL3. Wikipedia has an <a href="https://en.wikipedia.org/wiki/International_Territorial_Level">excellent explanation with maps</a> of the ITL regions.</p>
+<p>IT2 level data includes several zones that match existing mayoral authorities. ITL3 data has zones matching <strong>local</strong> authorities - but neither perfectly. Some are grouped. For example, ITL3 zones in South Yorkshire separate Sheffield from the other three local authorities in South Yorkshire grouped into one zone (Rotherham, Barnsley, Doncaster).</p>
+<p>Here, we’ll explore some ways to analyse this data using R. The data has been processed to make it more useable in R - see the <a href="process_from_excel.R">process_from_excel.R</a> script and its comments for an explanation of how to get from the Excel sheet to the datasets used here. All of the derived files (and the original ONS excel sheet downloaded from the above page, current version dated 25th April 2023) are included in this repository in the <a href="data">data folder</a>.</p>
+<p>We’ll look at the <strong>current prices</strong> data, not the chained volume data. We’ll be making <strong>location quotients</strong>, which require being able to sum different regions in different ways; chained volume measures can’t be summed. Current price data (prices at the time point of the data) can’t be used to measure nominal growth as it’s not inflation adjusted, but as long as we’re working with proportional change over time (which as we’ll see, LQs are), they’re fine.</p>
+<p><strong>The code is available in a single script in the <a href="GVAcode.R">GVAcode.R file</a>.</strong></p>
+<section id="loading-in-data-and-finding-location-quotients" class="level2">
+<h2 class="anchored" data-anchor-id="loading-in-data-and-finding-location-quotients">Loading in data and finding location quotients</h2>
+<p>First, load the libraries we’ll be using, and get the ITL2 level data. (If you haven’t already, install the libraries/packages with e.g.&nbsp;<code>install.packages("tidyverse")</code> before loading here.) Also, load some functions that include an LQ function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(zoo)<span class="co">#For moving average function</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)<span class="co">#For self-adjusting plot labels</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">'functions/misc_functions.R'</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">99</span>)<span class="co">#Avoids scientific notation</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>itl2.cp <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'data/ITL2currentprices_long.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this dataframe, we have: ITL2 regions, SIC sectors and year - ranging from 1998 to 2021 in the current data - and finally the current price GVA value.</p>
+<p>Then we’ll find the <strong>location quotients</strong> for the whole dataset. The <a href="https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locationquotientdataandindustrialspecialisationforlocalauthorities">Excel sheet here</a> from the ONS has an excellent explanation of location quotients in its notes, I won’t repeat all of that here. But a quick word on what the location quotient is showing for this data:</p>
+<ul>
+<li>The location quotient gives a <strong>measure of concentration</strong> for sectors (both within regions and across them, see below) when compared to a larger geography (the UK in this case).</li>
+<li>The LQ is found easily: it’s the ratio of two ratios - the proportion of a sector in region x, over the proportion of that sector in the UK as a whole.</li>
+<li>If the LQ &gt; 1, that industry is <em>relatively more concentrated</em> in the region, compared to the UK.</li>
+<li>If the LQ &lt; 1, that industry is <em>relatively less concentrated</em> in the region, compared to the UK.</li>
+<li>We’re looking at raw GVA values here - the total GVA value of a particular sector in a region tells us something about that region’s economic structure. But it can’t directly be used to say anything definitive about productivity, since we don’t know e.g.&nbsp;if that GVA value is due to high productivity workers, or just a very large but lower productivity sector.</li>
+<li>LQs are good for getting a structural overview, but their biggest weakness is that a regional sector can be <em>proportionally larger</em> than the UK, but itself quite small. So a region’s top LQ sector may still be a tiny part of its overall economy. We’ll look at a way to overcome that weakness below.</li>
+<li>As the <a href="https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locationquotientdataandindustrialspecialisationforlocalauthorities">ONS Excel sheet on LQs</a> make really clear, because (A/B)/(C/D) is equivalent to (A/C)/(B/D), the LQ actually captures two related ways of seeing the same thing: how relatively concentrated sectors are <em>across a whole geography</em> like the UK, and how concentrated <em>within a subgeography</em> like South Yorkshire they are. (See the table in the ONS document - numbers which can be read either across geographies or across sectors.)</li>
+</ul>
+<p>The LQ function takes in a dataframe, the name of the region column, the name of the sector column and the name of the value column to find the LQ for. It returns the same dataframe with the LQ and region and total proportions added (we’ll need those proportions later), as well the LQ logged, which will help with plotting (as the log makes plus/minus 1 values symmetric).</p>
+<p>First, here’s the function working on a single year in the data, to illustrate what the function takes in.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>lq1998 <span class="ot">&lt;-</span> <span class="fu">add_location_quotient_and_proportions</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">df =</span> itl2.cp <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">1998</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">regionvar =</span> ITL_region_name,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">lq_var =</span> SIC07_description,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">valuevar =</span> value</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s repeat that for all years and replace the original dataframe with the result.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>itl2.cp <span class="ot">&lt;-</span> itl2.cp <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">split</span>(.<span class="sc">$</span>year) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(add_location_quotient_and_proportions, </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">regionvar =</span> ITL_region_name,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">lq_var =</span> SIC07_description,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">valuevar =</span> value) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Taking a quick look at the resulting LQs, this is <strong>top ten LQ sectors for South Yorkshire</strong>, showing which sectors have relatively larger proportions of GVA in South Yorkshire compared to the UK as a whole.</p>
+<p>Note we can see the point made above about <em>relative</em> LQ concentration not capturing actual scale. ‘Manufacture of basic metals’ has 5 times the GVA concentration of the UK as a whole, but its regional percent of GVA is only 1.28%. This is reflecting that this sector is generally small everywhere, just larger in South Yorkshire. Contrast with ‘Education’ - still a higher relative proportion than the UK with an LQ of 1.7, but it’s actually nearly 11% of South Yorkshire’s GVA.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>itl2.cp <span class="sc">%&gt;%</span> <span class="fu">filter</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  ITL_region_name <span class="sc">==</span> <span class="st">'South Yorkshire'</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  year <span class="sc">==</span> <span class="dv">2021</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">regional_percent =</span> sector_regional_proportion <span class="sc">*</span><span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(SIC07_description,regional_percent, LQ) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>LQ) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   SIC07_description                                  regional_percent    LQ
+   &lt;chr&gt;                                                         &lt;dbl&gt; &lt;dbl&gt;
+ 1 Manufacture of basic metals                                   1.28   5.14
+ 2 Manufacture of furniture                                      0.780  3.17
+ 3 Manufacture of fabricated metal products                      2.21   2.79
+ 4 Other manufacturing                                           0.694  2.53
+ 5 Manufacture of other non-metallic mineral products            0.835  2.39
+ 6 Manufacture of rubber and plastic products                    1.02   2.39
+ 7 Manufacture of electrical equipment                           0.576  1.95
+ 8 Motor trades                                                  2.52   1.80
+ 9 Education                                                    10.8    1.70
+10 Telecommunications                                            2.69   1.64</code></pre>
+</div>
+</div>
+<p>Repeating that for Greater Manchester, where none of the LQ top ten are especially large percentages of its GVA:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>itl2.cp <span class="sc">%&gt;%</span> <span class="fu">filter</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  ITL_region_name <span class="sc">==</span> <span class="st">'Greater Manchester'</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  year <span class="sc">==</span> <span class="dv">2021</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">regional_percent =</span> sector_regional_proportion <span class="sc">*</span><span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(SIC07_description,regional_percent, LQ) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>LQ) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   SIC07_description                                     regional_percent    LQ
+   &lt;chr&gt;                                                            &lt;dbl&gt; &lt;dbl&gt;
+ 1 Manufacture of textiles                                          0.732  3.47
+ 2 Sports, amusement and recreation activities                      0.979  1.71
+ 3 Warehousing and transport support activities                     2.11   1.64
+ 4 Manufacture of rubber and plastic products                       0.687  1.61
+ 5 Travel agency and tour operator activities                       0.528  1.59
+ 6 Office administration and business support activities            1.85   1.50
+ 7 Manufacture of food products                                     1.62   1.47
+ 8 Manufacture of wood and paper products                           0.573  1.38
+ 9 Repair of computers, personal and household goods                0.162  1.33
+10 Telecommunications                                               2.16   1.32</code></pre>
+</div>
+</div>
+<p>Liverpool City Region has three public-sector-heavy SICs in its LQ top ten:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>itl2.cp <span class="sc">%&gt;%</span> <span class="fu">filter</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  ITL_region_name <span class="sc">==</span> <span class="st">'Merseyside'</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  year <span class="sc">==</span> <span class="dv">2021</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">regional_percent =</span> sector_regional_proportion <span class="sc">*</span><span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(SIC07_description,regional_percent, LQ) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>LQ) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   SIC07_description                                      regional_percent    LQ
+   &lt;chr&gt;                                                             &lt;dbl&gt; &lt;dbl&gt;
+ 1 Manufacture of motor vehicles                                     1.96   2.89
+ 2 Manufacture of petroleum, chemicals and pharmaceutica…            4.20   2.50
+ 3 Manufacture of other non-metallic mineral products                0.770  2.20
+ 4 Human health activities                                          12.0    1.91
+ 5 Gambling and betting activities                                   0.467  1.86
+ 6 Sports, amusement and recreation activities                       1.04   1.81
+ 7 Security and investigation activities                             0.323  1.49
+ 8 Public administration and defence                                 7.19   1.39
+ 9 Warehousing and transport support activities                      1.72   1.34
+10 Land transport                                                    1.40   1.32</code></pre>
+</div>
+</div>
+<p>As mentioned, the LQ has a handy bonus feature: it can be used either to compare sectors <em>within</em> subregions, as above, or - looking at individual sectors - to see how geographical concentration differs.</p>
+<p>Sectors with the highest difference across places in the UK will have a higher spread between their min and max LQ values. Some sectors - often public sectors - are fairly evenly spread everywhere. Here we find the spread and pick out the top five most geographically varied:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Find the geographical variation of sectors using the LQ spread</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>LQspread <span class="ot">&lt;-</span> itl2.cp <span class="sc">%&gt;%</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2021</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(SIC07_description) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">LQ_spread =</span> <span class="fu">diff</span>(<span class="fu">range</span>(LQ))) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>LQ_spread)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Show top 5</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>LQspread[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  SIC07_description                             LQ_spread
+  &lt;chr&gt;                                             &lt;dbl&gt;
+1 Forestry and fishing                              41.5 
+2 Mining and quarrying                              35.4 
+3 Manufacture of beverages and tobacco products     15.4 
+4 Manufacture of basic metals                       10.8 
+5 Manufacture of other transport equipment           9.77</code></pre>
+</div>
+</div>
+<p>That can then be used to pick out particular sectors to map. For example, South Yorshire’s most concentrated GVA sector - manufacture of basic metals - is also the UK’s fourth most varied sector, and looks like this across the UK (note South Yorkshire doesn’t top the most concentrated for this sector).</p>
+<p>The geographical pattern is very clear. (Greener colours are more concentrated than the UK as whole; redder colours less so.)</p>
+<p>The map shapefiles are included in this repo, and can also be downloaded from <a href="https://geoportal.statistics.gov.uk/">geoportal.statistics.gov.uk</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load ITL2 map data using the sf library</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>itl2.geo <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">'data/ITL_geographies/International_Territorial_Level_2_January_2021_UK_BFE_V2_2022_-4735199360818908762/ITL2_JAN_2021_UK_BFE_V2.shp'</span>, <span class="at">quiet =</span> T) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_simplify</span>(<span class="at">preserveTopology =</span> T, <span class="at">dTolerance =</span> <span class="dv">100</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Join map data to a subset of the GVA data</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>sector_LQ_map <span class="ot">&lt;-</span> itl2.geo <span class="sc">%&gt;%</span> </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">right_join</span>(</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    itl2.cp <span class="sc">%&gt;%</span> <span class="fu">filter</span>(</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>      year<span class="sc">==</span><span class="dv">2021</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>      SIC07_description <span class="sc">==</span> LQspread<span class="sc">$</span>SIC07_description[<span class="dv">4</span>]<span class="co">#picking out the fourth highest geographical spread sector</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="fu">c</span>(<span class="st">'ITL221NM'</span><span class="ot">=</span><span class="st">'ITL_region_name'</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot map</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(sector_LQ_map) <span class="sc">+</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="st">'LQ_log'</span>, <span class="at">n =</span> <span class="dv">9</span>) <span class="sc">+</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">title =</span> <span class="st">'LQ spread of</span><span class="sc">\n</span><span class="st">Basic metals</span><span class="sc">\n</span><span class="st">Across ITL2 regions'</span>, <span class="at">legend.outside =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="sector_locationquotients_and_proportions_files/figure-html/geogconc_map-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="lq-change-and-growth-over-time" class="level2">
+<h2 class="anchored" data-anchor-id="lq-change-and-growth-over-time">LQ change and growth over time</h2>
+<p>Now onto plotting LQs themselves. To do this, we’ll add in a measure of what the change/growth trends for LQs are, for each sector in each ITL2 zone. This next function adds in some ordinary least squares slopes for LQ change over time, to get a sense of the growth trends. LQ_log is used so that slope scale is the same for different size sectors, so their trends are comparable. (It returns zero for any region/sector combinations with no data at all.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Use</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#LQ_slopes %&gt;% filter(slope==0)</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#To see which didn't get slopes (only 8 rows in the current data)</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>LQ_slopes <span class="ot">&lt;-</span> <span class="fu">compute_slope_or_zero</span>(</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> itl2.cp, </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  ITL_region_name, SIC07_description,<span class="co">#slopes will be found within whatever grouping vars are added here</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> LQ_log, <span class="at">x =</span> year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We’ll plot data for a single year, but include that information about how LQ has changed over the full range of the data from 1998 to 2021.</p>
+<p>The following code does three things:</p>
+<ol type="1">
+<li>Filters down to a single year and keeps in <em>yeartoplot</em>.</li>
+<li>Joins the LQ-over-time slopes to this single year, so we can see what the trends were in the rest of the time range for each place and sector</li>
+<li>Finds the minimum and maximum LQ values for the entire data range, for each place and year (this is explained more below when looking at a plot) and adds this to <em>yeartoplot</em>.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Filter down to a single year</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>yeartoplot <span class="ot">&lt;-</span> itl2.cp <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2021</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Add slopes into data to get LQ plots</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>yeartoplot <span class="ot">&lt;-</span> yeartoplot <span class="sc">%&gt;%</span> </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    LQ_slopes,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="fu">c</span>(<span class="st">'ITL_region_name'</span>,<span class="st">'SIC07_description'</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Get min/max values for LQ over time as well, for each sector and place, to add as bars so range of sector is easy to see</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>minmaxes <span class="ot">&lt;-</span> itl2.cp <span class="sc">%&gt;%</span> </span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(SIC07_description,ITL_region_name) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_LQ_all_time =</span> <span class="fu">min</span>(LQ),</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_LQ_all_time =</span> <span class="fu">max</span>(LQ)</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="co">#Join min and max</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>yeartoplot <span class="ot">&lt;-</span> yeartoplot <span class="sc">%&gt;%</span> </span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    minmaxes,</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="fu">c</span>(<span class="st">'ITL_region_name'</span>,<span class="st">'SIC07_description'</span>)</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We then pick a place to take an initial look at - <strong>Liverpool City Region (LCR)</strong> (which is <strong>Merseyside</strong> in the ITL2 data). This will be the main place on the plot, with others to compare to. We also order the sectors by LCR’s LQ, so they’re ordered in the plots by LCR.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>place <span class="ot">=</span> <span class="st">'Merseyside'</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Get a vector with sectors ordered by the place's LQs, descending order</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Use this next to factor-order the SIC sectors</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>sectorLQorder <span class="ot">&lt;-</span> itl2.cp <span class="sc">%&gt;%</span> <span class="fu">filter</span>(</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  ITL_region_name <span class="sc">==</span> place,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  year <span class="sc">==</span> <span class="dv">2021</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>LQ) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(SIC07_description) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>()</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Turn the sector column into a factor and order by LCR's LQs</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>yeartoplot<span class="sc">$</span>SIC07_description <span class="ot">&lt;-</span> <span class="fu">factor</span>(yeartoplot<span class="sc">$</span>SIC07_description, <span class="at">levels =</span> sectorLQorder, <span class="at">ordered =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A plot for all sectors is a little unwieldy, though interesting to get an overiew. You can view it <a href="miscimages/gva_Merseyside_plot.png">here</a>. (The plot code below will produce this full plot if you don’t filter first.)</p>
+<p>Instead, let’s look just at LCR sectors where LQ is more than 1 - that is, sectors that have relatively higher GVA in LCR compared to the rest of the UK. First, find sectors in LCR that are LQ &gt; 1, then use that to get those sectors for all places, so we can compare LCR to those places.</p>
+<p>Note the commented out line - there are other useful things to filter by, e.g.&nbsp;if we want only sectors where the LQ had grown relatively over the time range (slope &gt; 1).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reduce to SY LQ 1+</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>lq.selection <span class="ot">&lt;-</span> yeartoplot <span class="sc">%&gt;%</span> <span class="fu">filter</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  ITL_region_name <span class="sc">==</span> place,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># slope &gt; 1,#LQ grew relatively over time</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  LQ <span class="sc">&gt;</span> <span class="dv">1</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Keep only sectors that were LQ &gt; 1 from the main plotting df</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>yeartoplot <span class="ot">&lt;-</span> yeartoplot <span class="sc">%&gt;%</span> <span class="fu">filter</span>(</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  SIC07_description <span class="sc">%in%</span> lq.selection<span class="sc">$</span>SIC07_description</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can plot. The plot functions do two things:</p>
+<ol type="1">
+<li>The first function (<em>LQ_baseplot</em>) begins the plot by adding <strong>all places</strong> (faintness controlled by the alpha value). We also have the option of not including this by setting alpha to zero, but it still functions as the base plot initialisation, so always use.</li>
+<li>The function <em>addplacename_to_LQplot</em> can be used repeatedly to add specific places with clearer shapes (choose shape numbers from somewhere <a href="http://www.sthda.com/english/wiki/ggplot2-point-shapes">like here</a>).</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">LQ_baseplot</span>(<span class="at">df =</span> yeartoplot, <span class="at">alpha =</span> <span class="fl">0.1</span>, <span class="at">sector_name =</span> SIC07_description, </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">LQ_column =</span> LQ, <span class="at">change_over_time =</span> slope)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">addplacename_to_LQplot</span>(<span class="at">df =</span> yeartoplot, <span class="at">placename =</span> <span class="st">'Merseyside'</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">plot_to_addto =</span> p, <span class="at">shapenumber =</span> <span class="dv">16</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">min_LQ_all_time =</span> min_LQ_all_time, <span class="at">max_LQ_all_time =</span> max_LQ_all_time,<span class="co">#Range bars won't appear if either of these not included</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                            <span class="at">value_column =</span> value, <span class="at">sector_regional_proportion =</span> sector_regional_proportion,<span class="co">#Sector size numbers won't appear if either of these not included</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>                            <span class="at">region_name =</span> ITL_region_name,<span class="co">#The next four, the function needs them all </span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>                            <span class="at">sector_name =</span> SIC07_description,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>                            <span class="at">change_over_time =</span> slope, </span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>                            <span class="at">LQ_column =</span> LQ </span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>                            )</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Details of what’s in this plot:</p>
+<ul>
+<li>LQ is on the x axis, log scale so values below 1 are symmetrical. The vertical line at 1 marks where sectors are more or less concentrated than the UK as a whole (more concentrated to the right of the line, LQ &gt; 1). Liverpool City Region sector GVA location quotients are shown in the green and red circles.</li>
+<li>Green circles: the LQ trend has <em>increased</em> over the full data range (slope &gt; 1)</li>
+<li>Red circles: the LQ trend has <em>decreased</em> over the full data range (slope &lt; 1)</li>
+<li>Horizontal bar-lines show the full range of the LQ for that sector across all years (more on that below).</li>
+<li>The fainter background circles show all other ITL2 regions to show where LCR is relative to those. If they’re more clustered around 1, they’re less geographically varied. (Public sectors like Education tend to be evenly spread, as the plot shows.)</li>
+<li>On the right hand side, figures for the raw GVA value and its percentage of LCR’s total GVA is included.</li>
+</ul>
+<p><img src="miscimages/gva_Merseyside_plot_LQmorethan1.png" class="img-fluid"></p>
+<p>Some things we can see in this plot:</p>
+<ul>
+<li>As we saw above, manufacture of motor vehicles has LCR’s highest LQ value (2.89) means it’s close to three times more concentrated in LCR relative to the UK as a whole. It’s also got the largest green circle, so it’s trend slope is highest from this group. Note what ‘growth’ means here - if a sector’s LQ is ‘growing’, it’s relative. It could be that GVA has been relatively shrinking elsewhere (we’d need to look at GVA change over time to know - we do this below).</li>
+<li>Motor vehicles’ marker is also on the right of the range bar - it’s growing (relatively) and the current year’s data is close to the LQ’s all time high. (Compare to e.g.&nbsp;Gambling and betting - growing but it’s nowhere near its relative growth peak).</li>
+<li>The GVA % number on the right also shows that motor trades is a bit less than 2% of LCR’s economy, compared to 4.2% for ‘Manufacture of petroleum, chemicals and pharmaceuticals’ - less relatively concentrated in LCR, but larger.</li>
+<li>‘Petroleum, chemicals and pharmaceuticals’ is also a very different relative change story - it’s always had a higher LQ in LCR (the range bars don’t cross zero) but it’s growth circle is red (sloping down) and it’s right at the bottom of the LQ range in the latest year.</li>
+</ul>
+<hr>
+<p>We’ll come back to that last sector in a moment, but let’s also see how to use the plot code to compare different places more specifically.</p>
+<p>The next code chunk does the following:</p>
+<ul>
+<li>Get the base plot, setting alpha to zero so we don’t get all places</li>
+<li>Add two specific places - Greater Manchester (GM) and South Yorkshire (SY) - without including arguments for the range bars or numbers, as those should be in the final overlay of LCR.</li>
+<li>Add LCR last so it appears on top.</li>
+</ul>
+<p>When comparing different regions like this, it’s helpful to note that any sector with a lower LQ is also proportionally a smaller part of that region’s economy (the LQ for a particular sector has the same denominator across all sectors, so the values here map to regional sector percentages.)</p>
+<p>So for example, from this we can see:</p>
+<ul>
+<li>GM and SY’s motor vehicle manufacture sectors’ LQs are both below 1, and a smaller proportion of their GVA than LCR.</li>
+<li>Sectors like rubber and plastics products, and telecoms, are both more concentrated in SY and GM.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Repeat but overlay other places</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">LQ_baseplot</span>(<span class="at">df =</span> yeartoplot, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">sector_name =</span> SIC07_description, </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">LQ_column =</span> LQ, <span class="at">change_over_time =</span> slope)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">addplacename_to_LQplot</span>(<span class="at">df =</span> yeartoplot, <span class="at">plot_to_addto =</span> p, </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">placename =</span> <span class="st">'Greater Manchester'</span>, <span class="at">shapenumber =</span> <span class="dv">23</span>,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                            <span class="at">region_name =</span> ITL_region_name,<span class="co">#The next four, the function needs them all </span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                            <span class="at">sector_name =</span> SIC07_description, <span class="at">change_over_time =</span> slope, <span class="at">LQ_column =</span> LQ)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">addplacename_to_LQplot</span>(<span class="at">df =</span> yeartoplot, <span class="at">plot_to_addto =</span> p, </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>                            <span class="at">placename =</span> <span class="st">'South Yorkshire'</span>, <span class="at">shapenumber =</span> <span class="dv">22</span>,</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>                            <span class="at">region_name =</span> ITL_region_name,</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>                            <span class="at">sector_name =</span> SIC07_description, <span class="at">change_over_time =</span> slope, <span class="at">LQ_column =</span> LQ)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">addplacename_to_LQplot</span>(<span class="at">df =</span> yeartoplot, <span class="at">plot_to_addto =</span> p, </span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>                            <span class="at">placename =</span> place1, <span class="at">shapenumber =</span> <span class="dv">16</span>,</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>                            <span class="at">min_LQ_all_time =</span> min_LQ_all_time,<span class="at">max_LQ_all_time =</span> max_LQ_all_time,<span class="co">#Include minmax</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>                            <span class="at">value_column =</span> value, <span class="at">sector_regional_proportion =</span> sector_regional_proportion,<span class="co">#include numbers</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>                            <span class="at">region_name =</span> ITL_region_name,</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>                            <span class="at">sector_name =</span> SIC07_description, <span class="at">change_over_time =</span> slope, <span class="at">LQ_column =</span> LQ)</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> </span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"text"</span>,</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">"Greater Manchester: diamonds</span><span class="sc">\n</span><span class="st">South Yorkshire: squares"</span>,</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fl">0.05</span>, <span class="at">y =</span> <span class="st">'Manufacture of rubber and plastic products'</span>,</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="miscimages/gva_Merseyside_plot_LQmorethan1_3places.png" class="img-fluid"></p>
+</section>
+<section id="looking-at-trends" class="level2">
+<h2 class="anchored" data-anchor-id="looking-at-trends">Looking at trends</h2>
+<p>Let’s look more deeply at change over time to see what’s happening with Petroleum, chemicals and pharmaceuticals in LCR. Is it actually a shrinking proportion of LCR’s economy, or has it just grown elsewhere? The code below does three things:</p>
+<ul>
+<li>Filter the full dataset down to just the one sector. <code>grepl</code> is used to save having to use the full sector name (but watch out for multiple sectors with the same words in like ‘motor’).</li>
+<li>Use the <code>zoo</code> library’s <code>rollapply</code> function to get a moving average of the sector’s regional proportions, so trends are easier to see. (A moving average for LQ is also included, though we don’t use it here.)</li>
+<li>Flag the ITL2 region we’re interested and, in this case, just keep the top ten places where the sector had the largest GVA proportion on average for the last three years in the data.</li>
+</ul>
+<p>From this plot, we can see that, yes, petroleum and chemicals has indeed shrunk as a proportion of LCR’s economy, trending down since around 2011. Note, we could in theory plot the actual GVA values but they’re not inflation-adjusted so would be misleading. So while we can say from this data what sectors have changed proportionally, it’s possible petroleum/chemicals is shrinking due to other sectors’ relative growth in LCR.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Pick a sector to plot separately for all places</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Use grepl as a shortcut to search for sector names</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>sector <span class="ot">&lt;-</span> itl2.cp<span class="sc">$</span>SIC07_description[<span class="fu">grepl</span>(<span class="st">'petroleum'</span>, itl2.cp<span class="sc">$</span>SIC07_description ,<span class="at">ignore.case =</span> T)] <span class="sc">%&gt;%</span> unique</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>timeplot <span class="ot">&lt;-</span> itl2.cp <span class="sc">%&gt;%</span> </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(SIC07_description <span class="sc">==</span> sector) </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Use zoo's rollapply function to get a moving average</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>timeplot <span class="ot">&lt;-</span> timeplot <span class="sc">%&gt;%</span> </span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ITL_region_name) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(year) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">LQ_movingav =</span> <span class="fu">rollapply</span>(LQ,<span class="dv">3</span>,mean,<span class="at">align=</span><span class="st">'right'</span>,<span class="at">fill=</span><span class="cn">NA</span>),</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">percent_movingav =</span> <span class="fu">rollapply</span>(sector_regional_proportion <span class="sc">*</span> <span class="dv">100</span>,<span class="dv">3</span>,mean,<span class="at">align=</span><span class="st">'right'</span>,<span class="at">fill=</span><span class="cn">NA</span>)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co">#Or pick top size values</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co">#Largest % in 2021</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>largest_percents <span class="ot">&lt;-</span> timeplot <span class="sc">%&gt;%</span> </span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2021</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>percent_movingav)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="co">#Keep only the top ten places and order them</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>timeplot <span class="ot">&lt;-</span> timeplot <span class="sc">%&gt;%</span> </span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ITL_region_name =</span> <span class="fu">factor</span>(ITL_region_name, <span class="at">ordered =</span> T, <span class="at">levels =</span> largest_percents<span class="sc">$</span>ITL_region_name)) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ITL_region_name <span class="sc">%in%</span> largest_percents<span class="sc">$</span>ITL_region_name[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>])</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a><span class="co">#Mark the ITL of interest so it can be clearer in the plot</span></span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>timeplot <span class="ot">&lt;-</span> timeplot <span class="sc">%&gt;%</span></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">ITL2ofinterest =</span> <span class="fu">ifelse</span>(ITL_region_name <span class="sc">==</span> place, <span class="st">'ITL of interest'</span>,<span class="st">'other'</span>),</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(timeplot <span class="sc">%&gt;%</span> </span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>         <span class="fu">rename</span>(<span class="st">`</span><span class="at">ITL region</span><span class="st">`</span> <span class="ot">=</span> ITL_region_name) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(percent_movingav)),<span class="co">#remove NAs from dates so the x axis doesn't show them</span></span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> percent_movingav, <span class="at">colour =</span> <span class="st">`</span><span class="at">ITL region</span><span class="st">`</span>, <span class="at">size =</span> ITL2ofinterest, <span class="at">linetype =</span> ITL2ofinterest, <span class="at">group =</span> <span class="st">`</span><span class="at">ITL region</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fl">2.5</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">'Paired'</span>, <span class="at">direction =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">'Regional GVA percent'</span>) <span class="sc">+</span></span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">size =</span> <span class="st">"none"</span>, <span class="at">linetype =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(</span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste0</span>(sector,<span class="st">'</span><span class="sc">\n</span><span class="st">'</span>, place, <span class="st">' highlighted'</span>)</span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">'bold'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="sector_locationquotients_and_proportions_files/figure-html/timeplot1-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>If we want to look at all places at once, it’s useful to do two things:</p>
+<ol type="1">
+<li>Use a log scale on the y axis, so change scale is comparable and we can see places with smaller sectors.</li>
+<li>Use plotly to make an interactive plot, so hovering over lines will show what places are interactively.</li>
+</ol>
+<p>This plot does so for LCR’s largest LQ sector, manufacture of motor vehicles.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>sector <span class="ot">&lt;-</span> itl2.cp<span class="sc">$</span>SIC07_description[<span class="fu">grepl</span>(<span class="st">'motor vehicles'</span>, itl2.cp<span class="sc">$</span>SIC07_description ,<span class="at">ignore.case =</span> T)] <span class="sc">%&gt;%</span> unique</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>timeplot <span class="ot">&lt;-</span> itl2.cp <span class="sc">%&gt;%</span> </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(SIC07_description <span class="sc">==</span> sector) </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>timeplot <span class="ot">&lt;-</span> timeplot <span class="sc">%&gt;%</span> </span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ITL_region_name) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(year) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">LQ_movingav =</span> <span class="fu">rollapply</span>(LQ,<span class="dv">3</span>,mean,<span class="at">align=</span><span class="st">'right'</span>,<span class="at">fill=</span><span class="cn">NA</span>),</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">percent_movingav =</span> <span class="fu">rollapply</span>(sector_regional_proportion <span class="sc">*</span> <span class="dv">100</span>,<span class="dv">3</span>,mean,<span class="at">align=</span><span class="st">'right'</span>,<span class="at">fill=</span><span class="cn">NA</span>)</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>timeplot <span class="ot">&lt;-</span> timeplot <span class="sc">%&gt;%</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">ITL2ofinterest =</span> <span class="fu">ifelse</span>(ITL_region_name <span class="sc">==</span> place, <span class="st">'ITL of interest'</span>,<span class="st">'other'</span>),</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(timeplot <span class="sc">%&gt;%</span> </span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>         <span class="fu">rename</span>(<span class="st">`</span><span class="at">ITL region</span><span class="st">`</span> <span class="ot">=</span> ITL_region_name) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(percent_movingav)),<span class="co">#remove NAs from dates so the x axis doesn't show them, </span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> percent_movingav, <span class="at">colour =</span> ITL2ofinterest, <span class="at">size =</span> ITL2ofinterest, <span class="at">group =</span> <span class="st">`</span><span class="at">ITL region</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">'Regional GVA percent (log 10)'</span>) <span class="sc">+</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">'black'</span>,<span class="st">'grey'</span>)) <span class="sc">+</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(</span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste0</span>(sector,<span class="st">'</span><span class="sc">\n</span><span class="st">'</span>, place, <span class="st">' highlighted'</span>)</span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">'bold'</span>))</span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="sector_locationquotients_and_proportions_files/figure-html/plotother-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>It’s easy to convert a ggplot to an interactive plotly. It can’t be included on this page, but will run in RStudio, and there’s an <a href="https://danolner.github.io/regionalGVAbyindustry/GVA_percent_liverpool_city_region_motorvehicles.html">online version here</a>.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(p, <span class="at">tooltip =</span> <span class="fu">c</span>(<span class="st">"ITL region"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can also filter sectors by which has ‘grown’ the most, using the function above that found slopes for growth and shrinkage in the location quotient.</p>
+<p>Rather than plotting LQ though, let’s plot % GVA again, for those 10 sectors with the largest LQ growth trend. For motor vehicle manufacture, we can see it’s actually not a very large part of LCR’s economy. (Note land/water transport and retail trade moving closely together too.)</p>
+<p>This highlights again a key weakness of using LQs. Though they’re very useful for getting a sense of structure, the lack of information about actual sector scale can be a problem. We’ll look at a way to address this next.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Look just at place of interest</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co">#And arrange by the 'growth' slope.</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>place_slopes <span class="ot">&lt;-</span> yeartoplot <span class="sc">%&gt;%</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ITL_region_name <span class="sc">==</span> place) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>slope)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Use that to filter the main df and order sectors by which slope is largest</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>timeplot.sectors <span class="ot">&lt;-</span> itl2.cp <span class="sc">%&gt;%</span> </span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ITL_region_name <span class="sc">==</span> place) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SIC07_description =</span> <span class="fu">factor</span>(SIC07_description, <span class="at">ordered =</span> T, <span class="at">levels =</span> place_slopes<span class="sc">$</span>SIC07_description))</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Moving averages</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>timeplot.sectors <span class="ot">&lt;-</span> timeplot.sectors <span class="sc">%&gt;%</span> </span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(SIC07_description) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(year) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">LQ_movingav =</span> <span class="fu">rollapply</span>(LQ,<span class="dv">3</span>,mean,<span class="at">align=</span><span class="st">'right'</span>,<span class="at">fill=</span><span class="cn">NA</span>),</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">percent_movingav =</span> <span class="fu">rollapply</span>(sector_regional_proportion <span class="sc">*</span> <span class="dv">100</span>,<span class="dv">3</span>,mean,<span class="at">align=</span><span class="st">'right'</span>,<span class="at">fill=</span><span class="cn">NA</span>)</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="co">#Filter down to top ten LQ growth sectors</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>timeplot.sectors <span class="ot">&lt;-</span> timeplot.sectors <span class="sc">%&gt;%</span> </span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>    SIC07_description <span class="sc">%in%</span> place_slopes<span class="sc">$</span>SIC07_description[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot GVA percent of the largest LQ growth sectors</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(timeplot.sectors <span class="sc">%&gt;%</span> </span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>         <span class="fu">rename</span>(<span class="at">Sector =</span> SIC07_description) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(percent_movingav)),<span class="co">#remove NAs from dates so the x axis doesn't show them</span></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> percent_movingav, <span class="at">colour =</span> Sector, <span class="at">group =</span> Sector)) <span class="sc">+</span></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">'Paired'</span>, <span class="at">direction =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">'GVA percent'</span>) <span class="sc">+</span></span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">size =</span> <span class="st">"none"</span>, <span class="at">linetype =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggtitle</span>(</span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste0</span>(<span class="st">'Top ten sectors by LQ growth trend</span><span class="sc">\n</span><span class="st">'</span>, place)</span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">'bold'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="sector_locationquotients_and_proportions_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+</section>
+<section id="d-location-quotient-plots" class="level2">
+<h2 class="anchored" data-anchor-id="d-location-quotient-plots">2D location quotient plots</h2>
+<p>One way to address the fact that LQs can be large while the actual proportion of the economy they represent can be tiny (and vice versa) is to break it down into its two component parts. As we’ve said, the LQ is the ratio of regional sector proportion over the same sector’s proportion at the larger geography. We can just plot both of those separately on each axis.</p>
+<p>If we’re doing this, it also makes sense to remove the region in question when working out the sector proportions for the larger geography, so it’s not double-counted, as it is in LQs. Let’s look at a plot to explain this, using the <code>twod_proportionplot</code> function, which returns a <code>ggplot</code> object we can then add to.</p>
+<p>Most things going into the function are obvious, but some things to note:</p>
+<ul>
+<li><code>x_regionnames</code> and <code>x_regionnames</code> can be any list of ITL2 region names. We want them to be different on each axis. In this case, Liverpool City Region is going on the x axis and the rest of the UK on the y axis (by passing in “Everything except LCR.”)</li>
+<li>In this one, we pass in the earliest and latest possible years to plot. This will show very large structural change given that’s a 23 year span.</li>
+<li><code>compasspoints_to_display</code>: leave blank to display all the data, or here we can specify any combination of ‘SE’,‘SW’,‘NE’ and ‘NW’ compass directions. These show the following:
+<ul>
+<li>‘NE’: sectors that <em>grew</em> (in GVA percent terms) for both the x and y region(s).</li>
+<li>‘SW’: sectors that <em>shrunk</em> for both the x and y region(s).</li>
+<li>‘SE’: sectors that <em>grew</em> for the x region(s) but <em>shrunk</em> for the y regions.</li>
+<li>‘SW’: sectors that <em>shrunk</em> for the x region(s) but <em>grew</em> for the y regions.</li>
+</ul></li>
+<li>The function returns the base plot, and then any optional ggplot extras can be added to it.</li>
+</ul>
+<p>The next plot puts LCR on the x axis and the rest of the UK on the y axis, looking at both ‘SE’ and ‘NE’ (sectors all ‘grew’ for LCR, but a mix of growth and shrinkage in the UK). ‘SE’, in purple, has five sectors.</p>
+<p>Anything to the right of the diagonal line has an LQ higher than 1 (or roughly - slightly different number here since the denominator has the region in question left out).</p>
+<p>The plot included here is a gif that compares what difference logging the scales makes. Logging is useful for checking overall structural change - movements are proportional at different scales. But it can hide the scale of some sectors - for example, it’s clear here that some public sectors are (relatively) a much larger proportion both regionally and nationally in 2021 than 1998.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">twod_proportionplot</span>(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">df =</span> itl2.cp,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x_regionnames =</span> place, </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y_regionnames =</span> <span class="fu">unique</span>(itl2.cp<span class="sc">$</span>ITL_region_name[itl2.cp<span class="sc">$</span>ITL_region_name <span class="sc">!=</span> place]),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">regionvar =</span> ITL_region_name,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">category_var =</span> SIC07_description, </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">valuevar =</span> value, </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">timevar =</span> year, </span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">start_time =</span> <span class="dv">1998</span>, </span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">end_time =</span> <span class="dv">2021</span>, </span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">compasspoints_to_display =</span> <span class="fu">c</span>(<span class="st">'SE'</span>,<span class="st">'NE'</span>)</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="co">#add some extras</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> </span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">paste0</span>(place, <span class="st">' GVA proportion'</span>)) <span class="sc">+</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">'UK GVA proportion (MINUS '</span>,place,<span class="st">')'</span>)) <span class="sc">+</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">0.1</span>,<span class="dv">12</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fl">0.1</span>,<span class="dv">12</span>)) <span class="sc">+</span>  <span class="co"># good for log scale</span></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>()</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="miscimages/LCR_v_UK1.gif" class="img-fluid"></p>
+<hr>
+<p>These next two plots do the following:</p>
+<ul>
+<li>Compare South and North England for two different time periods, 1998-2007 and then 2008-2021.</li>
+<li>North England is on the y axis (so anything left of the diagonal line is a proportionally larger sector in the North for that time period) and South England on the x axis (vice versa).</li>
+<li>Each gif flips between ‘SE + SW’ (sectors that relatively shrunk in the North) and ‘NE + NW’ (sectors that relatively grew in the North).</li>
+<li>The earlier period shows a much clearer gulf between structural change in the North and South. For 1998-07, shrinking sectors are much more concentrated in the North than South, and growing sectors much more in South.</li>
+<li>The later period is much more varied. It’s also clear that there are a larger number of sectors relatively growing in the North than there were in the earlier period.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Northern England</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>north <span class="ot">&lt;-</span> itl2.cp<span class="sc">$</span>ITL_region_name[<span class="fu">grepl</span>(<span class="st">'Greater Manc|Merseyside|West Y|Cumbria|Cheshire|Lancashire|East Y|North Y|Tees|Northumb|South Y'</span>, itl2.cp<span class="sc">$</span>ITL_region_name, <span class="at">ignore.case =</span> T)] <span class="sc">%&gt;%</span> unique</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">#South England</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>south <span class="ot">&lt;-</span> itl2.cp<span class="sc">$</span>ITL_region_name[<span class="sc">!</span><span class="fu">grepl</span>(<span class="st">'Greater Manc|Merseyside|West Y|Cumbria|Cheshire|Lancashire|East Y|North Y|Tees|Northumb|South Y|Scot|Highl|Wales|Ireland'</span>, itl2.cp<span class="sc">$</span>ITL_region_name, <span class="at">ignore.case =</span> T)] <span class="sc">%&gt;%</span> unique</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">twod_proportionplot</span>(</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">df =</span> itl2.cp,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">regionvar =</span> ITL_region_name,</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">category_var =</span> SIC07_description, </span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">valuevar =</span> value, </span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">timevar =</span> year, </span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">start_time =</span> <span class="dv">2008</span>,</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">end_time =</span> <span class="dv">2021</span>,</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># start_time = 1998,</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># end_time = 2007,</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">compasspoints_to_display =</span> <span class="fu">c</span>(<span class="st">'SE'</span>,<span class="st">'SW'</span>),</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># compasspoints_to_display = c('NE','NW'),</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">y_regionnames =</span> north,</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">x_regionnames =</span> south</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="co">#add these after</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> </span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">'Southern England GVA proportions'</span>) <span class="sc">+</span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">'North England GVA proportions'</span>) <span class="sc">+</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">0.1</span>,<span class="dv">11</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fl">0.1</span>,<span class="dv">11</span>))<span class="co"># good for log scale</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>1998 to 2007. Note larger concentration of shrinking sectors concentrated in the North (left of diagonal line) and growing sectors concentrated in the South (right of diagonal line)</strong></p>
+<p><img src="miscimages/NS_98to07.gif" class="img-fluid"></p>
+<p><strong>2008 to 2021. Much more mixed, larger number of growing sectors on the Northern side of the plot.</strong></p>
+<p><img src="miscimages/NS_08to21.gif" class="img-fluid"></p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
