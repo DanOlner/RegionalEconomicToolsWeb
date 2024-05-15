@@ -45,7 +45,7 @@ perhourworked.itl3 <- read_csv(here('data/Table A4 Current Price unsmoothed GVA 
   pivot_longer(cols = `2004`:`2021`, names_to = 'year', values_to = 'gva') %>% 
   mutate(year = as.numeric(year))
 
-x = 1
+x = 2
 
 #Rank to see which ITL2 changed position the most
 perhourworked <- perhourworked %>% 
