@@ -770,7 +770,7 @@ ggplot() +
 #i.e. Oxfordshire and Gloucestershire start out with higher rank than LCR and Tees, but those swap over entirely
 
 #Look at that directly for top rank movers?
-p <- ggplot(pip %>% filter(Place %in% top_places) %>% ungroup() %>% mutate(Place = fct_reorder(Place,-rankrange,mean)), aes(x = measure, y = rank, group = Place, colour = Place)) +
+ggplot(pip %>% filter(Place %in% top_places) %>% ungroup() %>% mutate(Place = fct_reorder(Place,-rankrange,mean)), aes(x = measure, y = rank, group = Place, colour = Place)) +
   geom_line(size = 2) +
   geom_point(size = 3) +
   scale_color_brewer(palette = 'Paired', direction = -1) +
@@ -778,9 +778,6 @@ p <- ggplot(pip %>% filter(Place %in% top_places) %>% ungroup() %>% mutate(Place
   guides(colour=guide_legend(title="Place (ordered by rank range)")) +
   theme_minimal() +
   xlab('') + ylab('Rank position (higher is more productive)')
-
-ggplotly(p)
-
 
 #Mapping is a bit to piece together:
 #"For England, the sub-regions we use are the 38 Local Enterprise Partnership areas. 

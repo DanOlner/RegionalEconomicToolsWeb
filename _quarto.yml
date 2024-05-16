@@ -1,7 +1,7 @@
 project:
   type: website
   output-dir: docs
-
+  
 website:
   title: "UK regional economics tools and analysis"
   navbar:
@@ -16,6 +16,7 @@ website:
       - section: "GDP and GVA"
         contents:
           - gdp_gaps.qmd
+          - beattyfothergill.qmd
       - section: "Sectors"
         contents:
           - sector_locationquotients_and_proportions.qmd

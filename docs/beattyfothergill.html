@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>UK regional economics tools and analysis - Beatty &amp; Fothergill on productivity: viz</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.10.4/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">UK regional economics tools and analysis</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools ms-auto">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./gdp_gaps.html">GDP and GVA</a></li><li class="breadcrumb-item"><a href="./beattyfothergill.html">Beatty &amp; Fothergill on productivity: viz</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">GDP and GVA</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gdp_gaps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">GDP regional gaps in the UK</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./beattyfothergill.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Beatty &amp; Fothergill on productivity: viz</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Sectors</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sector_locationquotients_and_proportions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">UK sectors: LQs &amp; proportion plots</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#beatty-and-fothergill-report-productivity-of-industry-and-places-2020" id="toc-beatty-and-fothergill-report-productivity-of-industry-and-places-2020" class="nav-link active" data-scroll-target="#beatty-and-fothergill-report-productivity-of-industry-and-places-2020">Beatty and Fothergill report: ‘Productivity of Industry and Places’ 2020</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Beatty &amp; Fothergill on productivity: viz</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="beatty-and-fothergill-report-productivity-of-industry-and-places-2020" class="level2">
+<h2 class="anchored" data-anchor-id="beatty-and-fothergill-report-productivity-of-industry-and-places-2020">Beatty and Fothergill report: ‘Productivity of Industry and Places’ 2020</h2>
+<p>Report <a href="https://www.shu.ac.uk/centre-regional-economic-social-research/publications/the-productivity-of-industries-and-places">webpage</a> and <a href="file:///home/dano/Downloads/productivity-industries-places-1.pdf">PDF</a>.</p>
+<p>This CRESR report from 2020 presents a fascinating analysis of how different the UK productivity picture is depending on what measure/control one uses. To illustrate this, I scraped the numbers out of table 1 - this gives index values for the eight different measures the report compares.</p>
+<p>This first plot is just the values from table 1 in interactive form, comparing each measure type and showing South Yorkshire in red (or Sheffield City Region, as it was at the time). See the report pp.3 for a full explanation of each measure.</p>
+<p>The report interprets the differences in values in this figure as percentage differences. So, for the largest gap between lowest and highest - GVA per head:</p>
+<blockquote class="blockquote">
+<p>“London comes out on top at 177 per cent of the UK average, whereas Southern Scotland ranks lowest at just 59 per cent. To put these figures another way, output per head in London is three times higher than in Southern Scotland.” (p.5)</p>
+</blockquote>
+<p>At the other extreme, controlling for industry, occupation and hours worked:</p>
+<blockquote class="blockquote">
+<p>“London is overtaken at the top by Thames Valley Berkshire, at 126 per cent of the UK average, whilst Cornwall is lowest at 81 per cent… the lowest ranked UK sub-region has an estimated efficiency of production that is just below two-thirds of the best.” (p.6)</p>
+</blockquote>
+<p>That’s a big difference - the top ranked place being 3 times more productive, vs only a two-thirds gap overall. There’s possibly an argument for <em>not</em> adjusting for industrial mix (that mix is exactly one of the things one might want to change to improve productivity) but it’s still a very strong illustration of what difference all the various key factors (including demographics, unemployment, inactivity etc) can make.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load in scraped data from table 1</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pip <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'data/Beatty_Fothergill_productivity-industries-places_table1.csv'</span>) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Place<span class="sc">!=</span><span class="st">'United Kingdom'</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Get factor order from column order before converting to long</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>measure_factororder <span class="ot">=</span> <span class="fu">names</span>(pip)[<span class="dv">2</span><span class="sc">:</span><span class="dv">9</span>]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>pip <span class="ot">&lt;-</span> pip <span class="sc">%&gt;%</span> </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">9</span>, <span class="at">names_to =</span> <span class="st">"measure"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">measure =</span> <span class="fu">factor</span>(measure, <span class="at">ordered =</span> T, <span class="at">levels =</span> measure_factororder)) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SCR =</span> <span class="fu">ifelse</span>(Place <span class="sc">==</span> <span class="st">'Sheffield City Region'</span>, T,F))</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(pip, <span class="fu">aes</span>(<span class="at">x =</span> measure, <span class="at">y =</span> value, <span class="at">group =</span> Place, <span class="at">colour =</span> SCR, <span class="at">alpha =</span> SCR)) <span class="sc">+</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">100</span>, <span class="at">colour =</span> <span class="st">'red'</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.25</span>) <span class="sc">+</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">'black'</span>,<span class="st">'red'</span>)) <span class="sc">+</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_alpha_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fl">0.5</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">''</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">'index value (UK average is 100)'</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(p, <span class="at">tooltip =</span> <span class="st">'Place'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-f32694ae87e79c53571a" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-f32694ae87e79c53571a">{"x":{"data":[{"x":[177.30108970869333,177.61103004012256,165.83935182690621,166.84234680775552,140.80804141387344,133.77448323108257,124.80150130260736,115.98306737039238,169.99701006375253,172.63138323426247,170.77757361885159,160.61693848837166,142.25135180782527,137.17379704993218,128.85038488917053,126.24064171183855,131.01204322110863,133.75845096949487,127.68887318205088,122.14309482835233,115.79001218527556,111.78918487485498,113.20843875333667,107.69495991803706,123.61596988588572,120.92945228964091,124.80267371460795,125.95292614847422,113.81255343258381,112.07590356748551,106.17945160325617,111.02490415573121,122.31636854019015,123.89150722399354,128.93975840006024,124.94296782612801,110.97261213175952,108.00986952073872,108.08974109571427,105.82959962636232,121.14715871047228,120.24455382805317,119.80974053982645,112.98267300296575,100.95833784695715,99.753632387146354,96.764296538755303,95.12857413645834,109.32370551675558,111.38746265601367,109.81449652221053,108.2077314209193,104.75417153425515,104.12299024425447,103.99718691874295,106.3627260768786,107.85191801395267,104.70035193283111,105.2460483668372,97.278941652365035,89.875117997825143,90.626188539341086,87.35634485986084,88.942773248441512,106.86831884663552,107.74501626137643,104.95746478959919,101.03414226435125,96.187102009542286,96.362867817096415,92.630624346621332,94.801531170681116,105.97264941819012,105.69259738996625,108.79366013333201,90.071811538003388,89.887108778022224,95.072140615805978,100.07793377898633,104.72904701139778,103.67925790585578,105.35959726907313,107.87863023243844,101.37663592640311,103.71287420000881,104.24857628811151,103.82664747945964,109.81614918019622,102.22118800934405,103.35120598785579,103.65618138220161,97.917398825846618,103.37044010832906,102.32570087704808,103.66161346826702,98.881037311069662,102.39574852902442,103.27795504126698,100.26816115807742,101.14529391024261,109.30650726016611,109.84661382082849,111.12635528333485,113.87789773978292,98.384743920527399,90.777919651567942,94.214616018347442,86.735850674472744,93.898555005528038,92.830463944561785,88.235800400935119,87.68155119810254,97.24294017907232,95.619781744107598,99.048932750150556,93.819996822997922,93.052531068585807,92.160313480161136,92.038915288262075,92.72508059348911,95.348520565032956,89.603943986818194,91.062600299157197,86.711587899550793,96.171242077089843,94.903198659606275,92.727175752446058,95.931995179690418,94.287232610769564,95.727526433765888,96.942423930205408,103.37182382401079,98.226648638024926,98.23936893995851,98.975192026048902,100.09352721162141,91.661919317953291,90.143428598716852,92.938382969610387,85.228475033305585,86.81857960801571,87.37335894238204,85.774323912523684,86.334619842283431,89.257122882828114,90.065369671955708,88.609279412031171,93.265128885582087,90.388017005473372,89.603273938223722,91.303060667030508,91.801850572973493,88.863500863872474,88.927345095202327,90.055496221780771,88.867811891064051,86.35658293999731,87.708098074980086,90.171486823633316,90.991837608441713,87.09871398247779,87.218827447295183,85.679965023137626,85.791776336170727,94.704536598175764,98.300718259625143,98.828417401015756,107.62869041897356,86.118623439967635,87.34466345123947,86.345308852940803,87.664069762267175,92.350895552150902,93.212775621190673,96.096133620478213,96.001189457997683,84.121319349110124,82.608050044439736,88.047298399917779,84.076841212250287,80.983795919083065,82.793629806116229,88.35564791541546,90.656938443332905,84.283328037150198,80.079492656514049,86.382031807303434,80.882328760810196,80.863571577146644,83.07178497370333,82.893744729645547,85.804042430594563,84.228981366008526,84.870582508295769,85.154715531319383,86.914705138280993,86.067719433456659,87.091581754013902,88.347426426969463,88.0629493733868,83.271974444203082,81.200057382881639,85.05347074065358,82.056774700991809,81.217410932853824,84.270381193980569,85.336474260874098,86.922527320496741,83.044844412058595,85.076439023762944,81.17997156772762,90.255287370085711,89.814906637929383,91.637601885758343,93.672835335880521,94.10837782565504,80.344479408673948,81.173925516568119,83.122532596066591,84.157648167200392,88.874215327389535,91.997722571901974,95.336256881244481,95.727178000472492,80.156476785615084,78.008683406747878,81.982077623158688,78.340958357602361,81.388243994303053,81.386126861348743,82.671933489106593,83.151756755635148,80.239532236754897,78.846818580850965,83.742221030406654,81.332937283068901,84.298055764846509,86.058403851650652,88.723465491831305,93.921049829199916,79.121952609531576,79.094679592363534,78.746695679239934,85.151530338637528,89.194889314472675,92.884090737998491,95.847241311334074,90.996691417880356,78.266348922252661,73.799861746840179,76.921545908600095,74.131781752780086,86.271970769576726,88.068588598817584,89.746109074726704,92.740211006626481,77.120588448829949,78.278599296137685,78.383202904090282,78.684054536186153,84.660945123247799,86.662272310256952,89.702602143213156,91.815400042012328,75.610665195994073,75.236053181625905,78.309561654552823,75.178356026113036,77.275832656770945,78.858753682300446,81.97318403981626,83.015350149385625,76.071410949900752,77.006351422518492,79.066512279398736,81.1494320044294,84.846264247596267,87.088561834953722,93.835546104982498,94.271972531266513,76.076876515150076,76.741154432855552,77.37408087998628,80.83185945320875,90.046117112413043,94.057675670459872,98.308930045366282,100.11319470964372,73.039813779108229,71.36315508037805,74.897324720397592,71.335422022268176,74.355047184228894,78.263642999157312,81.090645085088909,85.854433123022318,72.862740919739011,73.667980516515669,75.078765359707177,73.369556025601923,80.74600599780679,83.763140964880591,88.214126853831118,88.719336478598422,72.273076252266762,72.87906359918415,72.91353451907635,77.333099269121888,84.335322278738019,86.845676597021523,92.306901176087564,93.916838645562535,71.843885031342509,72.274786022491753,75.311124986596411,74.994699603877962,81.311333206109708,84.249413117207581,89.858951384760445,90.953335428237921,70.945862729288635,71.983400044031441,74.274493159167463,82.119002949073916,88.94272993188352,91.61089840810746,97.238885803893211,99.369313228875399,68.125126944668594,64.346972137875852,68.948324212618175,65.939250118844214,68.745274719223374,74.398242305964231,78.015314753353593,81.298238258250052,62.978421317227188,62.807365702278915,66.044921896234158,68.984447232633826,78.986171169765299,84.643157763592896,90.256549935787916,91.060476201213902,61.892671156674623,62.725522438436748,64.311497476883233,71.069565467722711,79.210197683796281,80.967656992375851,86.307162609137592,85.030651924386618,58.996437306515872,58.373403770104048,60.029424691759047,60.703426514193417,75.081127473153174,78.813550492003557,86.102305058762425,87.811162199079988],"y":[1.0936421859078109,1.9823400591500104,3.0059245821554215,4.0223946060054008,4.92020396636799,5.9196225727442648,7.0187837131321427,7.900130666838959,0.96473260852508247,2.0211488834582267,3.0472499463241549,3.9913650285452604,4.9953159077093003,5.9845371764153246,7.0302629233803602,7.9153701540548358,1.0568378012627364,1.9812283880077302,3.0834770185872911,3.9707510420121253,5.0521542300004514,6.0051298932172354,7.09747692910023,8.0535119998734448,0.9633756753057241,1.9396334135439246,2.9871218590997159,3.9386944492347538,4.9825236765202137,6.0020961405243725,6.9817401985172181,8.024521626718343,1.0344492980744691,2.022277686977759,3.0089653903152795,4.0783979054074733,5.0481206469237803,6.000072913011536,7.0111565735656765,7.9852875425014647,0.95706956544890998,1.941759472200647,2.9394277064595373,3.9482827969826757,5.0498014635406436,6.0970364079345014,7.0748649089131508,7.993410871038213,1.0159887573681772,2.0698229311499743,2.984584235586226,3.995086323004216,4.9334468563087288,5.9133283619303256,6.9387885754462335,8.0027577861677859,1.0146048422902822,2.0968641897663476,2.9895348182879387,4.0774850546848027,4.9859951138496399,6.0790952084586021,7.0860441884025933,8.0054565418045964,1.0572880007792265,1.9249779651407153,3.0574021223001182,4.0699466085527094,5.085524613549933,5.923536264291033,6.964604408619925,7.9091808376368133,0.91547249108552931,1.9746697312686592,2.9297102813608946,3.9149325945880262,4.940948995575309,6.0856888901907951,7.0411862679291515,8.0078889392781996,1.0413331904914229,2.00386736872606,2.9235839816275986,4.0825842082500454,5.0658132731448857,5.9230416824575514,7.0604435039684175,8.0601458453107622,0.94862034143880014,1.933738167770207,3.072554990462959,4.0190273585263636,5.0814660247415304,5.9625319058075545,6.9152581335976722,7.956495807506144,0.94677929589524867,2.0863750871736557,2.9950385593809186,4.0327602040488273,4.995578212337568,6.0161494121421129,6.9653490607626738,7.9121805214788763,1.0434272974729537,2.0651195554062722,3.0432874275371433,3.9286270965822041,5.0656361329834905,5.9890226168092342,7.0605641457252206,7.9400616977829488,0.98065820117481051,1.9842024745885283,3.0582141748629512,4.0346354629378762,5.0822894367389377,5.9350688333623109,7.0482369853649285,7.9607858835253866,1.0395249686669559,2.0616740869823844,2.977925960626453,3.9379088442772625,4.9749743620865043,6.0321464275941254,7.0518189248628911,8.0692862537223853,1.009739311086014,1.9152391659095884,2.9398003193084152,3.9960883592721075,5.0119612605776638,6.0184251090977341,6.9947848496027287,8.0775784609373655,1.0690602483227849,2.0255856362637132,3.0814332344103605,3.9086035714019092,5.0649528013076637,6.0221433398313824,7.0687830860260874,7.999669051356614,1.0140149041544646,2.098789783520624,3.0861493969336151,3.9756150407716633,5.0585437178146098,6.038720136415213,6.9628108792006973,8.0716246102005247,1.0805673538241536,1.9278416156303138,2.9509680681861936,3.9627001209184529,4.9706839464604853,6.0070369722321626,6.9986876018345354,8.0610688117332749,0.9915845801122487,2.0564461692236362,2.9018183526117354,3.9454498030245304,4.9537498256657271,6.0515318900812414,7.0625041615217921,7.9166877740528436,1.0046229594852776,2.0060816918965427,2.9745244081597777,4.0596053530927749,4.953002025792375,6.0652185884770002,6.980381507799029,8.0555725565645844,1.01712789372541,2.0389546910300851,2.9560611309017988,4.0061199483461678,5.0591065236367285,5.9702691071666774,6.9073630406986926,7.974220413248986,1.0261343877762557,1.9385667235590518,3.0571723487693818,3.9822735665831717,4.9897037748713045,5.9055753036402168,6.9015540197025986,8.0195475530344993,0.93058501002378757,1.9213919325731694,3.0463951783720402,4.0142113088164475,4.9225905683822928,6.0745980325620623,6.9571541714947669,7.9574338762555268,1.0503387097734957,2.0930619535036383,2.9986637270078065,4.0198938677087428,4.9716934454161672,5.9287279641721398,6.9308944723103192,8.0453542472328987,0.93662570719607174,1.9636188300792128,3.023285252926871,4.0762417993042614,4.9489606797695158,6.0960771680343893,6.9999847573228182,7.9238202003762126,0.97739997673779722,1.9775217141490429,3.017576973279938,4.0851203497033568,4.9873676248826087,6.0941307279281318,7.0883295502513644,8.0282339075580236,1.0465441931970418,1.9215067522600293,2.915810905210674,4.039893044251949,4.9147359497845171,6.0774295302573593,6.927828329056501,7.9646126009989526,1.0770766525063664,1.9324742210563273,2.9885019569657745,3.9400762715376914,5.0480375159066169,5.9301581731066104,7.0082998924888669,7.9303260173182935,0.91456045396625996,1.9573911502026022,2.9555949457921087,4.0486126221716408,5.0008527261670679,5.9204368692822751,7.0212624203413725,7.9051606471650304,1.0220308437943459,2.0870672007091344,3.0302616068627684,4.099319682596251,5.0383162944111977,6.0207001922186461,7.0824385701213028,7.9880116650834676,0.90072848871350286,2.0537579959258436,2.9277729745954275,3.9087905871681867,5.0001164046116173,5.9675576191861186,6.9283950898330655,8.0503550864756104,0.96678073136135934,1.9147727326489985,2.9372450288850813,4.0897269329521801,4.9165389081928881,6.096212366130203,7.0780102876015007,7.9009402075316757,0.92552588162943716,1.9696697672829031,2.9536227042786778,4.0461801332421601,4.9320985526777807,5.9079839209560303,6.9768289812840525,7.9207531952299179,0.90432737064547841,2.0863850282505156,3.0822114576119928,4.0641262631397694,4.9089251894503834,6.058974455995485,6.9052373324986549,8.0585503135807812,1.0500670885201544,1.9353211810346693,2.9491255936212837,4.0078132150229067,4.9339315815828737,6.0508900153916327,7.0072142538614575,7.9011141145136206,1.0669187054503708,2.0426514458376914,2.9067225484643133,4.0930352807976309,4.9825857872609047,5.9550169846042991,7.0768230964429675,7.9478683332446964,0.92629872299730776,2.0155981606803834,2.9198491854593156,3.9704852451104671,4.9257916110102089,6.0098966959863898,6.9731549819931384,7.9378271705470977,1.0383247265126556,2.0050955912563948,2.9049180331639946,4.0059356837067757,5.0402514798101041,6.011059329099953,6.9225012970156969,7.9946415273938332,0.96839001281186943,1.9806271438486873,3.069899202743545,4.0067201479338106,5.0111768485978248,6.0787580194417385,6.9271252949722113,8.0422540179919455,0.95455585089512174,2.0650095271877946,2.9361501384992152,4.0790339609608051,5.0937555701937525,6.0595493190921843,6.9299463451374326,7.9228590173181148,1.0550325968768448,1.9100453278515488,3.0709155629854648,4.0372366055380553,4.9908481489401311,6.0240066719241439,6.9402186099439858,7.9786253063008186,0.95311129768379033,1.9767233730759473,3.0321716308593749,3.9558161722030492,5.0502335568424312,6.0505563169717789,6.95357924583368,8.0259861542377617,1.0394862981513142,1.9927695852238685,2.9619843826163561,4.0881646601483226,5.0772622233722355,6.047938198689371,7.063779677078128,7.9805418835952882],"text":["Place: London","Place: London","Place: London","Place: London","Place: London","Place: London","Place: London","Place: London","Place: Thames Valley Berkshire","Place: Thames Valley Berkshire","Place: Thames Valley Berkshire","Place: Thames Valley Berkshire","Place: Thames Valley Berkshire","Place: Thames Valley Berkshire","Place: Thames Valley Berkshire","Place: Thames Valley Berkshire","Place: North Eastern Scotland","Place: North Eastern Scotland","Place: North Eastern Scotland","Place: North Eastern Scotland","Place: North Eastern Scotland","Place: North Eastern Scotland","Place: North Eastern Scotland","Place: North Eastern Scotland","Place: Enterprise M3","Place: Enterprise M3","Place: Enterprise M3","Place: Enterprise M3","Place: Enterprise M3","Place: Enterprise M3","Place: Enterprise M3","Place: Enterprise M3","Place: Cheshire and Warrington","Place: Cheshire and Warrington","Place: Cheshire and Warrington","Place: Cheshire and Warrington","Place: Cheshire and Warrington","Place: Cheshire and Warrington","Place: Cheshire and Warrington","Place: Cheshire and Warrington","Place: Hertfordshire","Place: Hertfordshire","Place: Hertfordshire","Place: Hertfordshire","Place: Hertfordshire","Place: Hertfordshire","Place: Hertfordshire","Place: Hertfordshire","Place: Coventry and Warwickshire","Place: Coventry and Warwickshire","Place: Coventry and Warwickshire","Place: Coventry and Warwickshire","Place: Coventry and Warwickshire","Place: Coventry and Warwickshire","Place: Coventry and Warwickshire","Place: Coventry and Warwickshire","Place: Oxfordshire","Place: Oxfordshire","Place: Oxfordshire","Place: Oxfordshire","Place: Oxfordshire","Place: Oxfordshire","Place: Oxfordshire","Place: Oxfordshire","Place: West of England","Place: West of England","Place: West of England","Place: West of England","Place: West of England","Place: West of England","Place: West of England","Place: West of England","Place: Highlands and Islands","Place: Highlands and Islands","Place: Highlands and Islands","Place: Highlands and Islands","Place: Highlands and Islands","Place: Highlands and Islands","Place: Highlands and Islands","Place: Highlands and Islands","Place: Swindon and Wiltshire","Place: Swindon and Wiltshire","Place: Swindon and Wiltshire","Place: Swindon and Wiltshire","Place: Swindon and Wiltshire","Place: Swindon and Wiltshire","Place: Swindon and Wiltshire","Place: Swindon and Wiltshire","Place: South East Midlands","Place: South East Midlands","Place: South East Midlands","Place: South East Midlands","Place: South East Midlands","Place: South East Midlands","Place: South East Midlands","Place: South East Midlands","Place: Eastern Scotland","Place: Eastern Scotland","Place: Eastern Scotland","Place: Eastern Scotland","Place: Eastern Scotland","Place: Eastern Scotland","Place: Eastern Scotland","Place: Eastern Scotland","Place: Buckinghamshire Thames Valley","Place: Buckinghamshire Thames Valley","Place: Buckinghamshire Thames Valley","Place: Buckinghamshire Thames Valley","Place: Buckinghamshire Thames Valley","Place: Buckinghamshire Thames Valley","Place: Buckinghamshire Thames Valley","Place: Buckinghamshire Thames Valley","Place: Greater Cambridge and Greater Peterborough","Place: Greater Cambridge and Greater Peterborough","Place: Greater Cambridge and Greater Peterborough","Place: Greater Cambridge and Greater Peterborough","Place: Greater Cambridge and Greater Peterborough","Place: Greater Cambridge and Greater Peterborough","Place: Greater Cambridge and Greater Peterborough","Place: Greater Cambridge and Greater Peterborough","Place: Coast to Capital","Place: Coast to Capital","Place: Coast to Capital","Place: Coast to Capital","Place: Coast to Capital","Place: Coast to Capital","Place: Coast to Capital","Place: Coast to Capital","Place: Greater Birmingham and Solihull","Place: Greater Birmingham and Solihull","Place: Greater Birmingham and Solihull","Place: Greater Birmingham and Solihull","Place: Greater Birmingham and Solihull","Place: Greater Birmingham and Solihull","Place: Greater Birmingham and Solihull","Place: Greater Birmingham and Solihull","Place: Gloucestershire","Place: Gloucestershire","Place: Gloucestershire","Place: Gloucestershire","Place: Gloucestershire","Place: Gloucestershire","Place: Gloucestershire","Place: Gloucestershire","Place: Greater Manchester","Place: Greater Manchester","Place: Greater Manchester","Place: Greater Manchester","Place: Greater Manchester","Place: Greater Manchester","Place: Greater Manchester","Place: Greater Manchester","Place: East Wales","Place: East Wales","Place: East Wales","Place: East Wales","Place: East Wales","Place: East Wales","Place: East Wales","Place: East Wales","Place: Solent","Place: Solent","Place: Solent","Place: Solent","Place: Solent","Place: Solent","Place: Solent","Place: Solent","Place: Leicester and Leicestershire","Place: Leicester and Leicestershire","Place: Leicester and Leicestershire","Place: Leicester and Leicestershire","Place: Leicester and Leicestershire","Place: Leicester and Leicestershire","Place: Leicester and Leicestershire","Place: Leicester and Leicestershire","Place: Cumbria","Place: Cumbria","Place: Cumbria","Place: Cumbria","Place: Cumbria","Place: Cumbria","Place: Cumbria","Place: Cumbria","Place: Dorset","Place: Dorset","Place: Dorset","Place: Dorset","Place: Dorset","Place: Dorset","Place: Dorset","Place: Dorset","Place: Leeds City Region","Place: Leeds City Region","Place: Leeds City Region","Place: Leeds City Region","Place: Leeds City Region","Place: Leeds City Region","Place: Leeds City Region","Place: Leeds City Region","Place: York, North Yorkshire and East Riding","Place: York, North Yorkshire and East Riding","Place: York, North Yorkshire and East Riding","Place: York, North Yorkshire and East Riding","Place: York, North Yorkshire and East Riding","Place: York, North Yorkshire and East Riding","Place: York, North Yorkshire and East Riding","Place: York, North Yorkshire and East Riding","Place: West Central Scotland","Place: West Central Scotland","Place: West Central Scotland","Place: West Central Scotland","Place: West Central Scotland","Place: West Central Scotland","Place: West Central Scotland","Place: West Central Scotland","Place: Lancashire","Place: Lancashire","Place: Lancashire","Place: Lancashire","Place: Lancashire","Place: Lancashire","Place: Lancashire","Place: Lancashire","Place: Worcestershire","Place: Worcestershire","Place: Worcestershire","Place: Worcestershire","Place: Worcestershire","Place: Worcestershire","Place: Worcestershire","Place: Worcestershire","Place: New Anglia","Place: New Anglia","Place: New Anglia","Place: New Anglia","Place: New Anglia","Place: New Anglia","Place: New Anglia","Place: New Anglia","Place: Northern Ireland","Place: Northern Ireland","Place: Northern Ireland","Place: Northern Ireland","Place: Northern Ireland","Place: Northern Ireland","Place: Northern Ireland","Place: Northern Ireland","Place: South East","Place: South East","Place: South East","Place: South East","Place: South East","Place: South East","Place: South East","Place: South East","Place: Derby, Derbyshire, Nottingham and Nottinghamshire","Place: Derby, Derbyshire, Nottingham and Nottinghamshire","Place: Derby, Derbyshire, Nottingham and Nottinghamshire","Place: Derby, Derbyshire, Nottingham and Nottinghamshire","Place: Derby, Derbyshire, Nottingham and Nottinghamshire","Place: Derby, Derbyshire, Nottingham and Nottinghamshire","Place: Derby, Derbyshire, Nottingham and Nottinghamshire","Place: Derby, Derbyshire, Nottingham and Nottinghamshire","Place: The Marches","Place: The Marches","Place: The Marches","Place: The Marches","Place: The Marches","Place: The Marches","Place: The Marches","Place: The Marches","Place: Humber","Place: Humber","Place: Humber","Place: Humber","Place: Humber","Place: Humber","Place: Humber","Place: Humber","Place: Liverpool City Region","Place: Liverpool City Region","Place: Liverpool City Region","Place: Liverpool City Region","Place: Liverpool City Region","Place: Liverpool City Region","Place: Liverpool City Region","Place: Liverpool City Region","Place: Heart of the South West","Place: Heart of the South West","Place: Heart of the South West","Place: Heart of the South West","Place: Heart of the South West","Place: Heart of the South West","Place: Heart of the South West","Place: Heart of the South West","Place: Stoke-on-Trent and Staffordshire","Place: Stoke-on-Trent and Staffordshire","Place: Stoke-on-Trent and Staffordshire","Place: Stoke-on-Trent and Staffordshire","Place: Stoke-on-Trent and Staffordshire","Place: Stoke-on-Trent and Staffordshire","Place: Stoke-on-Trent and Staffordshire","Place: Stoke-on-Trent and Staffordshire","Place: North East","Place: North East","Place: North East","Place: North East","Place: North East","Place: North East","Place: North East","Place: North East","Place: Greater Lincolnshire","Place: Greater Lincolnshire","Place: Greater Lincolnshire","Place: Greater Lincolnshire","Place: Greater Lincolnshire","Place: Greater Lincolnshire","Place: Greater Lincolnshire","Place: Greater Lincolnshire","Place: Tees Valley","Place: Tees Valley","Place: Tees Valley","Place: Tees Valley","Place: Tees Valley","Place: Tees Valley","Place: Tees Valley","Place: Tees Valley","Place: Cornwall and Isles of Scilly","Place: Cornwall and Isles of Scilly","Place: Cornwall and Isles of Scilly","Place: Cornwall and Isles of Scilly","Place: Cornwall and Isles of Scilly","Place: Cornwall and Isles of Scilly","Place: Cornwall and Isles of Scilly","Place: Cornwall and Isles of Scilly","Place: West Wales and The Valleys","Place: West Wales and The Valleys","Place: West Wales and The Valleys","Place: West Wales and The Valleys","Place: West Wales and The Valleys","Place: West Wales and The Valleys","Place: West Wales and The Valleys","Place: West Wales and The Valleys","Place: Black Country","Place: Black Country","Place: Black Country","Place: Black Country","Place: Black Country","Place: Black Country","Place: Black Country","Place: Black Country","Place: Southern Scotland","Place: Southern Scotland","Place: Southern Scotland","Place: Southern Scotland","Place: Southern Scotland","Place: Southern Scotland","Place: Southern Scotland","Place: Southern Scotland"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,0,0,1)","opacity":0.5,"size":11.338582677165356,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"FALSE","legendgroup":"FALSE","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[68.939689734391862,70.243767788447443,70.143591452762479,72.030802879296246,80.036966180615124,83.202880983054641,87.835994949564338,89.852802034094935],"y":[1.0365669024642556,2.0820756549946964,2.9771945894695819,4.0392838283907624,5.0041830444242805,6.0030480554327372,7.0456838026642803,8.0295856507960703],"text":"Place: Sheffield City Region","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(255,0,0,1)","opacity":1,"size":11.338582677165356,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(255,0,0,1)"}},"hoveron":"points","name":"TRUE","legendgroup":"TRUE","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[100,100],"y":[0.40000000000000002,8.5999999999999996],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(255,0,0,0.25)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":30.611872146118724,"r":7.3059360730593621,"b":44.56621004566211,"l":273.97260273972609},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[52.411522456603123,183.57291135362348],"tickmode":"array","ticktext":["60","90","120","150","180"],"tickvals":[60,90,120,150,180],"categoryorder":"array","categoryarray":["60","90","120","150","180"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"index value (UK average is 100)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.40000000000000002,8.5999999999999996],"tickmode":"array","ticktext":["GVA per head","less imputed rent","per 16 to 64 yr old","per employed resident","per filled job","less industry effect","less occupation effect","adjusted for hours worked (efficiency factor)"],"tickvals":[1,2,3,4,5,6,7,8],"categoryorder":"array","categoryarray":["GVA per head","less imputed rent","per 16 to 64 yr old","per employed resident","per filled job","less industry effect","less occupation effect","adjusted for hours worked (efficiency factor)"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"SCR","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"16ded1f0adf8f":{"x":{},"y":{},"colour":{},"alpha":{},"type":"scatter"},"16ded167c58b6":{"yintercept":{}}},"cur_data":"16ded1f0adf8f","visdat":{"16ded1f0adf8f":["function (y) ","x"],"16ded167c58b6":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>It’s also striking if places are ranked on each of these measures, and then seeing how much rank position changes.</p>
+<p>The top five most productive places hardly change rank at all for the different measures. Cornwall and Isles of Scilly, at the least productive end, overlap with a few other places depending on the measure.</p>
+<p>Very many places, however, have radically different productivity rank positions depending on the chosen measure.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pip <span class="ot">&lt;-</span> pip <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(measure) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">rank =</span> <span class="fu">rank</span>(value)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Place) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">meanrank =</span> <span class="fu">mean</span>(rank),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">rankrange =</span> <span class="fu">max</span>(rank) <span class="sc">-</span> <span class="fu">min</span>(rank)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Look at spread of rank positions for all places</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Order by mean rank</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pip, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_reorder</span>(Place, meanrank), <span class="at">y =</span> rank)) <span class="sc">+</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"rank (higher number is more productive)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="beattyfothergill_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="960"></p>
+</div>
+</div>
+<p>Picking out the top ten places with the widest difference in rank across measures and looking at how they change, for some there is clear opposite movement: Oxfordshire, very near highest rank for GVA per head, drops very far down for the other measures. Tees Valley goes in the opposite direction.</p>
+<p>It looks like a geographical north-south pattern for which measure types and their rank range dominate. Oxfordshire and Gloucestershire start out with higher rank than Liverpool City Region and Tees, but those swap over entirely.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Pick out TEN of the largest rank spreads</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>top_places <span class="ot">&lt;-</span> pip <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(Place, rankrange) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(rankrange)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Place)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Look at that for top rank movers</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pip <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Place <span class="sc">%in%</span> top_places) <span class="sc">%&gt;%</span> <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Place =</span> <span class="fu">fct_reorder</span>(Place,<span class="sc">-</span>rankrange,mean)), <span class="fu">aes</span>(<span class="at">x =</span> measure, <span class="at">y =</span> rank, <span class="at">group =</span> Place, <span class="at">colour =</span> Place)) <span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">'Paired'</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">colour=</span><span class="fu">guide_legend</span>(<span class="at">title=</span><span class="st">"Place (ordered by rank range)"</span>)) <span class="sc">+</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">''</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">'Rank position (higher is more productive)'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="beattyfothergill_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="960"></p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
