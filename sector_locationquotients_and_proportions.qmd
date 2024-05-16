@@ -1,5 +1,6 @@
 ---
 title: "UK sectors: LQs & proportion plots"
+code-overflow: wrap
 execute:
   echo: true
   warning: false

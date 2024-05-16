@@ -1,13 +1,11 @@
 ---
-title: "GDP regional gaps in the UK"
+title: "GDP/GVA regional gaps in the UK"
+code-overflow: wrap
 execute:
   echo: true
   warning: false
   error: false
 ---
-
-# REGIONAL GVA GAP
-
 
 ```{r}
 #| echo: false
@@ -18,41 +16,59 @@ library(zoo)
 library(sf)
 library(tmap)
 library(plotly)
-library(nomisr)
-library(pryr)
-library(ggrepel)
-library(here)
 options(scipen = 99)
 ```
 
+## Identifying regional gaps in GVA/GDP in the UK
 
+Regional GVA/GDP data can be framed in many different ways. [Take a look at](beattyfothergill.html) the page examining data from Beatty & Fothergill's work on this. If, for example, we want to understand the impact that inactivity or unemployment has on regional output, GVA per head of population won't directly allow that (though it will be affecting differences between regions strongly).
+
+Here, we'll dig into some of the official data sources to examine what regional gaps in output appear, and how they compare to national and other larger-region averages.
+
+Let's start with one of the most common measures of regional productivity, **GVA per hour worked**. Information on data sources is in the code comments, but note that the hourly work data comes from the Labour Force Survey (see 'measuring the data' [here at ONS](https://www.ons.gov.uk/economy/economicoutputandproductivity/productivitymeasures/bulletins/regionallabourproductivityincludingindustrybyregionuk/latest)). 
+
+Load in the data for both ITL2 and ITL3 regions:
 
 ```{r}
-#| fig-width: 10
 #ONS link to the Excel sheets: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/regionalgrossdomesticproductallnutslevelregions
-#Data folder name of downloaded Excel sheets (from which the CSVs below are exported)
-#regionalgrossdomesticproductgdpallitlregions.xlsx
-perhourworked <- read_csv(here('data/Table A4 Current Price unsmoothed GVA B per hour worked £ ITL2 and ITL3 subregions 2004 to 2021.csv')) %>% 
+#Data folder name of downloaded Excel sheets (from which the CSVs below have been exported)
+#itlproductivity.xlsx
+perhourworked <- read_csv('data/Table A4 Current Price unsmoothed GVA B per hour worked £ ITL2 and ITL3 subregions 2004 to 2021.csv') %>% 
 rename(ITL = `ITL level`, ITLcode = `ITL code`, region = `Region name`) %>% 
   filter(ITL == 'ITL2') %>% 
   pivot_longer(cols = `2004`:`2021`, names_to = 'year', values_to = 'gva') %>% 
   mutate(year = as.numeric(year))
 
 #Repeat for ITL3
-perhourworked.itl3 <- read_csv(here('data/Table A4 Current Price unsmoothed GVA B per hour worked £ ITL2 and ITL3 subregions 2004 to 2021.csv')) %>% 
+perhourworked.itl3 <- read_csv('data/Table A4 Current Price unsmoothed GVA B per hour worked £ ITL2 and ITL3 subregions 2004 to 2021.csv') %>% 
   rename(ITL = `ITL level`, ITLcode = `ITL code`, region = `Region name`) %>% 
   filter(ITL == 'ITL3') %>% 
   pivot_longer(cols = `2004`:`2021`, names_to = 'year', values_to = 'gva') %>% 
   mutate(year = as.numeric(year))
+```
 
-x = 2
+As the file names say, this is GVA per hour worked in **current prices**. That is, it's the actual money amount for that specific 'current' year (2004 to 2021 in this data) - so it's not inflation adjusted.
 
+GVA/GDP data comes in either **current prices** (CP) or **chained volume** (CV) numbers. CV data has been *inflation-adjusted* so that change over time can be looked at - but the adjustment is done for each region separately, meaning that the difference in scale *between places* will be slightly off. (You can check this in e.g. the sector data by summing the CV values for regions and noting that it does **not** match the total for the larger geographies they're a part of.)
+
+In practice, this means it's best to use **current prices data to compare between places** and **chained volume / inflation adjusted numbers to look at how specific places' GVA/GDP changes over time.**
+
+However, it is possible to examine change over time in the current prices data if we just examine **relative change**, either in how proportions change or - as the next code block does - in how the rank position of places changes.
+
+This block:
+
+* Finds rank position of all places over time
+* Takes a moving 3 year average of that rank to smooth a bit
+* Labels different parts of the UK - North, South, London, South apart from London
+* Makes an interactive plot of the rank change over time (comparing the years after coalition govt and most recent years before COVID) with South Yorkshire highlighted
+
+```{r}
 #Rank to see which ITL2 changed position the most
 perhourworked <- perhourworked %>% 
   group_by(year) %>% 
   mutate(rank = rank(gva))
 
-#But let's start with 3 year smoothing and check differences
+#3 year smoothing
 perhourworked <- perhourworked %>% 
   arrange(year) %>% 
   group_by(region) %>%
@@ -61,8 +77,6 @@ perhourworked <- perhourworked %>%
     rank_movingav = rollapply(rank,3,mean,align='right',fill=NA),
     rank_movingav_7yr = rollapply(rank,7,mean,align='right',fill=NA)
     )
-
-
 
 #Picking out England and North etc...
 #Via https://github.com/DanOlner/regionalGVAbyindustry
@@ -85,22 +99,6 @@ england.minus.london <- england[!grepl('london',england,ignore.case = T)]
 #UK minus London
 uk.minus.london <- perhourworked$region[!grepl('london',perhourworked$region,ignore.case = T)] %>% unique
 
-#Check is all correct with map
-# itl2.geo <- st_read('data/ITL_geographies/International_Territorial_Level_2_January_2021_UK_BFE_V2_2022_-4735199360818908762/ITL2_JAN_2021_UK_BFE_V2.shp') %>% 
-#   st_simplify(preserveTopology = T, dTolerance = 100)
-# 
-# #Tick
-# table(england %in% itl2.geo$ITL221NM)
-# 
-# #Ticks all round
-# plot(st_geometry(itl2.geo %>% filter(ITL221NM %in% england)), col = 'grey')
-# plot(st_geometry(itl2.geo %>% filter(ITL221NM %in% north)), col = 'blue', add = T)
-# plot(st_geometry(itl2.geo %>% filter(ITL221NM %in% south)), col = 'green', add = T)
-# plot(st_geometry(itl2.geo %>% filter(ITL221NM %in% england.minus.london)), col = 'red', add = T)
-# 
-# plot(st_geometry(itl2.geo %>% filter(ITL221NM %in% uk.minus.london)), col = 'grey')
-
-
 #Add those regions into the per hour worked data
 perhourworked <- perhourworked %>% 
   mutate(ns_england_restofUK = case_when(
@@ -108,8 +106,6 @@ perhourworked <- perhourworked %>%
     region %in% south ~ 'South Eng (inc. London)',
     .default = 'rest of UK'
   ))
-
-table(perhourworked$ns_england_restofUK, useNA = 'always')
 
 perhourworked <- perhourworked %>% 
   mutate(ns_england_restofUK_londonseparate = case_when(
@@ -119,22 +115,50 @@ perhourworked <- perhourworked %>%
     .default = 'rest of UK'
   ))
 
-table(perhourworked$ns_england_restofUK_londonseparate, useNA = 'always')
+```
 
+If wanted, we can check those geographical zone selections are correct by plotting the maps.
 
+```{r}
+#| eval: false
+
+#Check is all correct with map
+itl2.geo <- st_read('data/ITL_geographies/International_Territorial_Level_2_January_2021_UK_BFE_V2_2022_-4735199360818908762/ITL2_JAN_2021_UK_BFE_V2.shp') %>%
+  st_simplify(preserveTopology = T, dTolerance = 100)
+
+#Tick
+table(england %in% itl2.geo$ITL221NM)
+
+#Ticks all round
+plot(st_geometry(itl2.geo %>% filter(ITL221NM %in% england)), col = 'grey')
+plot(st_geometry(itl2.geo %>% filter(ITL221NM %in% north)), col = 'blue', add = T)
+plot(st_geometry(itl2.geo %>% filter(ITL221NM %in% south)), col = 'green', add = T)
+plot(st_geometry(itl2.geo %>% filter(!ITL221NM %in% england.minus.london)), col = 'red', add = T)
+
+plot(st_geometry(itl2.geo %>% filter(ITL221NM %in% uk.minus.london)), col = 'grey')
+```
+
+Lastly - add a marker for a place of interest (South Yorkshire in this case) and plot interactively (hover for other region names):
+
+```{r}
+#| fig-width: 10
+#| fig-height: 8
 
 #Add marker for South Yorkshire
 perhourworked <- perhourworked %>% 
-  mutate(is_sy = region == 'South Yorkshire')
-
+  mutate(selectedregion = region == 'South Yorkshire')
 
 #Plot: first coalition years to pre covid
 p <- ggplot(perhourworked %>% filter(year %in% c(2012,2018)), aes(x = factor(year), y = rank_movingav, group = region, color = factor(year))) +
   geom_line(aes(group = region), color = "grey44") +
-  geom_point(aes(shape = is_sy, size = is_sy)) +
-  facet_wrap(vars(ns_england_restofUK_londonseparate), nrow = 1)
+  geom_point(aes(shape = selectedregion, size = selectedregion)) +
+  facet_wrap(vars(ns_england_restofUK_londonseparate), nrow = 1) +
+  ylab('rank (3 year average)') +
+  xlab('year (average centre)') +
+  guides(colour="none", shape = "none", size = "none") +
+  theme_bw()
 
-ggplotly(p, tooltip = 'region')
+ggplotly(p, tooltip = c('region','rank_movingav'))
 
 ```
 
@@ -679,111 +703,6 @@ sy_gdp_2021 * 0.03 *1000000
 
 #current prices
 sy_gdp_cp_2021 * 0.03 *1000000
-
-
-
-
-
-#CRESR PRODUCTIVTY----
-
-#Table pulled from this report:
-#The productivity of industries and places, Christina Beatty Steve Fothergill 2020
-#https://www.shu.ac.uk/centre-regional-economic-social-research/publications/the-productivity-of-industries-and-places
-
-#Drop UK, can assume that's the av and add line
-pip <- read_csv('data/productivity-industries-places.csv') %>% filter(Place!='United Kingdom')
-
-#Get factor order from column order before converting to long
-measure_factororder = names(pip)[2:9]
-
-pip <- pip %>% 
-  pivot_longer(cols = 2:9, names_to = "measure", values_to = "value") %>% 
-  mutate(measure = factor(measure, ordered = T, levels = measure_factororder)) %>% 
-  mutate(SCR = ifelse(Place == 'Sheffield City Region', T,F))
-
-p <- ggplot(pip, aes(x = measure, y = value, group = Place, colour = SCR, alpha = SCR)) +
-  geom_jitter(width = 0.1, size = 3) +
-  geom_hline(yintercept = 100, colour = 'red', size = 3, alpha = 0.25) +
-  scale_colour_manual(values = c('black','red')) +
-  scale_alpha_manual(values = c(0.5,1)) +
-  coord_flip() +
-  xlab('') + ylab('index value (UK average is 100)')
-  
-p <- ggplotly(p, tooltip = 'Place')
-
-#Makes horrible separate folder for libraries, but works (manual export via RStudio puts in single html script)
-htmlwidgets::saveWidget(as_widget(p), "docs/plotly/pip_chart.html")
-
-
-#Of more interest might be the change in rank position between the different measures.
-#Rank position per measure type
-pip <- pip %>% 
-  group_by(measure) %>% 
-  mutate(
-    rank = rank(value)
-  ) %>% 
-  group_by(Place) %>% 
-  mutate(
-    meanrank = mean(rank),
-    rankrange = max(rank) - min(rank)
-    )
-
-#How many geog regions here? 46
-length(unique(pip$Place))
-
-#Can have a look at spread of rank positions for all places?
-#Order by rank range (biggest range = place changes rank position the most)
-ggplot(pip, aes(x = fct_reorder(Place, rankrange), y = rank)) +
-  geom_boxplot() +
-  coord_flip()
-
-
-#Order by mean rank
-ggplot(pip, aes(x = fct_reorder(Place, meanrank), y = rank)) +
-  geom_boxplot() +
-  coord_flip()
-
-
-#Different measures also reduce the RELATIVE distances between places 
-#E.g. London is less of an outlier (though still top rank) for various measures
-#Relative distances probably better, as I don't think the nominal index values are likely easily comparable
-#(but need to check that)
-
-#Repeat of plot above, with some of the largest rank spreads shown
-top_places <- pip %>%
-  ungroup() %>% 
-  distinct(Place, rankrange) %>% 
-  arrange(desc(rankrange)) %>%
-  slice_head(n = 10) %>%
-  pull(Place)
-
-#Interesting - for Oxford and Tees Valley, opposite positions and they swap over
-ggplot() +
-  geom_jitter(data = pip, aes(x = measure, y = rank, group = Place), width = 0.1, size = 3) +
-  geom_jitter(data = pip %>% filter(Place %in% top_places[3:4]), aes(x = measure, y = rank, group = Place, colour = Place), width = 0.1, size = 5, shape =15) +
-  # geom_hline(yintercept = 100, colour = 'red', size = 3, alpha = 0.25) +
-  coord_flip() +
-  xlab('') + ylab('rank position')
-
-
-#Seeing what seems to be a geographical north-south pattern for which measure types and their rank range dominate
-#i.e. Oxfordshire and Gloucestershire start out with higher rank than LCR and Tees, but those swap over entirely
-
-#Look at that directly for top rank movers?
-ggplot(pip %>% filter(Place %in% top_places) %>% ungroup() %>% mutate(Place = fct_reorder(Place,-rankrange,mean)), aes(x = measure, y = rank, group = Place, colour = Place)) +
-  geom_line(size = 2) +
-  geom_point(size = 3) +
-  scale_color_brewer(palette = 'Paired', direction = -1) +
-  coord_flip() +
-  guides(colour=guide_legend(title="Place (ordered by rank range)")) +
-  theme_minimal() +
-  xlab('') + ylab('Rank position (higher is more productive)')
-
-#Mapping is a bit to piece together:
-#"For England, the sub-regions we use are the 38 Local Enterprise Partnership areas. 
-#For Scotland and Wales, we use NUTS2 regions (5 in Scotland, 2 in Wales) and Northern Ireland is treated as a single unit."
-
-#REMINDER, THIS IS NOT BEING EXECUTED!
 
 
 ```
