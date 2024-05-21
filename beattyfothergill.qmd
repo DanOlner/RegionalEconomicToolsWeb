@@ -17,7 +17,7 @@ library(plotly)
 options(scipen = 99)
 ```
 
-## Beatty and Fothergill report: 'Productivity of Industry and Places' 2020
+## Beatty and Fothergill report: 'Productivity of Industry and Places' 2020 
 
 Report [webpage](https://www.shu.ac.uk/centre-regional-economic-social-research/publications/the-productivity-of-industries-and-places) and [PDF](file:///home/dano/Downloads/productivity-industries-places-1.pdf).
 
