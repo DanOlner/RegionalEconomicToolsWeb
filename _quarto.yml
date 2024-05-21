@@ -3,7 +3,7 @@ project:
   output-dir: docs
   
 website:
-  title: "UK regional economics tools and analysis"
+  title: "UK regional economics tools and analysis in R"
   navbar:
     left:
       - href: index.qmd

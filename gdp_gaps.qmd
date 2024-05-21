@@ -7,18 +7,6 @@ execute:
   error: false
 ---
 
-```{r}
-#| echo: false
-
-#GDP/GVA explore
-library(tidyverse)
-library(zoo)
-library(sf)
-library(tmap)
-library(plotly)
-options(scipen = 99)
-```
-
 ## Identifying regional gaps in GVA/GDP in the UK
 
 Regional GVA/GDP data can be framed in many different ways. [Take a look at](beattyfothergill.html) the page examining data from Beatty & Fothergill's work on this. If, for example, we want to understand the impact that inactivity or unemployment has on regional output, GVA per head of population won't directly allow that (though it will be affecting differences between regions strongly).
@@ -27,7 +15,18 @@ Here, we'll dig into some of the official data sources to examine what regional 
 
 Let's start with one of the most common measures of regional productivity, **GVA per hour worked**. Information on data sources is in the code comments, but note that the hourly work data comes from the Labour Force Survey (see 'measuring the data' [here at ONS](https://www.ons.gov.uk/economy/economicoutputandproductivity/productivitymeasures/bulletins/regionallabourproductivityincludingindustrybyregionuk/latest)). 
 
-Load in the data for both ITL2 and ITL3 regions:
+First, the libraries we'll use (and setting scipen to avoid any scientific notation):
+
+```{r}
+library(tidyverse)
+library(zoo)
+library(sf)
+library(tmap)
+library(plotly)
+options(scipen = 99)
+```
+
+Then load in the data for both ITL2 and ITL3 regions:
 
 ```{r}
 #ONS link to the Excel sheets: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/regionalgrossdomesticproductallnutslevelregions
@@ -73,9 +72,9 @@ perhourworked <- perhourworked %>%
   arrange(year) %>% 
   group_by(region) %>%
   mutate(
-    movingav = rollapply(gva,3,mean,align='right',fill=NA),
-    rank_movingav = rollapply(rank,3,mean,align='right',fill=NA),
-    rank_movingav_7yr = rollapply(rank,7,mean,align='right',fill=NA)
+    movingav = rollapply(gva,3,mean,align='center',fill=NA),
+    rank_movingav = rollapply(rank,3,mean,align='center',fill=NA),
+    rank_movingav_7yr = rollapply(rank,7,mean,align='center',fill=NA)
     )
 
 #Picking out England and North etc...
@@ -115,6 +114,15 @@ perhourworked <- perhourworked %>%
     .default = 'rest of UK'
   ))
 
+#And a category for 'UK minus London'
+perhourworked <- perhourworked %>% 
+  mutate(UK_minus_london = case_when(
+    grepl('london',region,ignore.case = T) ~ 'London',
+    .default = 'UK minus London'
+  ))
+
+
+
 ```
 
 If wanted, we can check those geographical zone selections are correct by plotting the maps.
@@ -138,7 +146,7 @@ plot(st_geometry(itl2.geo %>% filter(!ITL221NM %in% england.minus.london)), col 
 plot(st_geometry(itl2.geo %>% filter(ITL221NM %in% uk.minus.london)), col = 'grey')
 ```
 
-Lastly - add a marker for a place of interest (South Yorkshire in this case) and plot interactively (hover for other region names):
+Lastly - add a marker for a place of interest (South Yorkshire in this case) and plot interactively (hover for other region names). Here, we plot the average of the first three years rankings available in the data, then the first three years after 2010, then the last three years before COVID-19.
 
 ```{r}
 #| fig-width: 10
@@ -149,7 +157,7 @@ perhourworked <- perhourworked %>%
   mutate(selectedregion = region == 'South Yorkshire')
 
 #Plot: first coalition years to pre covid
-p <- ggplot(perhourworked %>% filter(year %in% c(2012,2018)), aes(x = factor(year), y = rank_movingav, group = region, color = factor(year))) +
+p <- ggplot(perhourworked %>% filter(year %in% c(2006,2012,2018)), aes(x = factor(year), y = rank_movingav, group = region, color = factor(year))) +
   geom_line(aes(group = region), color = "grey44") +
   geom_point(aes(shape = selectedregion, size = selectedregion)) +
   facet_wrap(vars(ns_england_restofUK_londonseparate), nrow = 1) +
@@ -161,6 +169,315 @@ p <- ggplot(perhourworked %>% filter(year %in% c(2012,2018)), aes(x = factor(yea
 ggplotly(p, tooltip = c('region','rank_movingav'))
 
 ```
+
+
+## Finding weighted averages for per hour productivity
+
+We want to compare specific places to the rest of the UK - and also, possibly, the rest of the UK minus London, because London is such an outlier. To do this, we'll need average per-hour-productivity values for the UK as as a whole, as well as regional subsets. 
+
+But each place differs in size - the per-hour-productivity values for each need adjusting to account for that. Here, we'll **weight the averages by the total number of hours worked in each ITL2 zone**. This data is available in another sheet from the regional GDP ONS data (stored here in the data folder as itlproductivity.xlsx).
+
+Values for one *before* the latest year in the data is used (2020) to match the centre point of the three year moving average.
+
+First, get the 'total hours a week' data and add in the regional labels:
+
+```{r}
+#WEIGHTED AVERAGES
+#Using number of hours worked per ITL2
+
+#Get hours worked per week total for ITL2
+totalhoursperweek <- read_csv('data/Productivity Hours Worked per Week ITL2 and ITL3 subregions constrained to ITL1 2004 2021.csv') %>%
+  rename(ITL = `ITL level`, ITLcode = `ITL code`, region = `Region name`) %>% 
+  filter(ITL == 'ITL2') %>% 
+  pivot_longer(cols = `2004`:`2021`, names_to = 'year', values_to = 'hours_per_week') %>% 
+  mutate(year = as.numeric(year))
+
+
+# #Add in all the region labels
+# totalhoursperweek.itl2 <- totalhoursperweek.itl2 %>% 
+#   mutate(ns_england_restofUK = case_when(
+#     region %in% north ~ 'North England',
+#     region %in% south ~ 'South Eng (inc. London)',
+#     .default = 'rest of UK'
+#   ))
+# 
+# totalhoursperweek.itl2 <- totalhoursperweek.itl2 %>% 
+#   mutate(ns_england_restofUK_londonseparate = case_when(
+#     region %in% north ~ 'North England',
+#     region %in% south.minus.london ~ 'South Eng (exc. London)',
+#     grepl('london',region,ignore.case = T) ~ 'London',
+#     .default = 'rest of UK'
+#   ))
+# 
+# totalhoursperweek.itl2 <- totalhoursperweek.itl2 %>% 
+#   mutate(UK_minus_london = case_when(
+#     grepl('london',region,ignore.case = T) ~ 'London',
+#     .default = 'UK minus London'
+#   ))
+```
+
+Next, join to the GVA per hour data, for 2020, and then get weighted averages for specific regions (including the whole of the UK minus London):
+
+```{r}
+
+perhourworked.withtotalhours <- perhourworked %>% filter(year == 2020) %>% 
+  ungroup() %>% 
+  left_join(
+    totalhoursperweek %>% filter(year == 2020) %>% select(region,hours_per_week),
+    by = 'region'
+  )
+
+#UK weighted average INCLUDING London
+weightedaverages.perhourworked.UK <- perhourworked.withtotalhours %>% 
+  summarise(
+    sy = perhourworked %>% filter(year == 2020, region == 'South Yorkshire') %>% select(movingav) %>% pull,#put SY in there to directly compare
+    mean_gva_av3years_weighted = weighted.mean(movingav, hours_per_week, na.rm=T)#get weighted average by each ITL2 grouping
+  ) %>% 
+  mutate(
+    prop_diff = (mean_gva_av3years_weighted - sy)/sy
+  )
+
+
+##UK weighted average EXCLUDING London (and comparing JUST to London)
+weightedaverages.perhourworked.UKminuslondon <- perhourworked.withtotalhours %>% 
+  group_by(UK_minus_london) %>% #group by "UK minus london" vs "london by itself"
+  summarise(
+    sy = perhourworked %>% filter(year == 2020, region == 'South Yorkshire') %>% select(movingav) %>% pull,#put SY in there to directly compare
+    mean_gva_av3years_weighted = weighted.mean(movingav, hours_per_week, na.rm=T)#get weighted average by each ITL2 grouping
+  ) %>% 
+  mutate(
+    prop_diff = (mean_gva_av3years_weighted - sy)/sy
+  )
+
+#So SY would need to be ~17.7% more productive to match non London UK average
+
+#Weighted averages, omparison to rest of North
+weightedaverages.perhourworked.north <- perhourworked.withtotalhours %>% 
+  group_by(ns_england_restofUK_londonseparate) %>% #group by "UK minus london" vs "london by itself"
+  summarise(
+    sy = perhourworked %>% filter(year == 2020, region == 'South Yorkshire') %>% select(movingav) %>% pull,
+    mean_gva_av3years_weighted = weighted.mean(movingav, hours_per_week, na.rm=T)#get weighted average by each ITL2 grouping
+  ) %>% 
+  mutate(
+    prop_diff = (mean_gva_av3years_weighted - sy)/sy
+  )
+
+
+#Sanity check the weighted average manually, check with london
+#TICK
+chk <- perhourworked %>% filter(year == 2020) %>% 
+  left_join(
+    totalhoursperweek %>% filter(year == 2020) %>% select(region,hours_per_week),
+    by = 'region'
+  ) %>% filter(grepl('london',region,ignore.case = T)) %>% 
+  ungroup() %>% 
+  mutate(hours_per_week_normalised = hours_per_week / sum(hours_per_week)) %>% 
+  mutate(
+    manualweightedav_weights = movingav * hours_per_week_normalised,
+    manualweightedav = sum(manualweightedav_weights)
+    )
+```
+
+
+
+
+
+
+
+
+```{r}
+#| eval: false
+#| echo: false
+
+#So we can then take the chained volume / actual economy size numbers and change those
+#This is what the SEP did, adjusting by x amount, projecting forward, working out how to get from one path to the other
+sy_gdp_2021 <- gdp.itl2 %>% filter(year == 2021, region == 'South Yorkshire') %>% select(gdp) %>% pull
+
+#Current prices version
+sy_gdp_cp_2021 <- gdp.cp.itl2 %>% filter(year == 2021, region == 'South Yorkshire') %>% select(gdp) %>% pull
+
+
+
+
+prop_difftoeng_av_minuslondon <- weightedaverages.perhourworked %>% filter(UK_minus_london == 'UK minus London') %>% select(prop_diff) %>% pull
+
+#5.6 billion extra
+sy_gdp_2021 * prop_difftoeng_av_minuslondon
+
+#current prices (GDP)
+sy_gdp_cp_2021 * prop_difftoeng_av_minuslondon
+
+#Get population numbers for per person figures
+personcounts <- read_csv('data/Table 17 Total resident population numbers persons.csv') %>% 
+  rename(ITLcode = `ITL code`, region = `Region name`) %>% 
+  filter(ITL == 'ITL2') %>% 
+  pivot_longer(cols = `1998`:`2021`, names_to = 'year', values_to = 'personcount') %>% 
+  mutate(year = as.numeric(year))
+
+sy_people2021 <- personcounts %>% 
+  filter(year == 2021, region == 'South Yorkshire') %>% 
+  select(personcount) %>% pull
+
+
+#Extra amount of GDP per person
+((sy_gdp_2021 * prop_difftoeng_av_minuslondon)/sy_people2021)*1000000
+
+#Current price version
+((sy_gdp_cp_2021 * prop_difftoeng_av_minuslondon)/sy_people2021)*1000000
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+#| eval: false
+#| echo: false
+
+# Repeat for Sheffield vs BDR
+
+#Test if ITL3 codes nest handily into ITL2 and so can act as lookup for the regions I've already labelled above (rather than having to intersect)
+
+#Tick! Probably. Need to check...
+table(str_sub(perhourworked.itl3$ITLcode,1,-2) %in% perhourworked$ITLcode)
+
+
+
+
+#Add the probably-ITL2 code lookup to ITL3 data
+perhourworked.itl3 <- perhourworked.itl3 %>% 
+  mutate(
+    ITL2code = str_sub(perhourworked.itl3$ITLcode,1,-2)
+  )
+
+#Merge in region labels from the ITL2 data
+perhourworked.itl3 <- perhourworked.itl3 %>% 
+  left_join(
+    perhourworked %>% ungroup() %>% distinct(ITLcode, ns_england_restofUK, ns_england_restofUK_londonseparate) %>% select(ITL2code = ITLcode, ns_england_restofUK, ns_england_restofUK_londonseparate),
+    by = 'ITL2code'
+  )
+
+#Check map
+itl3.geo <- st_read('data/ITL_geographies/International_Territorial_Level_3_January_2021_UK_BUC_V3_2022_6920195468392554877/ITL3_JAN_2021_UK_BUC_V3.shp') %>%
+  st_simplify(preserveTopology = T, dTolerance = 100)
+
+
+#Ticks all round
+plot(st_geometry(itl3.geo), col = 'grey')
+
+plot(st_geometry(itl3.geo %>% filter(ITL321CD %in% perhourworked.itl3$ITLcode[perhourworked.itl3$ns_england_restofUK_londonseparate=='North England'])), col = 'red', add  = T)
+
+plot(st_geometry(itl3.geo %>% filter(ITL321CD %in% perhourworked.itl3$ITLcode[perhourworked.itl3$ns_england_restofUK_londonseparate=='South Eng (exc. London)'])), col = 'blue', add = T)
+
+plot(st_geometry(itl3.geo %>% filter(ITL321CD %in% perhourworked.itl3$ITLcode[perhourworked.itl3$ns_england_restofUK_londonseparate=='London'])), col = 'green', add = T)
+
+plot(st_geometry(itl3.geo %>% filter(ITL321CD %in% perhourworked.itl3$ITLcode[perhourworked.itl3$ns_england_restofUK_londonseparate=='rest of UK'])), col = 'orange', add = T)
+
+
+
+
+#Repeat rank plot
+perhourworked.itl3 <- perhourworked.itl3 %>% 
+  group_by(year) %>% 
+  mutate(rank = rank(gva))
+
+#3 year smoothing
+perhourworked.itl3 <- perhourworked.itl3 %>% 
+  arrange(year) %>% 
+  group_by(region) %>%
+  mutate(
+    movingav = rollapply(gva,3,mean,align='right',fill=NA),
+    rank_movingav = rollapply(rank,3,mean,align='right',fill=NA),
+    rank_movingav_7yr = rollapply(rank,7,mean,align='right',fill=NA)
+    )
+
+
+perhourworked.itl3 <- perhourworked.itl3 %>% 
+  mutate(selectedregion = grepl(x = region, pattern = 'Shef|Doncaster',ignore.case = T))
+
+#How many years available with smoothed 3 year data?
+#2006 to 2021
+unique(perhourworked.itl3$year[!is.na(perhourworked.itl3$movingav)])
+
+p <- ggplot(perhourworked.itl3 %>% filter(year %in% c(2006,2018)), aes(x = factor(year), y = rank_movingav, group = region, color = factor(year))) +
+  geom_line(aes(group = region), color = "grey44") +
+  geom_point(aes(shape = selectedregion, size = selectedregion)) +
+  facet_wrap(vars(ns_england_restofUK_londonseparate), nrow = 1) +
+  ylab('rank (3 year average)') +
+  xlab('year (average centre)') +
+  guides(colour="none", shape = "none", size = "none") +
+  theme_bw()
+
+ggplotly(p, tooltip = c('region','rank_movingav'))
+
+
+#Split into dropped vs rose, plot separately
+#Has to be for specific pair of years so let's pick those year
+startyear = 2012
+endyear = 2020
+
+polarity <- perhourworked.itl3 %>% 
+  ungroup() %>% 
+  filter(year %in% c(startyear, endyear)) %>% 
+  select(region,year,rank_movingav) %>% 
+  pivot_wider(names_from = year, values_from = rank_movingav) %>% 
+  mutate(
+    roseovertime = !!as.name(startyear) < !!as.name(endyear),
+    rankpositionchange = !!as.name(endyear) - !!as.name(startyear)
+    )
+
+#Drop if repeating
+perhourworked.itl3 <- perhourworked.itl3[,1:13]
+
+#Add that label back into perhourworked.itl3
+perhourworked.itl3 <- perhourworked.itl3 %>% 
+  left_join(polarity %>% select(region, roseovertime, rankpositionchange), by = 'region')
+
+p <- ggplot(perhourworked.itl3 %>% filter(year %in% c(2006,2012,2018)), aes(x = factor(year), y = rank_movingav, group = region, color = factor(year))) +
+  geom_line(aes(group = region), color = "grey44") +
+  geom_point(aes(shape = selectedregion, size = selectedregion)) +
+  facet_wrap(vars(roseovertime,ns_england_restofUK_londonseparate), nrow = 2) +
+  ylab('rank (3 year average)') +
+  xlab('year (average centre)') +
+  guides(colour="none", shape = "none", size = "none") +
+  theme_bw()
+
+ggplotly(p, tooltip = c('region','rank_movingav'))
+
+
+#Any kind of geography to that?
+perhourworked.itl3.geo <- itl3.geo %>% 
+  right_join(perhourworked.itl3, by = c('ITL321CD' = 'ITLcode'))
+
+tm_shape(perhourworked.itl3.geo) +
+  tm_polygons('rankpositionchange', n = 9, palette = 'BrBG') +
+  tm_layout(title = '', legend.outside = T)
+
+
+```
+
+
+
+
+
+
+
+
 
 
 
@@ -559,151 +876,6 @@ averages.perhourworked <- perhourworked %>%
 
 
 #Apart from London, all the other regional avs are not vastly different?
-
-
-
-
-#WEIGHTED AVERAGE FOR UK MINUS LONDON
-#Using number of hours worked per ITL2
-
-#Get hours worked per week total for ITL2
-totalhoursperweek.itl2 <- read_csv('data/Productivity Hours Worked per Week ITL2 and ITL3 subregions constrained to ITL1 2004 2021.csv') %>%
-  rename(ITL = `ITL level`, ITLcode = `ITL code`, region = `Region name`) %>% 
-  filter(ITL == 'ITL2') %>% 
-  pivot_longer(cols = `2004`:`2021`, names_to = 'year', values_to = 'hours_per_week') %>% 
-  mutate(year = as.numeric(year))
-
-
-#Add in all the region labels
-totalhoursperweek.itl2 <- totalhoursperweek.itl2 %>% 
-  mutate(ns_england_restofUK = case_when(
-    region %in% north ~ 'North England',
-    region %in% south ~ 'South Eng (inc. London)',
-    .default = 'rest of UK'
-  ))
-
-table(perhourworked$ns_england_restofUK, useNA = 'always')
-
-totalhoursperweek.itl2 <- totalhoursperweek.itl2 %>% 
-  mutate(ns_england_restofUK_londonseparate = case_when(
-    region %in% north ~ 'North England',
-    region %in% south.minus.london ~ 'South Eng (exc. London)',
-    grepl('london',region,ignore.case = T) ~ 'London',
-    .default = 'rest of UK'
-  ))
-
-table(perhourworked$ns_england_restofUK_londonseparate, useNA = 'always')
-
-totalhoursperweek.itl2 <- totalhoursperweek.itl2 %>% 
-  mutate(UK_minus_london = case_when(
-    grepl('london',region,ignore.case = T) ~ 'London',
-    .default = 'UK minus London'
-  ))
-
-table(totalhoursperweek.itl2$UK_minus_london, useNA = 'always')
-
-
-#Weighted averages for the various groupings
-#Check for 2021, do averages weighted by number of hours work per week that year in that place
-
-
-#Both go up, though London by more
-#Due presumably to cities having more hours per week / being more productive
-weightedaverages.perhourworked <- perhourworked %>% filter(year == 2021) %>% 
-  left_join(
-    totalhoursperweek.itl2 %>% filter(year == 2021) %>% select(region,hours_per_week,UK_minus_london),
-    by = 'region'
-  ) %>% 
-  group_by(UK_minus_london) %>% #group by "UK minus london" vs "london by itself"
-  summarise(
-    sy = perhourworked %>% filter(year == 2021, region == 'South Yorkshire') %>% select(movingav) %>% pull,
-    mean_gva_av3years_weighted = weighted.mean(movingav, hours_per_week, na.rm=T)#get weighted average by each ITL2 grouping
-  ) %>% 
-  mutate(
-    prop_diff = (mean_gva_av3years_weighted - sy)/sy
-  )
-
-#So SY would need to be ~17.7% more productive to match non London UK average
-
-#out of interest, comparison to rest of North?
-weightedaverages.perhourworked.north <- perhourworked %>% filter(year == 2021) %>% 
-  left_join(
-    totalhoursperweek.itl2 %>% filter(year == 2021) %>% select(region,hours_per_week,UK_minus_london),
-    by = 'region'
-  ) %>% 
-  group_by(ns_england_restofUK_londonseparate) %>% #group by "UK minus london" vs "london by itself"
-  summarise(
-    sy = perhourworked %>% filter(year == 2021, region == 'South Yorkshire') %>% select(movingav) %>% pull,
-    mean_gva_av3years_weighted = weighted.mean(movingav, hours_per_week, na.rm=T)#get weighted average by each ITL2 grouping
-  ) %>% 
-  mutate(
-    prop_diff = (mean_gva_av3years_weighted - sy)/sy
-  )
-
-
-
-
-#Sanity check the weighted average manually, check with london
-#TICK
-chk <- perhourworked %>% filter(year == 2021) %>% 
-  left_join(
-    totalhoursperweek.itl2 %>% filter(year == 2021) %>% select(region,hours_per_week,UK_minus_london),
-    by = 'region'
-  ) %>% filter(grepl('london',region,ignore.case = T)) %>% 
-  ungroup() %>% 
-  mutate(hours_per_week_normalised = hours_per_week / sum(hours_per_week)) %>% 
-  mutate(
-    manualweightedav_weights = movingav * hours_per_week_normalised,
-    manualweightedav = sum(manualweightedav_weights)
-    )
-
-
-
-#So we can then take the chained volume / actual economy size numbers and change those
-#This is what the SEP did, adjusting by x amount, projecting forward, working out how to get from one path to the other
-sy_gdp_2021 <- gdp.itl2 %>% filter(year == 2021, region == 'South Yorkshire') %>% select(gdp) %>% pull
-
-#Current prices version
-sy_gdp_cp_2021 <- gdp.cp.itl2 %>% filter(year == 2021, region == 'South Yorkshire') %>% select(gdp) %>% pull
-
-
-
-prop_difftoeng_av_minuslondon <- weightedaverages.perhourworked %>% filter(UK_minus_london == 'UK minus London') %>% select(prop_diff) %>% pull
-
-#5.6 billion extra
-sy_gdp_2021 * prop_difftoeng_av_minuslondon
-
-#current prices (GDP)
-sy_gdp_cp_2021 * prop_difftoeng_av_minuslondon
-
-#Get population numbers for per person figures
-personcounts <- read_csv('data/Table 17 Total resident population numbers persons.csv') %>% 
-  rename(ITLcode = `ITL code`, region = `Region name`) %>% 
-  filter(ITL == 'ITL2') %>% 
-  pivot_longer(cols = `1998`:`2021`, names_to = 'year', values_to = 'personcount') %>% 
-  mutate(year = as.numeric(year))
-
-sy_people2021 <- personcounts %>% 
-  filter(year == 2021, region == 'South Yorkshire') %>% 
-  select(personcount) %>% pull
-
-
-#Extra amount of GDP per person
-((sy_gdp_2021 * prop_difftoeng_av_minuslondon)/sy_people2021)*1000000
-
-#Current price version
-((sy_gdp_cp_2021 * prop_difftoeng_av_minuslondon)/sy_people2021)*1000000
-
-
-
-#Using those numbers - what's 3% of that? 
-#For how much private investment could be crowded in by public investment if using numbers from 
-#Jan 2024 report: “Boosting growth and productivity in the United Kingdom through investments in the sustainable economy” (LSE, Grantham Foundation, CEP, Productivity Institute) 
-sy_gdp_2021 * 0.03 *1000000
-
-#current prices
-sy_gdp_cp_2021 * 0.03 *1000000
-
 
 ```
 
