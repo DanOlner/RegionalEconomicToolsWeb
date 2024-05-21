@@ -1,5 +1,5 @@
 ---
-title: "UK Regional Economics tools and analysis"
+title: "UK regional economics tools and analysis in R"
 ---
 
 # OPEN DATA AND METHODS FOR UK REGIONAL ECONOMIC ANALYSIS
