@@ -2,5 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
-.qgz
+*.qgz
+*.pptx
 /.quarto/
