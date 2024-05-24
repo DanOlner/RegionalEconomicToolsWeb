@@ -17,6 +17,10 @@ Let's start with one of the most common measures of regional productivity, **GVA
 
 > "Output per hour worked is the preferred measure of labour productivity, as hours worked are a more precise measure of labour input than jobs."
 
+Also [here](https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/labourproductivity/articles/regionalandsubregionalproductivityintheuk/february2020):
+
+> "GVA per hour worked is considered a more comprehensive indicator of labour productivity and the preferred measure at subnational level. This is because GVA per filled job does not take into consideration regional labour market structures or different working patterns, such as the mix of part-time and full-time workers, industry structure and job shares."
+
 First, the libraries we'll use (and setting scipen to avoid any scientific notation):
 
 ```{r libraries}
@@ -1558,5 +1562,25 @@ averages.perhourworked <- perhourworked %>%
 
 
 
+```{r}
+#| eval: false
+#| echo: false
+
+#Quick check on per filled job comp
+perfilledjob <- read_csv('data/Table B4 Current Price unsmoothed GVA B per filled job £ ITL2 and ITL3 subregions 2002 to 2021.csv') %>% 
+  rename(ITL = `ITL level`, ITLcode = `ITL code`, region = `Region name`) %>% 
+  filter(ITL == 'ITL2') %>% 
+  pivot_longer(cols = `2002`:`2021`, names_to = 'year', values_to = 'gva') %>% 
+  mutate(year = as.numeric(year))
+
+#Steal region flags from previous
+perfilledjob <- perfilledjob %>% 
+  left_join(
+    perhourworked %>% select(ITLcode,ns_england_restofUK,ns_england_restofUK_londonseparate,UK_minus_london)
+  )
+
+
+
+```
 
 
