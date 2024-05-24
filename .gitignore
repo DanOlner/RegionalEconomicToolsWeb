@@ -5,3 +5,4 @@
 *.qgz
 *.pptx
 /.quarto/
+local/

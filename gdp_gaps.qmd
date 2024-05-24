@@ -145,7 +145,12 @@ plot(st_geometry(itl2.geo %>% filter(ITL221NM %in% north)), col = 'blue', add = 
 plot(st_geometry(itl2.geo %>% filter(ITL221NM %in% south)), col = 'green', add = T)
 plot(st_geometry(itl2.geo %>% filter(!ITL221NM %in% england.minus.london)), col = 'red', add = T)
 
+#Confirming 'rest of UK' Is Scot/Wales/NI
 plot(st_geometry(itl2.geo %>% filter(ITL221NM %in% uk.minus.london)), col = 'grey')
+
+#Check 'rest of UK' category
+plot(st_geometry(itl2.geo %>% filter(ITL221NM %in% perhourworked$region[perhourworked$ns_england_restofUK_londonseparate=='rest of UK'])), col = 'grey')
+
 ```
 
 Lastly - add a marker for a place of interest (South Yorkshire in this case) and plot interactively (hover for other region names). Here, we plot the average of the first three years rankings available in the data, then the first three years after 2010, then the last three years before COVID-19.
@@ -288,8 +293,6 @@ chk <- perhourworked %>% filter(year == 2020) %>%
     manualweightedav = sum(manualweightedav_weights)
     )
 ```
-
-
 
 
 
@@ -859,7 +862,6 @@ ggplot(mcacompare, aes(x = year, y = prop_diff * 100, colour = fct_reorder(regio
 
 
 ## REPEAT PER CAPITA FOR ITL3
-
 
 
 ```{r gvapercapitaitl3}

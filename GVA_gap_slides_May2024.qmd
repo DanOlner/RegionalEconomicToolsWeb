@@ -75,7 +75,7 @@ perhourworked <- perhourworked %>%
   mutate(ns_england_restofUK = case_when(
     region %in% north ~ 'North England',
     region %in% south ~ 'South Eng (inc. London)',
-    .default = 'rest of UK'
+    .default = 'Scot/Wales/NI'
   ))
 
 perhourworked <- perhourworked %>% 
@@ -83,7 +83,7 @@ perhourworked <- perhourworked %>%
     region %in% north ~ 'North England',
     region %in% south.minus.london ~ 'South Eng (exc. London)',
     grepl('london',region,ignore.case = T) ~ 'London',
-    .default = 'rest of UK'
+    .default = 'Scot/Wales/NI'
   ))
 
 #And a category for 'UK minus London'
@@ -268,20 +268,19 @@ weightedaverages.perhourworked.all <- rbind(
 
 
 
-ggplot(weightedaverages.perhourworked.all, aes(x = year, y = prop_diff_3yrsmooth * 100, colour = fct_reorder(region_grouping,prop_diff_3yrsmooth))) +
+ggplot(weightedaverages.perhourworked.all, aes(x = year, y = prop_diff_3yrsmooth * 100, colour = fct_reorder(region_grouping,prop_diff_3yrsmooth, .desc=T))) +
   geom_line() +
   geom_point(size = 2) +
   coord_cartesian(ylim = c(0,72)) +
   scale_color_brewer(palette = 'Paired', direction = -1) +
   ylab("South Yorks percent difference of... (3 year average)") +
   theme(legend.title=element_blank()) +
-  ggtitle("South Yorkshire: percent difference of other regions\n(e.g. South England is ~18 to 20% larger GVA per hour worked)")
+  ggtitle("South Yorkshire GVA per hour worked: percent difference of other regions\n(e.g. South England is ~18 to 20% larger GVA per hour worked)")
 
 
 
 
 ```
-
 
 
 
@@ -294,14 +293,14 @@ Weighted averages (no London for ease of viewing)
 #| fig-width: 10
 #| fig-height: 8
 
-ggplot(weightedaverages.perhourworked.all %>% filter(region_grouping!='London'), aes(x = year, y = prop_diff_3yrsmooth * 100, colour = fct_reorder(region_grouping,prop_diff_3yrsmooth))) +
+ggplot(weightedaverages.perhourworked.all %>% filter(region_grouping!='London'), aes(x = year, y = prop_diff_3yrsmooth * 100, colour = fct_reorder(region_grouping,prop_diff_3yrsmooth, .desc=T))) +
   geom_line() +
   geom_point(size = 2) +
   coord_cartesian(ylim = c(0,25)) +
   scale_color_brewer(palette = 'Paired', direction = -1) +
   ylab("South Yorks percent difference of... (3 year average)") +
   theme(legend.title=element_blank()) +
-  ggtitle("South Yorkshire: percent difference of other regions\n(e.g. South England is ~18 to 20% larger GVA per hour worked)")
+  ggtitle("South Yorkshire GVA per hour worked: percent difference of other regions\n(e.g. South England is ~18 to 20% larger GVA per hour worked)")
 
 
 ```
@@ -349,7 +348,7 @@ mcacompare <- perhourworked.withtotalhours %>%
     prop_diff_5yrsmooth = rollapply(prop_diff,5,mean,align='center',fill=NA),
   )
 
-ggplot(mcacompare, aes(x = year, y = prop_diff_3yrsmooth * 100, colour = fct_reorder(region, prop_diff_3yrsmooth))) +
+ggplot(mcacompare, aes(x = year, y = prop_diff_3yrsmooth * 100, colour = fct_reorder(region, prop_diff_3yrsmooth, .desc=T))) +
 # ggplot(corecompare, aes(x = year, y = prop_diff * 100, colour = fct_reorder(region, prop_diff))) +
   geom_line() +
   geom_point(size = 2) +
@@ -367,9 +366,9 @@ ggplot(mcacompare, aes(x = year, y = prop_diff_3yrsmooth * 100, colour = fct_reo
 
 
 
-## Repeat for ITL3
+## Separating Sheffield from Barnsley/Doncaster/Rotherham: GVA per hour worked
 
-Separate Sheffield from Barnsley/Doncaster/Rotherham
+Using ITL3 zones.
 
 ```{r gvagapovertime_itl3}
 #| fig-width: 10
@@ -460,20 +459,25 @@ weightedavs.itl3 <- weightedavs.itl3 %>%
     prop_diff_5yrsmooth = rollapply(prop_diff,5,mean,align='center',fill=NA),
   )
 
-ggplot(weightedavs.itl3 %>% filter(region_grouping!='London'), aes(x = year, y = prop_diff_3yrsmooth * 100, colour = region_grouping)) +
+ggplot(weightedavs.itl3 %>% filter(region_grouping!='London'), aes(x = year, y = prop_diff_3yrsmooth * 100, colour = fct_reorder(region_grouping, prop_diff_3yrsmooth, .desc=T))) +
 # ggplot(weightedavs.itl3 %>% filter(region_grouping!='London', !is.na(prop_diff_5yrsmooth)), aes(x = year, y = prop_diff_5yrsmooth * 100, colour = region_grouping)) +
 # ggplot(weightedavs.itl3, aes(x = year, y = prop_diff * 100, colour = region_grouping)) +
   geom_line() +
   geom_point(size = 2) +
   coord_cartesian(ylim = c(-1,30)) +
   geom_hline(yintercept = 0, alpha = 0.2, size = 2) +
-  facet_wrap(~place)
+  facet_wrap(~place) +
+  scale_color_brewer(palette = 'Paired') +
+  ylab("Percent difference of... (3 year average)") +
+  theme(legend.title=element_blank()) +
+  ggtitle("Sheffield vs Barnsley/Doncaster/Rotherham\nGVA per hour worked: % difference of other regions.")
+
 ```
 
 
 ## COMPARE SHEFFIELD TO OTHER 'CORE CITIES'
 
-Direct core city comparison
+Direct core city comparison. 5 Year smoothed average here, data is volatile.
 
 
 ```{r}
@@ -502,19 +506,408 @@ corecompare <- perhourworked.withtotalhours.itl3 %>%
 
 
 
-ggplot(corecompare, aes(x = year, y = prop_diff_3yrsmooth * 100, colour = fct_reorder(region, prop_diff_5yrsmooth))) +
+ggplot(corecompare, aes(x = year, y = prop_diff_3yrsmooth * 100, colour = fct_reorder(region, prop_diff_5yrsmooth, .desc=T))) +
 # ggplot(corecompare, aes(x = year, y = prop_diff * 100, colour = fct_reorder(region, prop_diff))) +
   geom_line() +
   geom_point(size = 2) +
   # coord_cartesian(ylim = c(-1,30)) +
   geom_hline(yintercept = 0, alpha = 0.2, size = 2) +
-  scale_color_brewer(palette = 'Paired')
+  scale_color_brewer(palette = 'Paired') +
+  ylab("Percent difference of... (5 year average)") +
+  theme(legend.title=element_blank()) +
+  ggtitle("Sheffield vs other 'core cities' GVA per hour worked: % difference of other core cities.")
+
+```
+
+
+
+
+
+## Compare South Yorkshire using GVA per capita
+
+Per head of resident population (population numbers via ONS mid year population estimates)
+
+This data goes back further, to 1998.
+
+Comparing to regional weighted averages again.
+
+
+```{r gvapercapita}
+#| fig-width: 10
+#| fig-height: 8
+
+#Get population numbers for per person figures
+#From regionalgrossvalueaddedbalancedbyindustryandallitlregions.xlsx
+#ONS mid year population estimates
+#Table 6 (not sure where they got consistent ITL2 geogs from...)
+personcounts <- read_csv('data/Table 6 Total resident population numbers persons.csv') %>% 
+  rename(ITLcode = `ITL code`, region = `Region name`) %>% 
+  filter(ITL == 'ITL2') %>% 
+  pivot_longer(cols = `1998`:`2021`, names_to = 'year', values_to = 'personcount') %>% 
+  mutate(year = as.numeric(year))
+
+#Total GVA in current basic prices from the same source
+gva.cp <- read_csv('data/Table 1 GVA balanced at current basic prices millions.csv') %>% 
+  rename(ITLcode = `ITL code`, region = `Region name`) %>% 
+  filter(ITL == 'ITL2') %>% 
+  pivot_longer(cols = `1998`:`2021`, names_to = 'year', values_to = 'gva') %>% 
+  mutate(year = as.numeric(year))
+
+#Add person counts in to get GVA per capita
+#Check link match... tick
+# table(personcounts$region %in% gva.cp$region)
+
+gva.cp <- gva.cp %>% 
+  left_join(
+    personcounts %>% select(region, year, personcount),
+    by = c('region','year')
+  ) %>% 
+  mutate(
+    gva_per_capita = (gva / personcount) * 1000000
+    )
+
+
+#Add in region labels as before
+gva.cp <- gva.cp %>% 
+  mutate(ns_england_restofUK = case_when(
+    region %in% north ~ 'North England',
+    region %in% south ~ 'South Eng (inc. London)',
+    .default = 'Scot/Wales/NI'
+  ))
+
+#Check full match
+# table(gva.cp$ns_england_restofUK, useNA = 'always')
+
+gva.cp <- gva.cp %>% 
+  mutate(ns_england_restofUK_londonseparate = case_when(
+    region %in% north ~ 'North England',
+    region %in% south.minus.london ~ 'South Eng (exc. London)',
+    grepl('london',region,ignore.case = T) ~ 'London',
+    .default = 'Scot/Wales/NI'
+  ))
+
+# table(gva.cp$ns_england_restofUK_londonseparate, useNA = 'always')
+
+#And a category for 'UK minus London'
+gva.cp <- gva.cp %>% 
+  mutate(UK_minus_london = case_when(
+    grepl('london',region,ignore.case = T) ~ 'London',
+    .default = 'UK minus London'
+  ))
+
+# table(gva.cp$UK_minus_london, useNA = 'always')
+
+
+
+#Regions weighted averages
+weightedaverages.gva.cp.regions <- gva.cp %>% 
+  rename(region_grouping = ns_england_restofUK_londonseparate) %>% 
+  group_by(region_grouping,year) %>%
+  summarise(
+    weighted_mean_gva = weighted.mean(gva_per_capita, personcount, na.rm=T)#get weighted average by each ITL2 grouping
+  ) %>% #merge in SY values
+  left_join(gva.cp %>% filter(region == 'South Yorkshire') %>% ungroup() %>% select(year, SY_gva = gva_per_capita), by = c('year'))  
+
+
+#Repeat for UK minus London av
+weightedaverages.gva.cp.ukminusLondon <- gva.cp %>% 
+  rename(region_grouping = UK_minus_london) %>% 
+  group_by(region_grouping,year) %>%
+  summarise(
+    weighted_mean_gva = weighted.mean(gva_per_capita, personcount, na.rm=T)#get weighted average by each ITL2 grouping
+  ) %>% #merge in SY values
+  left_join(gva.cp %>% filter(region == 'South Yorkshire') %>% ungroup() %>% select(year, SY_gva = gva_per_capita), by = c('year'))  
+
+
+#Repeat for MCA average minus SY
+weightedaverages.gva.cp.mcas <- gva.cp %>% 
+  mutate(region_grouping = ifelse(region %in% mcas[mcas!='South Yorkshire'], 'MCAs exc. SY','Other')) %>% 
+  group_by(region_grouping,year) %>%
+  summarise(
+    weighted_mean_gva = weighted.mean(gva_per_capita, personcount, na.rm=T)#get weighted average by each ITL2 grouping
+  ) %>% #merge in SY values
+  left_join(gva.cp %>% filter(region == 'South Yorkshire') %>% ungroup() %>% select(year, SY_gva = gva_per_capita), by = c('year'))
+
+
+#Append those three
+weightedavs.gva.cp <- 
+  bind_rows(
+  weightedaverages.gva.cp.regions,
+  weightedaverages.gva.cp.ukminusLondon %>% filter(region_grouping!='London'),#Got London in the previous one
+  weightedaverages.gva.cp.mcas %>% filter(region_grouping!='Other')
+  )
+  
+
+#Smooth
+weightedavs.gva.cp <- weightedavs.gva.cp %>% 
+  mutate(
+    prop_diff = (weighted_mean_gva - SY_gva)/SY_gva
+  ) %>% 
+  arrange(year) %>% 
+  group_by(region_grouping) %>% 
+  mutate(
+    prop_diff_3yrsmooth = rollapply(prop_diff,3,mean,align='center',fill=NA),
+    prop_diff_5yrsmooth = rollapply(prop_diff,5,mean,align='center',fill=NA),
+  )
+
+#Plain prop diff in per capita numbers looks smoothed already / isn't reliant on small samples?
+# ggplot(weightedavs.gva.cp, aes(x = year, y = prop_diff * 100, colour = region_grouping)) +
+ggplot(weightedavs.gva.cp %>% filter(region_grouping!='London'), aes(x = year, y = prop_diff * 100, colour = fct_reorder(region_grouping, prop_diff, .desc = T))) +
+# ggplot(weightedavs %>% filter(region_grouping!='London', !is.na(prop_diff_5yrsmooth)), aes(x = year, y = prop_diff_5yrsmooth * 100, colour = region_grouping)) +
+# ggplot(weightedavs, aes(x = year, y = prop_diff * 100, colour = region_grouping)) +
+  geom_line() +
+  geom_point(size = 2) +
+  # coord_cartesian(ylim = c(-1,30)) +
+  geom_hline(yintercept = 0, alpha = 0.2, size = 2) +
+  scale_color_brewer(palette = 'Paired') +
+  ylab("Percent difference of... ") +
+  theme(legend.title=element_blank()) +
+  ggtitle("GVA per capita: South Yorkshire % difference of regions, including av. of MCA list")
 
 
 ```
 
 
 
+
+
+## GVA per capita: Compare South Yorkshire to other MCAs
+
+Direct MCA comparison, percent difference from
+
+```{r}
+#| fig-width: 10
+#| fig-height: 8
+
+#COMPARE THE MCAS DIRECTLY
+#MCA to get proportion gaps to others
+comparator = perhourworked.withtotalhours$region[grepl('South Y', perhourworked.withtotalhours$region, ignore.case = T)] %>% unique
+# comparator = perhourworked.withtotalhours$region[grepl('Greater M', perhourworked.withtotalhours$region, ignore.case = T)] %>% unique
+
+mcacompare <- gva.cp %>%
+  select(region, year, gva_per_capita) %>% 
+  filter(region %in% mcas[mcas!=comparator]) %>%
+  left_join(
+    gva.cp %>%
+      ungroup() %>% 
+      filter(region == comparator) %>% 
+      select(year, SY_gva = gva_per_capita),
+  by = 'year'
+  ) %>% 
+  mutate(prop_diff = (gva_per_capita - SY_gva)/SY_gva) %>% 
+  group_by(region) %>% 
+  mutate(
+    prop_diff_3yrsmooth = rollapply(prop_diff,3,mean,align='center',fill=NA),
+    prop_diff_5yrsmooth = rollapply(prop_diff,5,mean,align='center',fill=NA),
+  )
+
+
+
+# ggplot(corecompare, aes(x = year, y = prop_diff_5yrsmooth * 100, colour = fct_reorder(region, prop_diff_5yrsmooth))) +
+ggplot(mcacompare, aes(x = year, y = prop_diff * 100, colour = fct_reorder(region, prop_diff, .desc = T))) +
+  geom_line() +
+  geom_point(size = 2) +
+  # coord_cartesian(ylim = c(-1,30)) +
+  geom_hline(yintercept = 0, alpha = 0.2, size = 2) +
+  scale_color_brewer(palette = 'Paired') +
+  ylab("Percent difference of... ") +
+  theme(legend.title=element_blank()) +
+  ggtitle("GVA per capita: South Yorkshire % difference of regions, including av. of MCA list")
+
+
+```
+
+
+
+
+
+
+## GVA per capita: Sheffield and Barnsley/Doncaster/Rotherham
+
+Breaking down Sheffield vs BDR
+
+
+```{r gvapercapitaitl3}
+#| fig-width: 10
+#| fig-height: 8
+
+#Get population numbers for per person figures
+#From regionalgrossvalueaddedbalancedbyindustryandallitlregions.xlsx
+#ONS mid year population estimates
+#Table 6 (not sure where they got consistent ITL2 geogs from...)
+personcounts.itl3 <- read_csv('data/Table 6 Total resident population numbers persons.csv') %>% 
+  rename(ITLcode = `ITL code`, region = `Region name`) %>% 
+  filter(ITL == 'ITL3') %>% 
+  pivot_longer(cols = `1998`:`2021`, names_to = 'year', values_to = 'personcount') %>% 
+  mutate(year = as.numeric(year))
+
+#Total GVA in current basic prices from the same source
+gva.cp.itl3 <- read_csv('data/Table 1 GVA balanced at current basic prices millions.csv') %>% 
+  rename(ITLcode = `ITL code`, region = `Region name`) %>% 
+  filter(ITL == 'ITL3') %>% 
+  pivot_longer(cols = `1998`:`2021`, names_to = 'year', values_to = 'gva') %>% 
+  mutate(year = as.numeric(year))
+
+#Add person counts in to get GVA per capita
+#Check link match... tick
+# table(personcounts.itl3$region %in% gva.cp.itl3$region)
+
+gva.cp.itl3 <- gva.cp.itl3 %>% 
+  left_join(
+    personcounts.itl3 %>% select(region, year, personcount),
+    by = c('region','year')
+  ) %>% 
+  mutate(
+    gva_per_capita = (gva / personcount) * 1000000
+    )
+
+
+
+#Use matching part ITL2 code to add region labels in
+gva.cp.itl3 <- gva.cp.itl3 %>% 
+  mutate(
+    ITL2code = str_sub(gva.cp.itl3$ITLcode,1,-2)
+  )
+
+#Merge in region labels from the ITL2 data
+gva.cp.itl3 <- gva.cp.itl3 %>% 
+  left_join(
+    gva.cp %>% ungroup() %>% distinct(ITLcode, ns_england_restofUK, ns_england_restofUK_londonseparate, UK_minus_london) %>% select(ITL2code = ITLcode, ns_england_restofUK, ns_england_restofUK_londonseparate, UK_minus_london),
+    by = 'ITL2code'
+  )
+
+#Add in an extra one for the shortlist of 11 'core cities'
+#Belfast, Birmingham, Bristol, Cardiff, Glasgow, Leeds, Liverpool, Manchester, Newcastle, Nottingham, Sheffield
+#https://www.corecities.com/about-us/what-core-cities-uk
+gva.cp.itl3 <- gva.cp.itl3 %>% 
+  mutate(
+    core_cities = ifelse(region %in% corecities, 'Core city', 'Other'),
+    core_cities_minus_sheffield = ifelse(region %in% corecities[corecities!='Sheffield'],'Core city (exc. Sheffield)','Other')#without sheffield, so not including in weighted average
+    )
+
+
+
+
+#For region grouping... Weight averages by population
+weightedaverages.gva.cp.itl3.regions <- gva.cp.itl3 %>% 
+  rename(region_grouping = ns_england_restofUK_londonseparate) %>% 
+  group_by(region_grouping,year) %>%
+  summarise(
+    weighted_mean_gva = weighted.mean(gva_per_capita, personcount, na.rm=T)#get weighted average by each ITL2 grouping
+  ) %>% #merge in SY values
+  left_join(gva.cp.itl3 %>% filter(region == 'Sheffield') %>% ungroup() %>% select(year, Sheffield_gva = gva_per_capita), by = c('year')) %>% 
+  left_join(gva.cp.itl3 %>% filter(grepl(x = region, pattern = 'Barnsley', ignore.case = T)) %>% ungroup() %>% select(year, BDR_gva = gva_per_capita), by = c('year')) 
+
+#repeat for UK minus London
+weightedaverages.gva.cp.itl3.ukminuslondon <- gva.cp.itl3 %>% 
+  rename(region_grouping = UK_minus_london) %>% 
+  group_by(region_grouping,year) %>%
+  summarise(
+    weighted_mean_gva = weighted.mean(gva_per_capita, personcount, na.rm=T)#get weighted average by each ITL2 grouping
+  ) %>% #merge in SY values
+  left_join(gva.cp.itl3 %>% filter(region == 'Sheffield') %>% ungroup() %>% select(year, Sheffield_gva = gva_per_capita), by = c('year')) %>% 
+  left_join(gva.cp.itl3 %>% filter(grepl(x = region, pattern = 'Barnsley', ignore.case = T)) %>% ungroup() %>% select(year, BDR_gva = gva_per_capita), by = c('year')) 
+
+#Repeat for core cities exc Sheffield
+weightedaverages.gva.cp.itl3.cores <- gva.cp.itl3 %>% 
+  rename(region_grouping = core_cities_minus_sheffield) %>% 
+  group_by(region_grouping,year) %>%
+  summarise(
+    weighted_mean_gva = weighted.mean(gva_per_capita, personcount, na.rm=T)#get weighted average by each ITL2 grouping
+  ) %>% #merge in SY values
+  left_join(gva.cp.itl3 %>% filter(region == 'Sheffield') %>% ungroup() %>% select(year, Sheffield_gva = gva_per_capita), by = c('year')) %>% 
+  left_join(gva.cp.itl3 %>% filter(grepl(x = region, pattern = 'Barnsley', ignore.case = T)) %>% ungroup() %>% select(year, BDR_gva = gva_per_capita), by = c('year')) 
+
+
+#Append those two
+weightedavs.gva.cp.itl3 <- bind_rows(
+  weightedaverages.gva.cp.itl3.regions,
+  weightedaverages.gva.cp.itl3.ukminuslondon %>% filter(region_grouping!='London'),#London already in previous groupings
+  weightedaverages.gva.cp.itl3.cores %>% filter(region_grouping!='Other')
+)
+
+#Make Sheffield and BDR gva long, and find proportion diffs
+weightedavs.gva.cp.itl3 <- weightedavs.gva.cp.itl3 %>% 
+  pivot_longer(cols = Sheffield_gva:BDR_gva, names_to = 'place', values_to = 'gva') %>% 
+  mutate(
+    prop_diff = (weighted_mean_gva - gva)/gva
+  ) %>% 
+  arrange(year) %>% 
+  group_by(region_grouping,place) %>% 
+  mutate(
+    prop_diff_3yrsmooth = rollapply(prop_diff,3,mean,align='center',fill=NA),
+    prop_diff_5yrsmooth = rollapply(prop_diff,5,mean,align='center',fill=NA),
+  )
+
+#Plain prop diff looks smoothed already I think... 
+# ggplot(weightedavs.gva.cp.itl3, aes(x = year, y = prop_diff * 100, colour = region_grouping)) +
+ggplot(weightedavs.gva.cp.itl3 %>% filter(region_grouping!='London'), aes(x = year, y = prop_diff * 100, colour = fct_reorder(region_grouping, prop_diff, .desc = T))) +
+# ggplot(weightedavs.itl3 %>% filter(region_grouping!='London', !is.na(prop_diff_5yrsmooth)), aes(x = year, y = prop_diff_5yrsmooth * 100, colour = region_grouping)) +
+# ggplot(weightedavs.itl3, aes(x = year, y = prop_diff * 100, colour = region_grouping)) +
+  geom_line() +
+  geom_point(size = 2) +
+  # coord_cartesian(ylim = c(-1,30)) +
+  geom_hline(yintercept = 0, alpha = 0.2, size = 2) +
+  facet_wrap(~place) +
+  scale_color_brewer(palette = 'Paired') +
+  ylab("Percent difference of... ") +
+  theme(legend.title=element_blank()) +
+  ggtitle("GVA per capita: Sheffield and Barnsley/Doncaster/Rotherham\nCompared to UK regions")
+
+```
+
+
+
+
+# GVA per capita: compare Sheffield to other 'core cities'
+
+Core city comparison.
+
+
+```{r}
+#| fig-width: 10
+#| fig-height: 8
+
+#VERSION TO DIRECTLY COMPARE SHEFFIELD TO OTHER 'CORE CITIES'
+#Exclude Sheffield, as we want % diff for Sheffield, will add as own column
+#Don't need hours per week as using direct GVA comparison, no need for weighted av
+comparator = 'Sheffield'
+# comparator = 'Manchester'
+# comparator = 'Leeds'
+# comparator = 'Nottingham'
+
+corecompare <- gva.cp.itl3 %>%
+  select(region, year, gva_per_capita) %>% 
+  filter(region %in% corecities[corecities!=comparator]) %>%
+  left_join(
+    gva.cp.itl3 %>%
+      ungroup() %>% 
+      filter(region == comparator) %>% 
+      select(year, sheffield_gva = gva_per_capita),
+  by = 'year'
+  ) %>% 
+  mutate(prop_diff = (gva_per_capita - sheffield_gva)/sheffield_gva) %>% 
+  group_by(region) %>% 
+  mutate(
+    prop_diff_3yrsmooth = rollapply(prop_diff,3,mean,align='center',fill=NA),
+    prop_diff_5yrsmooth = rollapply(prop_diff,5,mean,align='center',fill=NA),
+  )
+
+
+
+# ggplot(corecompare, aes(x = year, y = prop_diff_5yrsmooth * 100, colour = fct_reorder(region, prop_diff_5yrsmooth))) +
+ggplot(corecompare, aes(x = year, y = prop_diff * 100, colour = fct_reorder(region, prop_diff, .desc=T))) +
+  geom_line() +
+  geom_point(size = 2) +
+  # coord_cartesian(ylim = c(-1,30)) +
+  geom_hline(yintercept = 0, alpha = 0.2, size = 2) +
+  scale_color_brewer(palette = 'Paired', direction = -1) +
+  ylab("Percent difference of... ") +
+  theme(legend.title=element_blank()) +
+  ggtitle("GVA per capita: Sheffield compared to other 'core cities'")
+
+
+```
 
 
 
