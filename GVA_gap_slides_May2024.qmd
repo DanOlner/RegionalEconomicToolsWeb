@@ -22,8 +22,9 @@ options(scipen = 99)
 
 ----
 
+* **AFTER THE GRAPHS:** thoughts on what this means for gap analysis / 'eyes on prize'
 * Avoiding comparing places using inflation-adjusted data, which can mislead about gaps
-* GVA per hour worked and then per capita are in pairs of slides **using the same scale for comparison** 
+* GVA *per hour worked* and then *per capita* are in pairs of slides **using the same scale for comparison** 
 
 # Why these two GVA measures?
 
@@ -32,12 +33,11 @@ options(scipen = 99)
 
 ----
 
-# Headlines
+# Headlines from gap analysis
 
 * GVA per hour: apparent opening of gap to other regions/places - **Sheffield appears to be starting to close the gap, while BDR's continues to grow.**
 * GVA per capita: **SY overall now closing the gap after several years of getting larger**
-* Sheffield's gap to core cities has only recently (2012-15) dropped away and is **closing again now**
-
+* Sheffield's gap to core cities has only recently increased (2012-15) and is **closing again now**
 
 
 ```{r loaddata}
@@ -1004,15 +1004,47 @@ ggplot(corecompare.percapita, aes(x = year, y = prop_diff * 100, colour = region
 ```
 
 
+# THOUGHTS ON CLOSING GAP ISSUES using 'GVA per new JOB'
+
+# New job GVA impact
+
+* [DIT source](https://assets.publishing.service.gov.uk/media/604205b8d3bf7f021e25c0a3/Understanding-FDI-and-its-impact-in-the-United_Kingdom-for-DIT_s-investment-promotion-activities-and-services-phase-2-analytical-report.pdf) for FDI impact; [CBI + Data City source](https://eciu.net/analysis/reports/2024/the-uks-net-zero-economy-2024) for net zero job impact. **Both include sector spillovers.**
+* CBI: £114300 GVA PA for a FTE = £58.615 per hour worked
+* DIT: £212,000 GVA PA for a FTE = £108.70 per hour worked
 
 
+# GVA per hour comparators
+
+* London average in the latest year (smoothed) is £51.52 per hour worked (gap to SY = 70%)
+* UK minus London: £35.85 (gap to SY = 17.7%)
+* SY currently: £30.40
 
 
+# Effect on raw gap closing
+
+* If SY raw GVA gap was same as per hour worked gap (~17.7%) = **£5.217 billion gap.**
+* Closing purely with new FTE: 24,183 to 45,045 jobs. (5217M / 212K & 5217M / 113.3K)
+* Investment approx via CBI report: £16 to 30 billion. DIT prob less but need to check more.  
 
 
+# Different gaps to close
+
+* GVA per hour worked is an **average**: it **could drop** if inactive people enter workforce, or new jobs created that are below SY average of £30.40.
+* Can only **go up** if people increase their own existing output via e.g. skills inc (or firms improve other prod factors)
+* GVA per hour points to direct productivity changes: skills, production frontier/gaps, infrastructure, transport etc
+
+# Range of metrics
+
+* Beatty & Fothergill 2020 show that GVA measure choice has range of SY gap between 10% to 31%. (My analysis of their data [here](https://danolner.github.io/RegionalEconomicTools/beattyfothergill.html).)
+* Not suggesting we use all those at all: but thinking about exactly what metric we aim to change?
+* One possible answer: **break down change by sector / deciles etc.**
 
 
+# Then map to intervention type
 
+* i.e. what impact skills shift? For existing vs new workers? Inactivity?
+* What impact on sector x / clean tech?
+* What impact working on production frontier gap within firms? Etc
 
 
 
