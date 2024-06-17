@@ -1,0 +1,127 @@
+SIC_SECTION,year,estimate,lower CI,upper CI,CV
+A Agriculture forestry and fishing,2014,1700,-700,4200,73
+B Mining and quarrying,2014,~,~,~,36
+C Manufacturing,2014,66900,53300,80500,10
+D Electricity gas steam and air conditioning supply,2014,13300,12400,14300,4
+E Water supply; sewerage waste management and remediation activities,2014,1700,1500,1900,6
+F Construction,2014,97300,79700,114800,9
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,2014,11300,6800,15700,20
+H Transportation and storage,2014,200,100,200,15
+J Information and communication ,2014,1200,800,1700,19
+L Real estate activities,2014,500,500,600,4
+M Professional scientific and technical activities ,2014,36100,25400,46900,15
+N Administrative and support service activities,2014,4300,2600,5900,20
+P Education,2014,400,-100,800,66
+S Other activities,2014,1000,-200,2300,63
+A Agriculture forestry and fishing,"2,015",600,~,1200,56
+B Mining and quarrying,"2,015",~,~,~,11
+C Manufacturing,"2,015",68100,54400,81700,10
+D Electricity gas steam and air conditioning supply,"2,015",11400,10900,11800,2
+E Water supply; sewerage waste management and remediation activities,"2,015",3500,700,6300,40
+F Construction,"2,015",73700,59100,88300,10
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,"2,015",8900,3000,14900,34
+H Transportation and storage,"2,015",200,200,200,5
+J Information and communication ,"2,015",100,100,100,0
+L Real estate activities,"2,015",300,300,400,6
+M Professional scientific and technical activities ,"2,015",28300,18600,38000,17
+N Administrative and support service activities,"2,015",2600,1200,3900,27
+P Education,"2,015",2600,-1800,7000,86
+S Other activities,"2,015",100,~,300,73
+A Agriculture forestry and fishing,"2,016",1300,-700,3300,78
+B Mining and quarrying,"2,016",~,~,~,9
+C Manufacturing,"2,016",69400,57300,81600,21
+D Electricity gas steam and air conditioning supply,"2,016",13700,11600,15800,31
+E Water supply; sewerage waste management and remediation activities,"2,016",4100,1600,6600,1
+F Construction,"2,016",73300,58700,87800,51
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,"2,016",13900,~,27800,10
+H Transportation and storage,"2,016",400,200,500,8
+J Information and communication ,"2,016",400,~,900,15
+L Real estate activities,"2,016",400,300,500,6
+M Professional scientific and technical activities ,"2,016",30500,20000,41000,18
+N Administrative and support service activities,"2,016",2700,2000,3400,45
+P Education,"2,016",100,100,100,13
+S Other activities,"2,016",~,~,~,56
+A Agriculture forestry and fishing,"2,017",900,300,1600,37
+B Mining and quarrying,"2,017",~,~,100,20
+C Manufacturing,"2,017",65700,57700,73800,6
+D Electricity gas steam and air conditioning supply,"2,017",16000,15100,16800,3
+E Water supply; sewerage waste management and remediation activities,"2,017",6200,1300,11200,41
+F Construction,"2,017",80700,69600,91700,7
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,"2,017",6000,3400,8700,23
+H Transportation and storage,"2,017",200,200,200,4
+J Information and communication ,"2,017",800,-200,1800,65
+L Real estate activities,"2,017",500,~,1000,57
+M Professional scientific and technical activities ,"2,017",34100,23200,45100,16
+N Administrative and support service activities,"2,017",5300,3900,6600,13
+P Education,"2,017",300,~,600,49
+S Other activities,"2,017",400,~,700,46
+A Agriculture forestry and fishing,"2,018",1300,~,2700,54
+B Mining and quarrying,"2,018",200,200,200,1
+C Manufacturing,"2,018",80600,57300,104000,15
+D Electricity gas steam and air conditioning supply,"2,018",16400,15800,17000,2
+E Water supply; sewerage waste management and remediation activities,"2,018",2800,1900,3700,16
+F Construction,"2,018",80000,68300,91600,7
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,"2,018",3200,2700,3800,8
+H Transportation and storage,"2,018",300,200,500,27
+J Information and communication ,"2,018",2300,-400,5000,61
+L Real estate activities,"2,018",300,~,500,35
+M Professional scientific and technical activities ,"2,018",22900,18700,27000,9
+N Administrative and support service activities,"2,018",7100,3500,10700,26
+P Education,"2,018",100,100,100,0
+S Other activities,"2,018",300,~,600,43
+A Agriculture forestry and fishing,"2,019",c,c,c,c
+B Mining and quarrying,"2,019",200,~,300,40
+C Manufacturing,"2,019",70800,58300,83300,9
+D Electricity gas steam and air conditioning supply,"2,019",16500,15400,17700,4
+E Water supply; sewerage waste management and remediation activities,"2,019",2200,2100,2300,2
+F Construction,"2,019",67000,55200,78900,9
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,"2,019",12300,200,24300,50
+H Transportation and storage,"2,019",c,c,c,c
+J Information and communication ,"2,019",1700,-400,3900,62
+L Real estate activities,"2,019",200,200,200,0
+M Professional scientific and technical activities ,"2,019",24700,20600,28900,9
+N Administrative and support service activities,"2,019",8700,400,17100,49
+P Education,"2,019",100,100,100,0
+S Other activities,"2,019",200,~,400,49
+A Agriculture forestry and fishing,"2,020",700,~,1300,47
+B Mining and quarrying,"2,020",c,c,c,c
+C Manufacturing,"2,020",70000,58600,81400,8
+D Electricity gas steam and air conditioning supply,"2,020",18600,17100,20200,4
+E Water supply; sewerage waste management and remediation activities,"2,020",1800,1500,2200,10
+F Construction,"2,020",76500,64000,89000,8
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,"2,020",9600,3000,16200,35
+H Transportation and storage,"2,020",200,~,400,38
+J Information and communication ,"2,020",900,-200,2100,65
+L Real estate activities,"2,020",100,100,100,2
+M Professional scientific and technical activities ,"2,020",31300,26600,36100,8
+N Administrative and support service activities,"2,020",c,c,c,c
+P Education,"2,020",200,200,200,0
+S Other activities,"2,020",500,~,1000,58
+A Agriculture forestry and fishing,"2,021",100,~,200,58
+B Mining and quarrying,"2,021",~,~,~,22
+C Manufacturing,"2,021",77500,68400,86700,6
+D Electricity gas steam and air conditioning supply,"2,021",15600,14700,16600,3
+E Water supply; sewerage waste management and remediation activities,"2,021",4500,3400,5500,12
+F Construction,"2,021",95600,78900,112300,9
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,"2,021",10000,1600,18400,43
+H Transportation and storage,"2,021",300,~,500,40
+J Information and communication ,"2,021",1600,-300,3500,61
+L Real estate activities,"2,021",800,-100,1700,58
+M Professional scientific and technical activities ,"2,021",36600,28300,44900,12
+N Administrative and support service activities,"2,021",8600,5700,11500,17
+P Education,"2,021",500,400,500,5
+S Other activities,"2,021",700,-200,1500,64
+A Agriculture forestry and fishing,"2,022",1400,-200,3000,59
+B Mining and quarrying,"2,022",~,~,~,1
+C Manufacturing,"2,022",75000,67900,82200,5
+D Electricity gas steam and air conditioning supply,"2,022",17400,16700,18200,2
+E Water supply; sewerage waste management and remediation activities,"2,022",2500,900,4000,32
+F Construction,"2,022",99100,86000,112100,7
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,"2,022",10100,1400,18900,44
+H Transportation and storage,"2,022",400,200,600,28
+J Information and communication ,"2,022",1000,-500,2500,77
+L Real estate activities,"2,022",600,~,1100,52
+M Professional scientific and technical activities ,"2,022",46200,33600,58900,14
+N Administrative and support service activities,"2,022",17500,5400,29600,35
+P Education,"2,022",400,400,400,2
+S Other activities,"2,022",700,~,1500,52

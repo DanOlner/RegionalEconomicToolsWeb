@@ -141,9 +141,9 @@ LQ_baseplot <- function(df, alpha = 0.1, sector_name, LQ_column, change_over_tim
 #a column with min and max values to overlay as bars to indicate full range of the data
 addplacename_to_LQplot <- function(df, plot_to_addto, placename, shapenumber=16, backgroundcolour='black', add_gva = F, setalpha = 1,
                                    region_name, sector_name,change_over_time, value_column, LQ_column, sector_regional_proportion,
-                                   min_LQ_all_time,max_LQ_all_time){
+                                   min_LQ_all_time,max_LQ_all_time, value_col_ismoney = T){
   
-  region_name <- enquo(region_name) 
+  region_name <- enquo(region_name)  
   sector_name <- enquo(sector_name)
   change_over_time <- enquo(change_over_time)
   LQ_column <- enquo(LQ_column)
@@ -183,12 +183,25 @@ addplacename_to_LQplot <- function(df, plot_to_addto, placename, shapenumber=16,
     value_column <- enquo(value_column)
     sector_regional_proportion <- enquo(sector_regional_proportion)
     
+    if(value_col_ismoney){
+    
     plot_to_addto <- plot_to_addto +  
       geom_text(
         data = df %>% filter(!!region_name == placename), 
-        aes(y = !!sector_name, x = 20, label = paste0('£',value,'M, ',round(!!sector_regional_proportion * 100, 2),'%')),
+        aes(y = !!sector_name, x = 20, label = paste0('£',!!value_column,'M, ',round(!!sector_regional_proportion * 100, 2),'%')),
         nudge_x = 0.3, hjust = 1, alpha = 0.7, size = 3
       )
+    
+    } else {
+      
+    plot_to_addto <- plot_to_addto +  
+      geom_text(
+        data = df %>% filter(!!region_name == placename), 
+        aes(y = !!sector_name, x = 20, label = paste0(!!value_column,', ',round(!!sector_regional_proportion * 100, 2),'%')),
+        nudge_x = 0.3, hjust = 1, alpha = 0.7, size = 3
+      )
+    
+    }
     
     #Test for one of these missing, don't display if so
     if(!(missing(min_LQ_all_time)|missing(max_LQ_all_time)) ){
@@ -224,7 +237,7 @@ addplacename_to_LQplot <- function(df, plot_to_addto, placename, shapenumber=16,
 #2D PROPORTION PLOT COMPARING TWO TIME POINTS
 # X axis name or names (of subregions)
 # Y axis name or names (of subregions)
-# Column to be comparing (so e.g. we can do smoothing on it beforehand if we want)
+# Column to be comparing (so e.g. we can do smoothing on it beforehand if we want) 
 # time variable
 # Start time
 # End time
