@@ -158,11 +158,54 @@ gb.jobs <- itl2.jobs %>%
   summarise(COUNT = sum(COUNT))
 
 
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~
+#TOTAL JOB COUNT CHECKS----
+#~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 #Random thing: total count of jobs in each ITL2?
 itl2.totaljobcount <- itl2.jobs %>% 
   select(DATE,GEOGRAPHY_NAME,COUNT) %>% 
   group_by(DATE,GEOGRAPHY_NAME) %>% 
   summarise(COUNT = sum(COUNT))
+
+#save those for elsewhere
+# write_csv(itl2.totaljobcount, 'data/itl2_totalFTjobcounts.csv')
+
+#Check correlation to per hour worked (taken from gdp_gaps.qmd)
+perhourworked <- read_csv('data/Table A4 Current Price unsmoothed GVA B per hour worked £ ITL2 and ITL3 subregions 2004 to 2021.csv') %>% 
+  rename(ITL = `ITL level`, ITLcode = `ITL code`, region = `Region name`) %>% 
+  filter(ITL == 'ITL2') %>% 
+  pivot_longer(cols = `2004`:`2021`, names_to = 'year', values_to = 'gva') %>% 
+  mutate(year = as.numeric(year)) %>% 
+  arrange(year) %>% 
+  group_by(region) %>%
+  mutate(
+    movingav = rollapply(gva,3,mean,align='right',fill=NA)
+  )
+
+#check ITL match. Lack of match probably NI... nope, it's same two.
+table(perhourworked$region %in% itl2.totaljobcount$GEOGRAPHY_NAME)
+perhourworked$region[!perhourworked$region %in% itl2.totaljobcount$GEOGRAPHY_NAME]
+
+#After this, only NI doesn't match, which is correct (BRES only GB)
+perhourworked$region[perhourworked$region == 'Northumberland, and Tyne and Wear'] <- 'Northumberland and Tyne and Wear'
+perhourworked$region[perhourworked$region == 'West Wales and The Valleys'] <- 'West Wales'
+
+#Join per hour worked
+itl2.totaljobcount <- itl2.totaljobcount %>% 
+  left_join(
+    perhourworked %>% select(region,year,movingav),
+    by = c('GEOGRAPHY_NAME' = 'region','DATE' = 'year')
+  )
+
+plot(itl2.totaljobcount$COUNT[itl2.totaljobcount$DATE == 2015] ~ itl2.totaljobcount$movingav[itl2.totaljobcount$DATE == 2015])
+plot(itl2.totaljobcount$COUNT[itl2.totaljobcount$DATE == 2021] ~ itl2.totaljobcount$movingav[itl2.totaljobcount$DATE == 2021])
+
+#Partly that's what economic theory says should happen - larger/denser places are more productive
+#But...
 
 #SY 376670, population 1.392 million.
 #Those are full time jobs only though.
@@ -177,6 +220,155 @@ itl2.totaljobcount <- itl2.jobs %>%
 
 #Manually rearranged... le sigh
 lcree <- read_csv('data/LCREE_2022_SECTION_v_JOBCOUNT.csv', na = c('~','c'))
+
+#coefficient of variation:
+#"also known as the relative standard error and is calculated by dividing the standard error of an estimate by the estimate itself"
+#Multiplied by 100 to get the CV itself, as it's expressed in % terms
+#https://www.ons.gov.uk/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit#coefficient-of-variation
+
+#So we can turn it back into a rough standard error easily (though noting there are rounding values on the estimate, so it's not perfect)
+lcree$se <- (lcree$CV * lcree$estimate) / 100
+
+#Sanity check on lower and upper 95% CI based on that SE
+#Tick - that's good enough for simulation purposes below (can stick straight into rnorm to get sample guesses)
+chk <- lcree %>% 
+  mutate(
+    chk_lower = estimate - (se * 1.96),
+    chk_upper = estimate + (se * 1.96)
+    )
+
+
+#LCREE data is UK, BRES is GB
+#So let's adjust the LCREE numbers crudely to recognise that
+#2022 employment per country
+emp.lcree <- read_csv('data/LCREE_2022_employmentpercountry.csv') %>% 
+  mutate(percent = (estimate / sum(estimate))*100)
+
+#Northern Ireland has around 1 percent of the jobs
+#So that's good for here - adjusting won't be very far off correct if we just reduce all numbers by 1%
+#(Though of course it's wrong - no account fo geog variability there)
+
+#Take a percent off job counts
+lcree <- lcree %>% 
+  mutate(across(estimate:se, ~ . * .99))
+
+
+#CHECK LCREE AND BRES SECTOR CATEGORY MATCH
+unique(lcree$SIC_SECTION)[order(unique(lcree$SIC_SECTION))]
+unique(itl2.jobs$SIC_SECTION_NAME)[order(unique(itl2.jobs$SIC_SECTION_CODE))]
+
+#Bit of processing and check match
+l.sectors <- substr(unique(lcree$SIC_SECTION),start = 3,stop = 100)
+b.sectors <- gsub(pattern = ',', replacement = '', x = unique(itl2.jobs$SIC_SECTION_NAME))
+
+#Quite a few matching sectors with different names that need manually matching up
+b.sectors[!b.sectors %in% l.sectors]
+l.sectors
+
+l.sectors[l.sectors == 'Water supply; sewerage waste management and remediation activities'] <- 'Water supply; sewerage and waste management'
+l.sectors[l.sectors == 'Wholesale and retail trade; repair of motor vehicles and motorcycles'] <- 'Wholesale and retail trade; repair of motor vehicles'
+
+#Rest are all now in 'other activities'
+l.sectors[!l.sectors %in% b.sectors]
+
+#Which now includes these (inc. all major public services)
+b.sectors[!b.sectors %in% l.sectors]
+
+#So those will need labelling as 'other activities' to match
+#replace commas before then either keeping default or grouping into 'other activities' to match LCREE
+itl2.jobs <- itl2.jobs %>% 
+  mutate(
+    SIC_SECTION_NAME_LCREE = gsub(pattern = ',', replacement = '', x = SIC_SECTION_NAME), 
+    SIC_SECTION_NAME_LCREE = case_when(
+      SIC_SECTION_NAME_LCREE %in% c("Accommodation and food service activities","Financial and insurance activities","Public administration and defence",
+                              "Human health and social work activities","Arts entertainment and recreation","Other service activities") ~ 'Other activities',
+      .default = SIC_SECTION_NAME_LCREE
+    )
+  )
+
+#Get rid of start letter
+lcree$SIC_SECTION_JOIN <- substr(lcree$SIC_SECTION,start = 3,stop = 100)
+lcree$SIC_SECTION_JOIN[lcree$SIC_SECTION_JOIN == 'Water supply; sewerage waste management and remediation activities'] <- 'Water supply; sewerage and waste management'
+lcree$SIC_SECTION_JOIN[lcree$SIC_SECTION_JOIN == 'Wholesale and retail trade; repair of motor vehicles and motorcycles'] <- 'Wholesale and retail trade; repair of motor vehicles'
+
+#should have full match now... tick
+table(unique(itl2.jobs$SIC_SECTION_NAME_LCREE) %in% lcree$SIC_SECTION_JOIN)
+
+
+
+
+
+#NOW... SUM THE JOBS IN THE BRES 'OTHER ACTIVITIES' CATEGORY
+#Drop all the various LQ calc columns, don't need those here
+#Keep sector total proportion so we can use below...
+itl2.jobs.lcree <- itl2.jobs %>% 
+  select(DATE, GEOGRAPHY_NAME, COUNT, SIC_SECTION_NAME_LCREE) %>% 
+  group_by(DATE,GEOGRAPHY_NAME, SIC_SECTION_NAME_LCREE) %>% 
+  summarise(COUNT = sum(COUNT)) %>% 
+  ungroup()
+
+#Add sector regional proportion back in, lost after summarise
+# itl2.jobs.lcree <- itl2.jobs.lcree %>% 
+#   split(.$DATE) %>% 
+#   map(add_location_quotient_and_proportions,
+#       regionvar = GEOGRAPHY_NAME,
+#       lq_var = SIC_SECTION_NAME_LCREE,
+#       valuevar = COUNT) %>% 
+#   bind_rows()
+
+#No, don't do that - we need a slightly different number (implicit in the LQ but we need explicitly)
+#Proportion each region has of each sector
+itl2.jobs.lcree <- itl2.jobs.lcree %>% 
+  group_by(DATE,SIC_SECTION_NAME_LCREE) %>% 
+  mutate(sector_national_proportion = COUNT / sum(COUNT))
+
+#Should sum to one for each sector in a particular year... tick
+# itl2.jobs.lcree %>% 
+#   group_by(DATE,SIC_SECTION_NAME_LCREE) %>% 
+#   summarise(sum(sector_national_proportion))
+
+#And can now join that to the LCREE data
+#How many matching years?
+#BRES 2015-21 vs LCREE 2014-22
+unique(itl2.jobs.lcree$DATE)[unique(itl2.jobs.lcree$DATE) %in% lcree$year]
+unique(lcree$year)
+
+itl2.jobs.lcree <- itl2.jobs.lcree %>% 
+  inner_join(
+    lcree %>% rename(lcree_jobcount = estimate, lcree_lowerCI = `lower CI`, lcree_upperCI = `upper CI`, lcree_cv = CV, lcree_se = se),
+    by = c('DATE' = 'year', 'SIC_SECTION_NAME_LCREE' = 'SIC_SECTION_JOIN')
+  )
+
+#Now just need to ADJUST ALL LCREE VALUES BY THE REGIONAL SECTOR PROPORTIONS
+itl2.jobs.lcree <- itl2.jobs.lcree %>% 
+  mutate(
+    across(lcree_jobcount:lcree_se, ~ . * sector_national_proportion),
+    propcheck = lcree_jobcount / COUNT,
+    propcheck_lowerci = lcree_lowerCI / COUNT,
+    propcheck_upperci = lcree_upperCI / COUNT
+  )
+
+#Look at one year for ease
+View(itl2.jobs.lcree %>% filter(DATE == 2021, SIC_SECTION_NAME_LCREE == 'Manufacturing'))
+View(itl2.jobs.lcree %>% filter(DATE == 2021, SIC_SECTION_NAME_LCREE == 'Wholesale and retail trade; repair of motor vehicles'))
+
+#sanity check... looks OK
+plot(hist(itl2.jobs.lcree$lcree_jobcount/itl2.jobs.lcree$COUNT, na.rm = T))
+
+#Check LCREE job counts sum sensibly... tick
+# itl2.jobs.lcree %>% 
+#   group_by(DATE,SIC_SECTION_NAME_LCREE) %>% 
+#   summarise(sum(lcree_jobcount, na.rm=T)) %>% View
+
+#SY?
+View(itl2.jobs.lcree %>% filter(DATE == 2021, GEOGRAPHY_NAME == 'South Yorkshire'))
+
+
+
+
+
+
+
 
 
 
