@@ -160,7 +160,6 @@ gb.jobs <- itl2.jobs %>%
 
 
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~
 #TOTAL JOB COUNT CHECKS----
 #~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -251,6 +250,39 @@ emp.lcree <- read_csv('data/LCREE_2022_employmentpercountry.csv') %>%
 #Take a percent off job counts
 lcree <- lcree %>% 
   mutate(across(estimate:se, ~ . * .99))
+
+
+#Quick look at how the sector estimates have changed over time and what the trend is
+lcree.plot <- lcree %>%
+  filter(SIC_SECTION!='B Mining and quarrying') %>%
+  mutate(below5000 = estimate < 4000) %>% 
+  filter(!is.na(below5000))
+
+#These should be zeroes now mining removed
+# lcree.plot[is.na(lcree.plot)] <- 0
+
+ggplot(lcree.plot %>% filter(!below5000), aes(x = year, y = estimate, colour = fct_reorder(SIC_SECTION,estimate, .desc = T) )) +
+  geom_line(position = position_dodge(width = 0.5)) +
+  geom_point(position = position_dodge(width = 0.5)) +
+  geom_errorbar(aes(ymin = `lower CI`, ymax = `upper CI`), position = position_dodge(width = 0.5)) +
+  # scale_y_log10() +
+  # facet_wrap(~below5000, nrow = 2, scales = 'free_y') +
+  scale_color_brewer(palette = 'Paired', direction = -1)
+  
+ggplot(lcree.plot %>% filter(below5000), aes(x = year, y = estimate, colour = fct_reorder(SIC_SECTION,estimate, .desc = T) )) +
+  geom_line(position = position_dodge(width = 0.5)) +
+  geom_point(position = position_dodge(width = 0.5)) +
+  geom_errorbar(aes(ymin = `lower CI`, ymax = `upper CI`), position = position_dodge(width = 0.5)) +
+  # scale_y_log10() +
+  # facet_wrap(~below5000, nrow = 2, scales = 'free_y') +
+  scale_color_brewer(palette = 'Paired', direction = -1)
+  
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~
+#LCREE + BRES LINK----
+#~~~~~~~~~~~~~~~~~~~~~
 
 
 #CHECK LCREE AND BRES SECTOR CATEGORY MATCH
