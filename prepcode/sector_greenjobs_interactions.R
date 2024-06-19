@@ -469,8 +469,9 @@ itl2 <- itl2.jobs.lcree %>%
 unique(itl2$DATE)
 unique(itl2.cp$DATE)
   
-#Does year difference solely account for row difference? (It should)
+#Does year difference solely account for row difference?
 #Also sector and place match
+#Those three should...
 #Tick
 nrow(
   itl2.cp %>% filter(
