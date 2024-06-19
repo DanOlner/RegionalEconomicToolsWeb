@@ -396,6 +396,92 @@ plot(hist(itl2.jobs.lcree$lcree_jobcount/itl2.jobs.lcree$COUNT, na.rm = T))
 View(itl2.jobs.lcree %>% filter(DATE == 2021, GEOGRAPHY_NAME == 'South Yorkshire'))
 
 
+#~~~~~~~~~~~~~~~~~~~~~~~~
+#GVA for SIC SECTIONS----
+#~~~~~~~~~~~~~~~~~~~~~~~~
+
+#Will need CURRENT PRICES, not least because 'other activities' sections need summing / summing only valid with CP
+#Via previous code here: https://github.com/DanOlner/ukcompare/blob/2d6237cd4917c79c9111989248d1a32df66ceaec/explore_code/GVA_region_by_sector_explore.R#L6166
+itl2.cp <- read_csv('data/Table 2c ITL2 UK current price estimates pounds million.csv')
+
+names(itl2.cp) <- gsub(x = names(itl2.cp), pattern = ' ', replacement = '_')
+
+#This gets all the letters, nice
+cvSICkeeps <- itl2.cp$SIC07_code[substr(itl2.cp$SIC07_code,2,2) == ' '] %>% unique
+
+#Filter out duplicate value rows and make long by year
+#Also convert year to numeric
+itl2.cp <- itl2.cp %>% 
+  filter(SIC07_code %in% cvSICkeeps) %>% 
+  pivot_longer(`1998`:`2021`, names_to = 'year', values_to = 'value') %>% 
+  mutate(year = as.numeric(year))
+
+
+#Repeat process of binning values to match LCREE categories
+#Note also there's extra in the GVA data because it's the whole economy including ones with no jobs in (e.g. imputed rent)
+
+#Do same thing - remove commas, bin LCREE's 'other activities'
+itl2.cp <- itl2.cp %>% 
+  mutate(
+    SIC_SECTION_NAME_LCREE = gsub(pattern = ',', replacement = '', x = SIC07_description), 
+    SIC_SECTION_NAME_LCREE = case_when(
+      SIC_SECTION_NAME_LCREE %in% c("Accommodation and food service activities","Financial and insurance activities","Public administration and defence",
+                                    "Human health and social work activities","Arts entertainment and recreation","Other service activities") ~ 'Other activities',
+      .default = SIC_SECTION_NAME_LCREE
+    )
+  )
+
+
+#Then need to sum GVA for 'other activities'
+itl2.cp <- itl2.cp %>% 
+  select(GEOGRAPHY_NAME = ITL_region_name, DATE = year, GVA = value, SIC_SECTION_NAME_LCREE) %>% 
+  group_by(DATE,GEOGRAPHY_NAME, SIC_SECTION_NAME_LCREE) %>% 
+  summarise(GVA = sum(GVA)) %>% 
+  ungroup()
+
+
+
+#After that,, check non match... mostly perfect
+#Just activities of households, which we don't want for our purposes here, so can just do left join and lose
+unique(itl2.jobs.lcree$SIC_SECTION_NAME_LCREE)[!unique(itl2.jobs.lcree$SIC_SECTION_NAME_LCREE) %in% itl2.cp$SIC_SECTION_NAME_LCREE]
+unique(itl2.cp$SIC_SECTION_NAME_LCREE)[!unique(itl2.cp$SIC_SECTION_NAME_LCREE) %in% unique(itl2.jobs.lcree$SIC_SECTION_NAME_LCREE)]
+
+#Check region name match, might have those usual suspects being wrong... yeeeeaaah
+unique(itl2.cp$ITL_region_name)[!unique(itl2.cp$ITL_region_name) %in% itl2.jobs.lcree$GEOGRAPHY_NAME]
+
+#Fix:
+itl2.cp$ITL_region_name[itl2.cp$ITL_region_name == 'Northumberland, and Tyne and Wear'] <- 'Northumberland and Tyne and Wear'
+itl2.cp$ITL_region_name[itl2.cp$ITL_region_name == 'West Wales and The Valleys'] <- 'West Wales'
+
+#Again, dropping NI because not in BRES data. (Dropping via non match implicitly)
+#Same for non matching years and that one sector
+
+#REDUCE NAME now we have all bits in same DF
+itl2 <- itl2.jobs.lcree %>% 
+  left_join(
+    itl2.cp,
+    by = c('DATE','GEOGRAPHY_NAME','SIC_SECTION_NAME_LCREE')
+    )
+
+#check match
+
+#Far fewer years in LCREE
+unique(itl2$DATE)
+unique(itl2.cp$DATE)
+  
+#Does year difference solely account for row difference? (It should)
+#Also sector and place match
+#Tick
+nrow(
+  itl2.cp %>% filter(
+    DATE %in% unique(itl2$DATE),
+    GEOGRAPHY_NAME %in% unique(itl2$GEOGRAPHY_NAME),
+    SIC_SECTION_NAME_LCREE %in% unique(itl2$SIC_SECTION_NAME_LCREE)
+    )
+  )
+
+
+
 
 
 
