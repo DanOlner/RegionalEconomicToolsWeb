@@ -402,7 +402,8 @@ View(itl2.jobs.lcree %>% filter(DATE == 2021, GEOGRAPHY_NAME == 'South Yorkshire
 
 #Will need CURRENT PRICES, not least because 'other activities' sections need summing / summing only valid with CP
 #Via previous code here: https://github.com/DanOlner/ukcompare/blob/2d6237cd4917c79c9111989248d1a32df66ceaec/explore_code/GVA_region_by_sector_explore.R#L6166
-itl2.cp <- read_csv('data/Table 2c ITL2 UK current price estimates pounds million.csv')
+itl2.cp <- read_csv('data/Table 2c ITL2 current price estimates pounds million 2024.csv')
+# chk <- read_csv('data/Table 2c ITL2 current price estimates pounds million 2024.csv')
 
 names(itl2.cp) <- gsub(x = names(itl2.cp), pattern = ' ', replacement = '_')
 
@@ -434,7 +435,7 @@ itl2.cp <- itl2.cp %>%
 
 #Then need to sum GVA for 'other activities'
 itl2.cp <- itl2.cp %>% 
-  select(GEOGRAPHY_NAME = ITL_region_name, DATE = year, GVA = value, SIC_SECTION_NAME_LCREE) %>% 
+  select(GEOGRAPHY_NAME = Region_name, DATE = year, GVA = value, SIC_SECTION_NAME_LCREE) %>% 
   group_by(DATE,GEOGRAPHY_NAME, SIC_SECTION_NAME_LCREE) %>% 
   summarise(GVA = sum(GVA)) %>% 
   ungroup()
@@ -450,8 +451,8 @@ unique(itl2.cp$SIC_SECTION_NAME_LCREE)[!unique(itl2.cp$SIC_SECTION_NAME_LCREE) %
 unique(itl2.cp$ITL_region_name)[!unique(itl2.cp$ITL_region_name) %in% itl2.jobs.lcree$GEOGRAPHY_NAME]
 
 #Fix:
-itl2.cp$ITL_region_name[itl2.cp$ITL_region_name == 'Northumberland, and Tyne and Wear'] <- 'Northumberland and Tyne and Wear'
-itl2.cp$ITL_region_name[itl2.cp$ITL_region_name == 'West Wales and The Valleys'] <- 'West Wales'
+itl2.cp$GEOGRAPHY_NAME[itl2.cp$GEOGRAPHY_NAME == 'Northumberland, and Tyne and Wear'] <- 'Northumberland and Tyne and Wear'
+itl2.cp$GEOGRAPHY_NAME[itl2.cp$GEOGRAPHY_NAME == 'West Wales and The Valleys'] <- 'West Wales'
 
 #Again, dropping NI because not in BRES data. (Dropping via non match implicitly)
 #Same for non matching years and that one sector
@@ -472,7 +473,7 @@ unique(itl2.cp$DATE)
 #Does year difference solely account for row difference?
 #Also sector and place match
 #Those three should...
-#Tick
+#That's dropped a little having updated to the 2024 ITL2 GVA data, why?
 nrow(
   itl2.cp %>% filter(
     DATE %in% unique(itl2$DATE),
