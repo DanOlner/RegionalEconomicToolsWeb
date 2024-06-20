@@ -418,6 +418,11 @@ itl2.cp <- itl2.cp %>%
   mutate(year = as.numeric(year))
 
 
+#Check against previous year's data up to 2021. Anything different?
+#"local/cuttings/Table 2c ITL2 UK current price estimates pounds million 2023.csv"
+
+
+
 #Repeat process of binning values to match LCREE categories
 #Note also there's extra in the GVA data because it's the whole economy including ones with no jobs in (e.g. imputed rent)
 
@@ -448,11 +453,14 @@ unique(itl2.jobs.lcree$SIC_SECTION_NAME_LCREE)[!unique(itl2.jobs.lcree$SIC_SECTI
 unique(itl2.cp$SIC_SECTION_NAME_LCREE)[!unique(itl2.cp$SIC_SECTION_NAME_LCREE) %in% unique(itl2.jobs.lcree$SIC_SECTION_NAME_LCREE)]
 
 #Check region name match, might have those usual suspects being wrong... yeeeeaaah
-unique(itl2.cp$ITL_region_name)[!unique(itl2.cp$ITL_region_name) %in% itl2.jobs.lcree$GEOGRAPHY_NAME]
+#2024 data has a new one: "Gloucestershire, Wiltshire and Bath/Bristol Area"
+#For that last one, only difference is capitalised A in the 2024 ITL2 data... le sigh
+unique(itl2.cp$GEOGRAPHY_NAME)[!unique(itl2.cp$GEOGRAPHY_NAME) %in% unique(itl2.jobs.lcree$GEOGRAPHY_NAME)]
 
 #Fix:
 itl2.cp$GEOGRAPHY_NAME[itl2.cp$GEOGRAPHY_NAME == 'Northumberland, and Tyne and Wear'] <- 'Northumberland and Tyne and Wear'
 itl2.cp$GEOGRAPHY_NAME[itl2.cp$GEOGRAPHY_NAME == 'West Wales and The Valleys'] <- 'West Wales'
+itl2.cp$GEOGRAPHY_NAME[itl2.cp$GEOGRAPHY_NAME == 'Gloucestershire, Wiltshire and Bath/Bristol Area'] <- 'Gloucestershire, Wiltshire and Bath/Bristol area'
 
 #Again, dropping NI because not in BRES data. (Dropping via non match implicitly)
 #Same for non matching years and that one sector
@@ -469,11 +477,12 @@ itl2 <- itl2.jobs.lcree %>%
 #Far fewer years in LCREE
 unique(itl2$DATE)
 unique(itl2.cp$DATE)
-  
+
+
 #Does year difference solely account for row difference?
 #Also sector and place match
 #Those three should...
-#That's dropped a little having updated to the 2024 ITL2 GVA data, why?
+#Tick
 nrow(
   itl2.cp %>% filter(
     DATE %in% unique(itl2$DATE),
