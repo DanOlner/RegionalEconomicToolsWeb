@@ -51,8 +51,16 @@ saveRDS(itl2.bres,paste0('data/BRES_NUTS2_',years[1],'_',years[length(years)],'.
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #Why? 5 digit sums seem to be more accurate than the 2 digit present in the data
+#some checks
+#Ah yes, doesn't have sections (despite downloadable version having them)
+unique(itl2.bres$INDUSTRY_TYPE)
+unique(itl2.bres$INDUSTRY_NAME[itl2.bres$INDUSTRY_TYPE=='SIC 2007 division (2 digit)'])
 
+#So we need to merge in SIC lookup
+SIClookup <- read_csv('data/SIClookup.csv')
 
+itl2.lq <- itl2.lq %>% 
+  left_join(SIClookup %>% select(-SIC_5DIGIT_NAME), by = c('INDUSTRY_CODE' = 'SIC_5DIGIT_CODE'))
 
 
 
