@@ -1,7 +1,5 @@
 #Collate sector jobs / GVA data 
 #Link to CPREE green jobs data
-#Estimate regional scale
-#Think about how jobs shifts might affect economy
 library(tidyverse)
 library(zoo)
 library(sf)
@@ -16,9 +14,30 @@ options(scipen = 99)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #ITL2 jobs counts for 20 SIC sections
-#Via previous BRES data wranngling here:
-#https://github.com/DanOlner/ukcompare
-itl2.jobs <- readRDS('data/itl2_BRES_jobs_SIC_sections.rds')
+#BRES API download and processing done in two other local scripts
+itl2.jobs <- readRDS('data/itl2_BRES_jobs_SIC_sections2015to2022.rds')
+
+#Quick sanity check, comparison of values in previous 2015 to 2021 version
+# chk <- readRDS('local/cuttings/itl2_BRES_jobs_SIC_sections2015to2021.rds') %>% select(-SIC_SECTION_CODE)
+# 
+# chk <- chk %>% 
+#   rename(OLDCOUNT = COUNT) %>% 
+#   left_join(
+#     itl2.jobs,
+#     by = c('DATE','GEOGRAPHY_NAME','SIC_SECTION_NAME')
+#   ) %>% 
+#   mutate(
+#     countdiff = OLDCOUNT/COUNT
+#   )
+# 
+# #Moooostly. Some missing values...
+# plot(density(chk$countdiff, na.rm = T))
+# 
+# #Agri values in Scotland, a known issue - no data via DEFRA for these
+# View(chk %>% filter(is.na(COUNT)))
+
+#Generally some small shifts in values but nothing that's going to alter outcomes here
+
 
 #Missing activities of households (non paid...) and extraterritorial, so 19 sections
 unique(itl2.jobs$SIC_SECTION_NAME)
@@ -38,8 +57,8 @@ LQ_slopes <- compute_slope_or_zero(
   GEOGRAPHY_NAME, SIC_SECTION_NAME,#slopes will be found within whatever grouping vars are added here
   y = LQ_log, x = DATE)
 
-#Filter down to a single DATE
-yeartoplot <- itl2.jobs %>% filter(DATE == 2021)
+#Filter down to a single DATE, latest in data
+yeartoplot <- itl2.jobs %>% filter(DATE == max(DATE))
 
 #Add slopes into data to get LQ plots
 yeartoplot <- yeartoplot %>% 
@@ -132,13 +151,13 @@ itl2.geo$ITL221NM[itl2.geo$ITL221NM == 'Northumberland, and Tyne and Wear'] <- '
 itl2.geo$ITL221NM[itl2.geo$ITL221NM == 'West Wales and The Valleys'] <- 'West Wales'
 
 #picking out the fourth highest geographical spread sector
-x = 5
+x = 4
 
 #Join map data to a subset of the GVA data
 sector_LQ_map <- itl2.geo %>% 
   right_join(
     itl2.jobs %>% filter(
-      DATE==2021,
+      DATE==max(DATE),
       SIC_SECTION_NAME == LQspread$SIC_SECTION_NAME[x]
     ),
     by = c('ITL221NM'='GEOGRAPHY_NAME')
@@ -153,7 +172,7 @@ tm_shape(sector_LQ_map) +
 
 #Sum GB job totals per SIC section (to save API hassle)
 gb.jobs <- itl2.jobs %>% 
-  select(DATE,SIC_SECTION_NAME,COUNT,SIC_SECTION_CODE) %>% 
+  select(DATE,SIC_SECTION_NAME,COUNT) %>% 
   group_by(DATE,SIC_SECTION_NAME) %>% 
   summarise(COUNT = sum(COUNT))
 
@@ -209,6 +228,10 @@ plot(itl2.totaljobcount$COUNT[itl2.totaljobcount$DATE == 2021] ~ itl2.totaljobco
 #SY 376670, population 1.392 million.
 #Those are full time jobs only though.
 
+
+
+
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #GET LCREE JOB COUNTS FOR SIC SECTIONS----
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -261,6 +284,7 @@ lcree.plot <- lcree %>%
 #These should be zeroes now mining removed
 # lcree.plot[is.na(lcree.plot)] <- 0
 
+
 ggplot(lcree.plot %>% filter(!below5000), aes(x = year, y = estimate, colour = fct_reorder(SIC_SECTION,estimate, .desc = T) )) +
   geom_line(position = position_dodge(width = 0.5)) +
   geom_point(position = position_dodge(width = 0.5)) +
@@ -279,6 +303,56 @@ ggplot(lcree.plot %>% filter(below5000), aes(x = year, y = estimate, colour = fc
   
 
 
+#Needs doing as proportion of GB jobs as well...
+#First, agggregate gb level jobs to match LCREE sections
+gb.jobs.forplot <- gb.jobs %>% 
+  mutate(
+    SIC_SECTION_NAME_LCREE = gsub(pattern = ',', replacement = '', x = SIC_SECTION_NAME), 
+    SIC_SECTION_NAME_LCREE = case_when(
+      SIC_SECTION_NAME_LCREE %in% c("Accommodation and food service activities","Financial and insurance activities","Public administration and defence",
+                                    "Human health and social work activities","Arts entertainment and recreation","Other service activities") ~ 'Other activities',
+      .default = SIC_SECTION_NAME_LCREE
+    )
+  )
+
+#Sum for those
+gb.jobs.forplot <- gb.jobs.forplot %>% 
+  select(DATE, COUNT, SIC_SECTION_NAME_LCREE) %>% 
+  group_by(DATE,SIC_SECTION_NAME_LCREE) %>% 
+  summarise(COUNT = sum(COUNT, na.rm = T)) %>% 
+  ungroup()
+
+
+
+lcree.plot.gbjobs <- lcree.plot %>% 
+  inner_join(
+    gb.jobs.forplot,
+    by = c('SIC_SECTION_JOIN' = 'SIC_SECTION_NAME_LCREE','year' = 'DATE')
+  )
+
+lcree.plot.gbjobs <- lcree.plot.gbjobs %>% 
+  mutate(across(estimate:`upper CI`, ~ (. / COUNT)*100,.names = "percent_of_gb_{.col}" ))
+
+#https://stackoverflow.com/a/12188551
+lcree.plot.gbjobs <- do.call(data.frame,lapply(lcree.plot.gbjobs, function(x) replace(x, is.infinite(x),NA)))
+
+#What's the median percent so can break up for plotting?
+median(lcree.plot.gbjobs$percent_of_gb_estimate, na.rm = T)
+
+lcree.plot.gbjobs <- lcree.plot.gbjobs %>% 
+  mutate(abovemedian = percent_of_gb_estimate > median(lcree.plot.gbjobs$percent_of_gb_estimate, na.rm = T))
+
+
+ggplot(lcree.plot.gbjobs %>% filter(abovemedian), aes(x = year, y = percent_of_gb_estimate, 
+                                                      colour = fct_reorder(SIC_SECTION,percent_of_gb_estimate, .desc = T) )) +
+  geom_line(position = position_dodge(width = 0.5)) +
+  geom_point(position = position_dodge(width = 0.5)) +
+  geom_errorbar(aes(ymin = percent_of_gb_lower.CI, ymax = percent_of_gb_upper.CI), position = position_dodge(width = 0.5)) +
+  # scale_y_log10() +
+  # facet_wrap(~below5000, nrow = 2, scales = 'free_y') +
+  scale_color_brewer(palette = 'Paired', direction = -1)
+
+
 
 #~~~~~~~~~~~~~~~~~~~~~
 #LCREE + BRES LINK----
@@ -287,7 +361,7 @@ ggplot(lcree.plot %>% filter(below5000), aes(x = year, y = estimate, colour = fc
 
 #CHECK LCREE AND BRES SECTOR CATEGORY MATCH
 unique(lcree$SIC_SECTION)[order(unique(lcree$SIC_SECTION))]
-unique(itl2.jobs$SIC_SECTION_NAME)[order(unique(itl2.jobs$SIC_SECTION_CODE))]
+# unique(itl2.jobs$SIC_SECTION_NAME)[order(unique(itl2.jobs$SIC_SECTION_CODE))]
 
 #Bit of processing and check match
 l.sectors <- substr(unique(lcree$SIC_SECTION),start = 3,stop = 100)
@@ -352,7 +426,7 @@ itl2.jobs.lcree <- itl2.jobs %>%
 #Proportion each region has of each sector
 itl2.jobs.lcree <- itl2.jobs.lcree %>% 
   group_by(DATE,SIC_SECTION_NAME_LCREE) %>% 
-  mutate(sector_national_proportion = COUNT / sum(COUNT))
+  mutate(sector_national_proportion = COUNT / sum(COUNT, na.rm = T))
 
 #Should sum to one for each sector in a particular year... tick
 # itl2.jobs.lcree %>% 
@@ -381,8 +455,8 @@ itl2.jobs.lcree <- itl2.jobs.lcree %>%
   )
 
 #Look at one year for ease
-View(itl2.jobs.lcree %>% filter(DATE == 2021, SIC_SECTION_NAME_LCREE == 'Manufacturing'))
-View(itl2.jobs.lcree %>% filter(DATE == 2021, SIC_SECTION_NAME_LCREE == 'Wholesale and retail trade; repair of motor vehicles'))
+View(itl2.jobs.lcree %>% filter(DATE == max(DATE), SIC_SECTION_NAME_LCREE == 'Manufacturing'))
+View(itl2.jobs.lcree %>% filter(DATE == max(DATE), SIC_SECTION_NAME_LCREE == 'Wholesale and retail trade; repair of motor vehicles'))
 
 #sanity check... looks OK
 plot(hist(itl2.jobs.lcree$lcree_jobcount/itl2.jobs.lcree$COUNT, na.rm = T))
@@ -393,7 +467,7 @@ plot(hist(itl2.jobs.lcree$lcree_jobcount/itl2.jobs.lcree$COUNT, na.rm = T))
 #   summarise(sum(lcree_jobcount, na.rm=T)) %>% View
 
 #SY?
-View(itl2.jobs.lcree %>% filter(DATE == 2021, GEOGRAPHY_NAME == 'South Yorkshire'))
+View(itl2.jobs.lcree %>% filter(DATE == max(DATE), GEOGRAPHY_NAME == 'South Yorkshire'))
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~
@@ -407,14 +481,16 @@ itl2.cp <- read_csv('data/Table 2c ITL2 current price estimates pounds million 2
 
 names(itl2.cp) <- gsub(x = names(itl2.cp), pattern = ' ', replacement = '_')
 
+#Keep SIC sections
 #This gets all the letters, nice
 cvSICkeeps <- itl2.cp$SIC07_code[substr(itl2.cp$SIC07_code,2,2) == ' '] %>% unique
 
 #Filter out duplicate value rows and make long by year
 #Also convert year to numeric
+#NEED TO MANUALLY UPDATE LATEST YEAR
 itl2.cp <- itl2.cp %>% 
   filter(SIC07_code %in% cvSICkeeps) %>% 
-  pivot_longer(`1998`:`2021`, names_to = 'year', values_to = 'value') %>% 
+  pivot_longer(`1998`:`2022`, names_to = 'year', values_to = 'value') %>% 
   mutate(year = as.numeric(year))
 
 
@@ -490,6 +566,12 @@ nrow(
     SIC_SECTION_NAME_LCREE %in% unique(itl2$SIC_SECTION_NAME_LCREE)
     )
   )
+
+#So: this is now LCREE linked to BRES and GVA current price data for latest year
+#With an if... then estimate (and CIs) for ITL2 green jobs: "If jobs there were proportional to its sector size"
+#Saaaave
+saveRDS(itl2,'data/LCREE_BRES_GVAcurrentprices_combo_2015to2022.rds')
+
 
 
 
