@@ -343,7 +343,8 @@ lcree.plot.gbjobs <- lcree.plot.gbjobs %>%
   mutate(abovemedian = percent_of_gb_estimate > median(lcree.plot.gbjobs$percent_of_gb_estimate, na.rm = T))
 
 
-ggplot(lcree.plot.gbjobs %>% filter(abovemedian), aes(x = year, y = percent_of_gb_estimate, 
+# ggplot(lcree.plot.gbjobs %>% filter(abovemedian), aes(x = year, y = percent_of_gb_estimate, 
+ggplot(lcree.plot.gbjobs %>% filter(SIC_SECTION!='S Other activities'), aes(x = year, y = percent_of_gb_estimate, 
                                                       colour = fct_reorder(SIC_SECTION,percent_of_gb_estimate, .desc = T) )) +
   geom_line(position = position_dodge(width = 0.5)) +
   geom_point(position = position_dodge(width = 0.5)) +

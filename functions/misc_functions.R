@@ -2,6 +2,9 @@
 library(tidyverse)
 library(ggrepel)
 
+#reduce need to type glimpse every time...
+g <- function(x) glimpse(x)
+
 #Compute series of slopes within groups safely, returning 0 if can't calculate
 compute_slope_or_zero <- function(data, ..., y, x) {
   
