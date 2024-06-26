@@ -579,6 +579,136 @@ saveRDS(itl2,'data/LCREE_BRES_GVAcurrentprices_combo_2015to2022.rds')
 
 
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#VERSION EXCLUDING IMPUTED RENT: GVA for SIC SECTIONS----
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#Will need CURRENT PRICES, not least because 'other activities' sections need summing / summing only valid with CP
+#Via previous code here: https://github.com/DanOlner/ukcompare/blob/2d6237cd4917c79c9111989248d1a32df66ceaec/explore_code/GVA_region_by_sector_explore.R#L6166
+itl2.cp <- read_csv('data/Table 2c ITL2 current price estimates pounds million 2024.csv')
+# chk <- read_csv('data/Table 2c ITL2 current price estimates pounds million 2024.csv')
+
+names(itl2.cp) <- gsub(x = names(itl2.cp), pattern = ' ', replacement = '_')
+
+#Keep SIC sections
+#This gets all the letters, nice
+cvSICkeeps <- itl2.cp$SIC07_code[substr(itl2.cp$SIC07_code,2,2) == ' '] %>% unique
+
+
+
+#REPLACE "L (68)" REAL ESTATE ACTIVITIES (WHICH INCLUDES IMPUTED RENT) WITH JUST 68 "Real estate activities, excluding imputed rental"  
+cvSICkeeps[cvSICkeeps == 'L (68)'] <- '68'
+
+
+#Filter out duplicate value rows and make long by year
+#Also convert year to numeric
+#NEED TO MANUALLY UPDATE LATEST YEAR
+itl2.cp <- itl2.cp %>% 
+  filter(SIC07_code %in% cvSICkeeps) %>% 
+  pivot_longer(`1998`:`2022`, names_to = 'year', values_to = 'value') %>% 
+  mutate(year = as.numeric(year))
+
+
+#Check against previous year's data up to 2021. Anything different?
+#"local/cuttings/Table 2c ITL2 UK current price estimates pounds million 2023.csv"
+
+
+
+#Repeat process of binning values to match LCREE categories
+#Note also there's extra in the GVA data because it's the whole economy including ones with no jobs in (e.g. imputed rent)
+
+#Do same thing - remove commas, bin LCREE's 'other activities'
+itl2.cp <- itl2.cp %>% 
+  mutate(
+    SIC_SECTION_NAME_LCREE = gsub(pattern = ',', replacement = '', x = SIC07_description), 
+    SIC_SECTION_NAME_LCREE = case_when(
+      SIC_SECTION_NAME_LCREE %in% c("Accommodation and food service activities","Financial and insurance activities","Public administration and defence",
+                                    "Human health and social work activities","Arts entertainment and recreation","Other service activities") ~ 'Other activities',
+      .default = SIC_SECTION_NAME_LCREE
+    )
+  )
+
+
+#Then need to sum GVA for 'other activities'
+itl2.cp <- itl2.cp %>% 
+  select(GEOGRAPHY_NAME = Region_name, DATE = year, GVA = value, SIC_SECTION_NAME_LCREE) %>% 
+  group_by(DATE,GEOGRAPHY_NAME, SIC_SECTION_NAME_LCREE) %>% 
+  summarise(GVA = sum(GVA)) %>% 
+  ungroup()
+
+
+
+#After that,, check non match... mostly perfect
+#Just activities of households, which we don't want for our purposes here, so can just do left join and lose
+unique(itl2.jobs.lcree$SIC_SECTION_NAME_LCREE)[!unique(itl2.jobs.lcree$SIC_SECTION_NAME_LCREE) %in% itl2.cp$SIC_SECTION_NAME_LCREE]
+unique(itl2.cp$SIC_SECTION_NAME_LCREE)[!unique(itl2.cp$SIC_SECTION_NAME_LCREE) %in% unique(itl2.jobs.lcree$SIC_SECTION_NAME_LCREE)]
+
+
+#FOR THIS VERSION, NEED TO FIX REAL ESTATE ACTIVITIES LINK
+#Change it in LCREE so it indicates imputed rental not included
+itl2.jobs.lcree.noimputedrent <- itl2.jobs.lcree %>% 
+  mutate(
+    SIC_SECTION_NAME_LCREE = case_when(
+      SIC_SECTION_NAME_LCREE == 'Real estate activities' ~ 'Real estate activities excluding imputed rental',
+      .default = SIC_SECTION_NAME_LCREE 
+    )
+  )
+
+#Check again... tick
+unique(itl2.jobs.lcree.noimputedrent$SIC_SECTION_NAME_LCREE)[!unique(itl2.jobs.lcree.noimputedrent$SIC_SECTION_NAME_LCREE) %in% itl2.cp$SIC_SECTION_NAME_LCREE]
+
+
+
+#Check region name match, might have those usual suspects being wrong... yeeeeaaah
+#2024 data has a new one: "Gloucestershire, Wiltshire and Bath/Bristol Area"
+#For that last one, only difference is capitalised A in the 2024 ITL2 data... le sigh
+unique(itl2.cp$GEOGRAPHY_NAME)[!unique(itl2.cp$GEOGRAPHY_NAME) %in% unique(itl2.jobs.lcree$GEOGRAPHY_NAME)]
+
+#Fix:
+itl2.cp$GEOGRAPHY_NAME[itl2.cp$GEOGRAPHY_NAME == 'Northumberland, and Tyne and Wear'] <- 'Northumberland and Tyne and Wear'
+itl2.cp$GEOGRAPHY_NAME[itl2.cp$GEOGRAPHY_NAME == 'West Wales and The Valleys'] <- 'West Wales'
+itl2.cp$GEOGRAPHY_NAME[itl2.cp$GEOGRAPHY_NAME == 'Gloucestershire, Wiltshire and Bath/Bristol Area'] <- 'Gloucestershire, Wiltshire and Bath/Bristol area'
+
+#Again, dropping NI because not in BRES data. (Dropping via non match implicitly)
+#Same for non matching years and that one sector
+
+#REDUCE NAME now we have all bits in same DF
+itl2 <- itl2.jobs.lcree.noimputedrent %>% 
+  left_join(
+    itl2.cp,
+    by = c('DATE','GEOGRAPHY_NAME','SIC_SECTION_NAME_LCREE')
+    )
+
+#check match
+
+#Far fewer years in LCREE
+unique(itl2$DATE)
+unique(itl2.cp$DATE)
+
+
+#Does year difference solely account for row difference?
+#Also sector and place match
+#Those three should...
+#Tick
+nrow(
+  itl2.cp %>% filter(
+    DATE %in% unique(itl2$DATE),
+    GEOGRAPHY_NAME %in% unique(itl2$GEOGRAPHY_NAME),
+    SIC_SECTION_NAME_LCREE %in% unique(itl2$SIC_SECTION_NAME_LCREE)
+    )
+  )
+
+#So: this is now LCREE linked to BRES and GVA current price data for latest year
+#With an if... then estimate (and CIs) for ITL2 green jobs: "If jobs there were proportional to its sector size"
+#Saaaave
+saveRDS(itl2,'data/LCREE_BRES_GVAcurrentprices_combo_2015to2022_MINUS_IMPUTED_RENT.rds')
+
+
+
+
+
+
+
 
 
 
