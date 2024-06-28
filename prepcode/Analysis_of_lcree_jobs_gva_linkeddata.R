@@ -8,7 +8,9 @@ source('functions/misc_functions.R')
 options(scipen = 99)
 
 #Processed in LCREE_linkToBres_and_GVA_currentprices.R
-itl2 <- readRDS('data/LCREE_BRES_GVAcurrentprices_combo_2015to2022.rds') %>% rename(jobcountFT = COUNT) %>% ungroup()
+# itl2 <- readRDS('data/LCREE_BRES_GVAcurrentprices_combo_2015to2022.rds') %>% rename(jobcountFT = COUNT) %>% ungroup()
+#MINUS IMPUTED RENT, BETTER FOR ACCURATE GVA PER JOB
+itl2 <- readRDS('data/LCREE_BRES_GVAcurrentprices_combo_2015to2022_MINUS_IMPUTED_RENT.rds') %>% rename(jobcountFT = COUNT) %>% ungroup()
 
 #Reminder: the "if then" we've done here (in LCREE_linkToBres...) - if green jobs had the national proportion in e.g. SY
 #What would be number be given the number of e.g. construction FT jobs there?
@@ -166,22 +168,57 @@ sectors.greenjobs.gva <- itl2 %>%
 #Remove two mostly non existent sectors
 sectors4plot <- sectors.greenjobs.gva %>% filter(DATE == 2022, !grepl(x = SIC_SECTION_NAME_LCREE, pattern = 'mining|agri', ignore.case = T)) %>% 
   group_by(GEOGRAPHY_NAME) %>% 
-  mutate(totalGREENgva_percent = sum(percent_of_totalGVA_green_gva_estimate)) %>% 
+  mutate(
+    totalGREENgva_percent = sum(percent_of_totalGVA_green_gva_estimate)
+    ) %>% 
   ungroup()
 
-ggplot(sectors4plot %>% mutate(GEOGRAPHY_NAME = ifelse(GEOGRAPHY_NAME == 'South Yorkshire', '>>>>>>>>>>>>>>>>>>> SOUTH YORKSHIRE',GEOGRAPHY_NAME)), 
-       aes(x = fct_reorder(GEOGRAPHY_NAME,totalGREENgva_percent), y = percent_of_totalGVA_green_gva_estimate, fill = fct_reorder(SIC_SECTION_NAME_LCREE,percent_of_totalGVA_green_gva_estimate))) +
-  geom_bar(position="stack", stat="identity") +
-  scale_fill_brewer(palette = 'Paired', direction = -1, name = "Sector") +
-  coord_flip() +
-  xlab('') +
-  theme(axis.text.x = element_text()) +
+
+#data for overlaying range - summarise rather than mutate
+sectors4plot.RANGE <- sectors.greenjobs.gva %>% filter(DATE == 2022, !grepl(x = SIC_SECTION_NAME_LCREE, pattern = 'mining|agri', ignore.case = T)) %>% 
+  group_by(GEOGRAPHY_NAME) %>% 
+  summarise(
+    totalGREENgva_percent = sum(percent_of_totalGVA_green_gva_estimate),
+    totalGREENgva_percent_lowerCI = sum(percent_of_totalGVA_green_gva_lowerCI, na.rm = T),
+    totalGREENgva_percent_upperCI = sum(percent_of_totalGVA_green_gva_upperCI, na.rm = T)
+  ) %>% 
+  ungroup()
+
+
+# ggplot(sectors4plot %>% mutate(GEOGRAPHY_NAME = ifelse(GEOGRAPHY_NAME == 'South Yorkshire', '>>>>>>>>>>>>>>>>>>> SOUTH YORKSHIRE',GEOGRAPHY_NAME)), 
+#        aes(x = fct_reorder(GEOGRAPHY_NAME,totalGREENgva_percent), y = percent_of_totalGVA_green_gva_estimate, fill = fct_reorder(SIC_SECTION_NAME_LCREE,percent_of_totalGVA_green_gva_estimate))) +
+#   geom_bar(position="stack", stat="identity") +
+#   scale_fill_brewer(palette = 'Paired', direction = -1, name = "Sector") +
+#   coord_flip() +
+#   xlab('') +
+#   theme(axis.text.x = element_text()) +
+#   geom_errorbar(data = sectors4plot.RANGE, aes(x = fct_reorder(GEOGRAPHY_NAME,totalGREENgva_percent),ymin =  totalGREENgva_percent_lowerCI, ymax = totalGREENgva_percent_upperCI  ))
   # geom_bar(
   #   data = sectors4plot %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire'), 
   #   aes(colour = SY, x = fct_reorder(GEOGRAPHY_NAME,totalGREENgva_percent), y = percent_of_totalGVA_green_gva_estimate, fill = fct_reorder(SIC_SECTION_NAME_LCREE,percent_of_totalGVA_green_gva_estimate)),
   #   position="stack", stat="identity", size = 0.5) +
-  scale_colour_manual(values = c('white','black')) 
+  # scale_colour_manual(values = c('white','black')) 
   
+
+ggplot() +
+  geom_bar(data = sectors4plot %>% mutate(GEOGRAPHY_NAME = ifelse(GEOGRAPHY_NAME == 'South Yorkshire', '>>>>>>>>>>>>>>>>>>> SOUTH YORKSHIRE',GEOGRAPHY_NAME)), 
+           aes(x = fct_reorder(GEOGRAPHY_NAME,totalGREENgva_percent), 
+               y = percent_of_totalGVA_green_gva_estimate, 
+               fill = fct_reorder(SIC_SECTION_NAME_LCREE,percent_of_totalGVA_green_gva_estimate)),
+           position="stack", stat="identity") +
+  scale_fill_brewer(palette = 'Paired', direction = -1, name = "Sector") +
+  coord_flip() +
+  xlab('') +
+  theme(axis.text.x = element_text()) +
+  geom_errorbar(data = sectors4plot.RANGE %>% mutate(GEOGRAPHY_NAME = ifelse(GEOGRAPHY_NAME == 'South Yorkshire', '>>>>>>>>>>>>>>>>>>> SOUTH YORKSHIRE',GEOGRAPHY_NAME)), 
+                aes(x = fct_reorder(GEOGRAPHY_NAME,totalGREENgva_percent),ymin =  totalGREENgva_percent_lowerCI, ymax = totalGREENgva_percent_upperCI  ),
+                alpha = 0.5,width = 0.25
+                ) +
+  geom_hline(yintercept = sectors4plot.RANGE$totalGREENgva_percent_lowerCI[sectors4plot.RANGE$GEOGRAPHY_NAME=='South Yorkshire'], size = 2, alpha = 0.2) +
+  geom_hline(yintercept = sectors4plot.RANGE$totalGREENgva_percent_upperCI[sectors4plot.RANGE$GEOGRAPHY_NAME=='South Yorkshire'], size = 2, alpha = 0.2) 
+
+
+
 
 
 
@@ -222,7 +259,7 @@ ggplot(itl2, aes(x = GVAperFT_asFractionOfAv)) +
 #Break down by size of GVA per FT for facet viewing
 #Use average of latest years to do that
 itl2 <- itl2 %>% 
-  group_by(GEOGRAPHY_NAME,SIC_SECTION) %>% 
+  group_by(GEOGRAPHY_NAME,SIC_SECTION) %>% #this assumes dates in order
   mutate(
     GVAperFT_movingav = rollapply(GVAperFT,3,mean,na.rm = TRUE,align='right',fill=NA),
     GVAASFRACTIONperFT_movingav = rollapply(GVAperFT_asFractionOfAv,3,mean,na.rm = TRUE,align='right',fill=NA)
@@ -264,6 +301,8 @@ sectororderGVAperFT_OVERTIME <- itl2 %>%
 #THIS IS VERY STRIKING: HOW LITTLE AVERAGES HAVE CHANGED OVER TIME FOR GB FOR GVA PER FT JOB IN THESE SECTIONS
 #More digging to be done to get to the story here...
 #NOTE: MINING REGULARLY LARGEST SECTION - leaving out because a specific case but need to check
+# ggplot(sectororderGVAperFT_OVERTIME %>% filter(!grepl(x = SIC_SECTION, pattern = 'mining|agri', ignore.case = T)),
+# ggplot(sectororderGVAperFT_OVERTIME %>% filter(!grepl(x = SIC_SECTION, pattern = 'mining|agri|elec', ignore.case = T)),
 ggplot(sectororderGVAperFT_OVERTIME %>% filter(!grepl(x = SIC_SECTION, pattern = 'mining|agri|real|elec', ignore.case = T)),
        aes(x = DATE, y = avGVAperFT_fraction, colour = fct_reorder(SIC_SECTION,avGVAperFT_fraction))) +
   geom_point() +
@@ -274,7 +313,7 @@ ggplot(sectororderGVAperFT_OVERTIME %>% filter(!grepl(x = SIC_SECTION, pattern =
   
 
 #VERSION WITH MINMAX BARs
-ggplot(sectororderGVAperFT_OVERTIME %>% filter(!grepl(x = SIC_SECTION, pattern = 'mining|agri|real|elec', ignore.case = T)), 
+ggplot(sectororderGVAperFT_OVERTIME %>% filter(!grepl(x = SIC_SECTION, pattern = 'mining|agri', ignore.case = T)), 
        aes(x = DATE, y = avGVAperFT_fraction, colour = fct_reorder(SIC_SECTION,avGVAperFT_fraction))) +
   # geom_line(position = position_dodge(width = 0.5)) +
   geom_point(position = position_dodge(width = 0.5)) +
@@ -314,7 +353,8 @@ GVAperFT_as_percentofwhole_timesTentoSeven <- itl2 %>%
   ) %>% 
   ungroup()
 
-ggplot(GVAperFT_as_percentofwhole_timesTentoSeven %>% filter(!grepl(x = SIC_SECTION, pattern = 'mining|agri|real|elec', ignore.case = T)),
+ggplot(GVAperFT_as_percentofwhole_timesTentoSeven %>% filter(!grepl(x = SIC_SECTION, pattern = 'mining|agri|elec|real', ignore.case = T)),
+# ggplot(GVAperFT_as_percentofwhole_timesTentoSeven %>% filter(!grepl(x = SIC_SECTION, pattern = 'mining|agri|elec', ignore.case = T)),
        aes(x = DATE, y = GVAperFT_asPERCENTofGB_times_ten_to_seven_AVE, colour = fct_reorder(SIC_SECTION,GVAperFT_asPERCENTofGB_times_ten_to_seven_AVE))) +
   geom_point() +
   geom_line() +
@@ -344,8 +384,9 @@ itl2 <- itl2 %>%
 
 #Should now be able to facet...
 p <- ggplot(
-  itl2 %>% filter(grepl('construction',SIC_SECTION,ignore.case=T)) %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire'),
-  # itl2 %>% filter(grepl('manuf',SIC_SECTION,ignore.case=T)) %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire'),
+  # itl2 %>% filter(grepl('profes',SIC_SECTION,ignore.case=T)) %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire'),
+  # itl2 %>% filter(grepl('construction',SIC_SECTION,ignore.case=T)) %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire'),
+  itl2 %>% filter(grepl('manuf',SIC_SECTION,ignore.case=T)) %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire'),
   # aes(x = DATE, y = GVAASFRACTIONperFT_movingav, colour = GEOGRAPHY_NAME, size = SY)
   aes(x = DATE, y = GVAperFT_asFractionOfAv, colour = GEOGRAPHY_NAME, size = SY)
   ) +
@@ -364,6 +405,7 @@ p <- ggplot(
   # itl2 %>% filter(grepl('construction',SIC_SECTION,ignore.case=T)) %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire'),
   itl2 %>% filter(grepl('comm',SIC_SECTION,ignore.case=T)) %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire'),
   # itl2 %>% filter(grepl('manuf',SIC_SECTION,ignore.case=T)) %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire'),
+  # itl2 %>% filter(grepl('prof',SIC_SECTION,ignore.case=T)) %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire'),
   aes(x = DATE, y = GVAASFRACTIONperFT_movingav, group = GEOGRAPHY_NAME, size = SY)) +
   # ggforce::geom_sina()
   coord_cartesian(xlim = c(2017,2022)) +
@@ -371,12 +413,85 @@ p <- ggplot(
   
 ggplotly(p, tooltip = 'GEOGRAPHY_NAME')
 
+#FACET ALL
+p <- ggplot(
+  itl2 %>% 
+    filter(!grepl('steam|estate|waste|mining|agri',SIC_SECTION,ignore.case=T)) %>% 
+    mutate(
+      SY = GEOGRAPHY_NAME == 'South Yorkshire',
+      SIC_SECTION = fct_reorder(SIC_SECTION, GVAASFRACTIONperFT_movingav, .desc = T)
+    ),
+  # itl2 %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire', SIC_SECTION = fct_reorder(SIC_SECTION, GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav, .desc = T)),
+  aes(x = DATE, y = GVAASFRACTIONperFT_movingav, group = GEOGRAPHY_NAME, size = SY, colour = SY)) +
+  # ggforce::geom_sina()
+  coord_cartesian(xlim = c(2017,2022)) +
+  geom_jitter(width = 0.1) +
+  scale_size_manual(values = c(1,5)) +
+  scale_colour_brewer(palette = 'Paired', direction = -1, name = "Sector") +
+  # facet_wrap(~SIC_SECTION, scales = 'free_y') +
+  facet_wrap(~SIC_SECTION, nrow = 1, labeller = labeller(groupwrap = label_wrap_gen(10))) +
+  guides(colour = F, size = F)
+
+p
+ggplotly(p, tooltip = 'GEOGRAPHY_NAME')
+
+
+
+
+
+#Get moving av of GVA as percent of total GB...
+itl2 <- itl2 %>% 
+  group_by(GEOGRAPHY_NAME,SIC_SECTION) %>% #this assumes dates in order
+  mutate(
+    GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav = rollapply(GVAperFT_asPERCENTofGB_times_ten_to_seven,3,mean,na.rm = TRUE,align='right',fill=NA)
+  ) %>% ungroup()
+
+
+p <- ggplot(
+  itl2 %>% filter(grepl('construction',SIC_SECTION,ignore.case=T)) %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire'),
+  # itl2 %>% filter(grepl('comm',SIC_SECTION,ignore.case=T)) %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire'),
+  # itl2 %>% filter(grepl('manuf',SIC_SECTION,ignore.case=T)) %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire'),
+  # itl2 %>% filter(grepl('prof',SIC_SECTION,ignore.case=T)) %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire'),
+  aes(x = DATE, y = GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav, group = GEOGRAPHY_NAME, size = SY)) +
+  # ggforce::geom_sina()
+  coord_cartesian(xlim = c(2017,2022)) +
+  geom_jitter(width = 0.1)
+  
+ggplotly(p, tooltip = 'GEOGRAPHY_NAME')
+
+
+#FACET ALL
+p <- ggplot(
+  itl2 %>% 
+    filter(!grepl('steam|estate|waste|mining|agri',SIC_SECTION,ignore.case=T)) %>% 
+    mutate(
+    SY = GEOGRAPHY_NAME == 'South Yorkshire',
+    # SY = grepl('Cambridge',GEOGRAPHY_NAME,ignore.case = T),
+    SIC_SECTION = fct_reorder(SIC_SECTION, GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav, .desc = T)
+    ),
+  # itl2 %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire', SIC_SECTION = fct_reorder(SIC_SECTION, GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav, .desc = T)),
+  aes(x = DATE, y = GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav, group = GEOGRAPHY_NAME, size = SY, colour = SY)) +
+  # ggforce::geom_sina()
+  coord_cartesian(xlim = c(2017,2022)) +
+  geom_jitter(width = 0.1) +
+  scale_size_manual(values = c(1,5)) +
+  scale_colour_brewer(palette = 'Paired', direction = -1, name = "Sector") +
+  # facet_wrap(~SIC_SECTION, scales = 'free_y') +
+  facet_wrap(~SIC_SECTION, nrow = 1, labeller = labeller(groupwrap = label_wrap_gen(10))) +
+  guides(colour = F, size = F)
+
+p
+ggplotly(p, tooltip = 'GEOGRAPHY_NAME')
+
+
+
+
 
 
 #What have SY's SIC sections done over time, internally?
 ggplot(
-  itl2 %>% filter(GEOGRAPHY_NAME == 'South Yorkshire', !grepl(x = SIC_SECTION, pattern = 'real|other', ignore.case = T)),
-  aes(x = DATE, y = GVAASFRACTIONperFT_movingav, colour = SIC_SECTION_NAME_LCREE)) +
+  itl2 %>% filter(GEOGRAPHY_NAME == 'South Yorkshire', !grepl(x = SIC_SECTION, pattern = 'agri|other', ignore.case = T)),
+  aes(x = DATE, y = GVAASFRACTIONperFT_movingav, colour = fct_reorder(SIC_SECTION_NAME_LCREE,GVAASFRACTIONperFT_movingav) )) +
   geom_point() +
   geom_line() +
   scale_colour_brewer(palette = 'Paired', direction = -1, name = "Sector") +
@@ -392,20 +507,53 @@ itl2 <- itl2 %>%
   ) %>% 
   ungroup()
 
+# View(itl2 %>% filter(DATE == 2017))
+
 # debugonce(twod_generictimeplot_multipletimepoints)
 p <- twod_generictimeplot_multipletimepoints(
-  df = itl2 %>% filter(grepl(x= GEOGRAPHY_NAME, pattern = 'south york', ignore.case = T), !grepl(x = SIC_SECTION, pattern = 'real|other', ignore.case = T)),
+  df = itl2 %>% filter(grepl(x= GEOGRAPHY_NAME, pattern = 'south york', ignore.case = T), !grepl(x = SIC_SECTION, pattern = 'other', ignore.case = T)),
   category_var = SIC_SECTION,
-  x_var = gva_movingav,
+  x_var = GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav,
+  # x_var = gva_movingav,
   y_var = jobcount_movingav,
   timevar = DATE,
-  label_var = `GVAASFRACTIONperFT_movingav`,
+  label_var = `GVA`,
   times = c(2017:2022)
+  # times = c(2017:2019)
 )
 
 p + theme(aspect.ratio=1) +
-  xlab("GVA (3 year moving average)") +
+  # xlab("GVA (3 year moving average)") +
+  xlab("GVA per FT as percent of GB whole econ (3 year moving average)") +
   ylab("Job count (3 year moving average)")
+
+
+#Can we compare same sector in different places? Probably too messy, but could pull some out...
+# debugonce(twod_generictimeplot_multipletimepoints)
+p <- twod_generictimeplot_multipletimepoints(
+  df = itl2 %>% filter(grepl(x= GEOGRAPHY_NAME, pattern = 'south york|west york|manc|mersey|west mid', ignore.case = T),
+  # df = itl2 %>% filter(
+                       grepl(x = SIC_SECTION, pattern = 'scient', ignore.case = T)),
+                       # grepl(x = SIC_SECTION, pattern = 'construction', ignore.case = T)),
+                       # grepl(x = SIC_SECTION, pattern = 'information', ignore.case = T)),
+                       # grepl(x = SIC_SECTION, pattern = 'manuf', ignore.case = T)),
+  category_var = GEOGRAPHY_NAME,
+  # x_var = GVAASFRACTIONperFT_movingav,
+  x_var = GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav,
+  # x_var = gva_movingav,
+  y_var = jobcount_movingav,
+  timevar = DATE,
+  label_var = `GVA`,
+  # compasspoints_to_display = c('NW','SW'),
+  # compasspoints_to_display = c('NE','SE'),
+  times = c(2017:2022)
+  # times = c(2017:2019)
+)
+
+p + theme(aspect.ratio=1) +
+  xlab("GVA per FT as percent of GB whole econ (3 year moving average)") +
+  ylab("Job count (3 year moving average)")
+
 
 
 # View(itl2 %>% filter(DATE==2022,grepl(x= GEOGRAPHY_NAME, pattern = 'south york', ignore.case = T), !grepl(x = SIC_SECTION, pattern = 'real', ignore.case = T)))
@@ -416,29 +564,175 @@ p + theme(aspect.ratio=1) +
 #SOME FIRST GUESTTIMATES AT GVA MOVEMENTS----
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+#Example for testing single case...
+#Take example sector, manufacturing
+#South Yorks has had consistently near lowest per worker manuf productivity
+
+#But let's imagine there's a single average productivity addition to the manuf workforce...
+#We'll be wanting an informed guess at a distribution around this mean
+job.mean <- itl2 %>%
+  filter(
+    grepl('south york', GEOGRAPHY_NAME, ignore.case = T),
+    grepl(pattern = 'manuf', SIC_SECTION, ignore.case = T),
+    DATE == 2022
+    ) %>% 
+  pull(GVAperFT_movingav)
+
+
+#Test getting spread of GVA per FT from other sectors based on existing job count
+#Removing some sectors that would be unlikely to move to manuf
+sample_GVAperFT <- itl2 %>%
+  filter(
+    grepl('south york', GEOGRAPHY_NAME, ignore.case = T),
+    !grepl('real|elec|mining|other', SIC_SECTION, ignore.case = T),
+    DATE == 2022
+  ) 
+
+# weighted.sample.GVAperFT <- sample(
+#   sample_GVAperFT$GVAperFT, size = 100000, replace = T, prob = sample_GVAperFT$jobcountFT
+# )
+# 
+# #Not very many values to sample from!
+# plot(density(weighted.sample.GVAperFT))
+# hist(weighted.sample.GVAperFT)
+
+
+#And try another approach
+#Eyeballed until amount overlaps values
+jittered.GVAperFT.repeats <- replicate(100, jitter(sample_GVAperFT$GVAperFT, amount = 9000)) %>% as.vector() 
+plot(jittered.GVAperFT.repeats)
+
+#Some neg
+jittered.jobcountFT.repeats <- replicate(100, jitter(sample_GVAperFT$jobcountFT, amount = 7000)) %>% as.vector() %>% abs()
+plot(jittered.jobcountFT.repeats)
+
+plot(sample_GVAperFT$GVAperFT, sample_GVAperFT$jobcountFT)
+#That linear relationship again - GVA per job is problematic isn't it? This is happening I think due to sector size and jobs needed in each sector not being strongly linked?
+#But then I thought it was...
+plot(jittered.GVAperFT.repeats,jittered.jobcountFT.repeats)
+
+#Yep, that's about the right relationship between them. Can now get smoother resampling estimate
+weighted.sample.GVAperFT <- sample(
+  jittered.GVAperFT.repeats, size = 100000, replace = T, prob = jittered.jobcountFT.repeats
+)
+
+#Better... long right tail, is right
+# plot(density(weighted.sample.GVAperFT))
+hist(weighted.sample.GVAperFT)
+abline(v = job.mean, lwd = 6)
+
+
+#Could then get a guesstimate about what manuf wage spread might be - attracting a regional worker, wage would need to be higher (most likely)
+#It would seem reasonable to use two assumptions:
+#The new job takes its possible spread from the spread of GVA per jobs across all local sectors
+#(i.e. some could higher than manuf mean, some lower)
+#And also constrain so isn't beyond other sectors
+#I think also sensible to still remove outlier sectors that have specific dynamics
+#E.g. elec / gas massive profit margins warps GVA per FT out of all proportion, won't work in other sectors
+
+#So: 
+#Dividing SD by 2 I think makes it more reasonable - sector has own spread of value that's within overall regional value per job
+job.spread <- rnorm(10000, mean = job.mean, sd = sd(weighted.sample.GVAperFT)/2)
+
+hist(job.spread)
+abline(v = job.mean, lwd = 6)
+
+#Both?
+ggplot(
+  data.frame(job.spread = job.spread, weighted.sample.GVAperFT = weighted.sample.GVAperFT) %>%
+    pivot_longer(job.spread:weighted.sample.GVAperFT),
+  aes(x = value, colour = name, fill = name)
+) +
+  geom_density(alpha = 0.5) +
+  geom_vline(xintercept = job.mean) +
+  geom_vline(xintercept = mean(weighted.sample.GVAperFT), colour = 'green') 
+
+
+#Single sample from manuf spread
+single.job <- sample(job.spread,1)
+
+#That is the gross GVA addition to South Yorkshire
+#But then there are several things to consider
+#Including mulling how these differently affect raw GVA change, GVA per capita and GVA per FT job
+
+#Assuming GVA per FT reflects job value to employee
+#Assume the job will attract candidates from lower GVA positions
+#But how much lower?
+#If we pick from anywhere in the lower distribution, this can bundle any knockon effects of chain of shifting work
+
+#So e.g.
+displaced.job <- sample(weighted.sample.GVAperFT[weighted.sample.GVAperFT < single.job],1)
+
+#net GVA difference?
+single.job - displaced.job
+
+#Issue there: assuming that GVA is directly lost from other firm or indeed gained here
+#Whole issue of "total GVA over total jobs" as the correct measure...
+#But still let's see the spread
+
+net.newjobvalue <- function(job.spread,jobmarket.spread){
+  single.job <- sample(job.spread,1)
+  displaced.job <- sample(jobmarket.spread[jobmarket.spread < single.job],1)
+  #net GVA difference?
+  single.job - displaced.job
+}
+
+net.newjobspread <- replicate(1000, net.newjobvalue(job.spread, weighted.sample.GVAperFT))
+
+hist(net.newjobspread)
+
+#So we're saying a thousand new manuf jobs would, if jobs all poached locally, net GVA of:
+#About £14M or net of average of 14K per new job a year (which I'm guessing stays quite stable?)
+#There's some spread, maybe a million each side, but yes.
+sum(net.newjobspread)
+
+#So that's likely the LOWEST extreme with a 1:1 net poaching ratio?
 
 
 
+#Then we want some assumptions on whether a new job triggers / is filled by migration or commuting
+#(Those two v different headline output diffs)
+#From SY viewpoint, whether migration from surrounding areas or elsewhere doesn't matter
+#Note: remote working too - the GVA will still 'commute' into where the job is
 
 
+#In-commutes: around 20% of overall workforce, maybe
+#See http://fryford.github.io/dvc193/indexv3.html#sty=true&flow=flow0&period=0&fix=E08000018&view=436.25,198.125,157.5,158.75&tr=-8.84210205078125,-29.01312255859375&sc=1
+
+#So if new job created... higher value ones likelier to be commute jobs?
+#What does this do to net job value?
+#If outside of SY, it's effectively AN ADDITIONAL JOB to the region entirely.
+#(Poached from elsewhere)
+
+#Which means in terms of raw GVA increase, by current measures
+#A commute / distance remote working job is probably better
+
+#Example:
+#750 new jobs filled from SY
+#£10M or ... again, it's always 14K per job net from this route!
+net.newjobspread <- replicate(750, net.newjobvalue(job.spread, weighted.sample.GVAperFT))
+sum(net.newjobspread)
+
+#250 in-commute jobs of same value:
+incommutes <- sample(job.spread,250)
+sum(incommutes)#16,425,375
+sum(incommutes)/250#65K GVA per job coming in, no other work displacement regionally means this is four times higher
+
+#BUT THAT JOB ISN'T BENEFITING AN EMPLOYEE IN SY!!
+#Spillover effects of employee spending go elsewhere (number for that?)
 
 
+#Next assumption:
+#New job is resident in SY but new
+#Either due to new recruit moving from inactive
+#Or migrating in
+#Two things there:
+#If "moving from inactive" but was previously there, effect on av GVA per FT will depend on if job is > av GVA per FT
+#It'll increase GVA per capita tho
+#And won't be net of any other job
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#i.e. adds one person to resident pop
+#Note: breaking down by resident vs workplace pop will be useful, if time
 
 
 

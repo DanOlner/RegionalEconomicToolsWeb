@@ -468,7 +468,7 @@ twod_generictimeplot <- function(df, category_var, x_var, y_var, timevar, label_
 
 twod_generictimeplot_multipletimepoints <- function(df, category_var, x_var, y_var, timevar, label_var, times, compasspoints_to_display = c('NE','NW','SE','SW')){
   
-  category_var <- enquo(category_var)    
+  category_var <- enquo(category_var)
   x_var <- enquo(x_var)
   y_var <- enquo(y_var)
   timevar <- enquo(timevar)

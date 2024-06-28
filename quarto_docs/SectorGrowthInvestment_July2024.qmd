@@ -1,0 +1,15 @@
+---
+title: "SectorGrowthInvestment_July2024"
+author: "Dan Olner"
+format: docx
+---
+
+```{r}
+library(flextable)
+```
+
+
+
+# Introduction
+
+This short report asks: how might the economic value of South Yorkshire change given different sector investment? 

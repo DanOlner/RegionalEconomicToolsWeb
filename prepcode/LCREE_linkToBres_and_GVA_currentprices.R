@@ -90,7 +90,7 @@ place = 'South Yorkshire'#11th highest
 #Use this next to factor-order the SIC sectors
 sectorLQorder <- itl2.jobs %>% filter(
   GEOGRAPHY_NAME == place,
-  DATE == 2021
+  DATE == 2022
 ) %>% 
   arrange(-LQ) %>% 
   select(SIC_SECTION_NAME) %>% 
