@@ -275,6 +275,9 @@ lcree <- lcree %>%
   mutate(across(estimate:se, ~ . * .99))
 
 
+#Save for elsewhere
+write_csv(lcree,'data/lcree2022_adjustedToMatchGBjobnumbers.csv')
+
 #Quick look at how the sector estimates have changed over time and what the trend is
 lcree.plot <- lcree %>%
   filter(SIC_SECTION!='B Mining and quarrying') %>%

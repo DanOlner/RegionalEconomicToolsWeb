@@ -1,0 +1,127 @@
+SIC_SECTION,year,estimate,lower CI,upper CI,CV,se,SIC_SECTION_JOIN
+A Agriculture forestry and fishing,2014,1683,-693,4158,72.27,1228.59,Agriculture forestry and fishing
+B Mining and quarrying,2014,NA,NA,NA,35.64,NA,Mining and quarrying
+C Manufacturing,2014,66231,52767,79695,9.9,6623.1,Manufacturing
+D Electricity gas steam and air conditioning supply,2014,13167,12276,14157,3.96,526.68,Electricity gas steam and air conditioning supply
+E Water supply; sewerage waste management and remediation activities,2014,1683,1485,1881,5.9399999999999995,100.98,Water supply; sewerage and waste management
+F Construction,2014,96327,78903,113652,8.91,8669.43,Construction
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,2014,11187,6732,15543,19.8,2237.4,Wholesale and retail trade; repair of motor vehicles
+H Transportation and storage,2014,198,99,198,14.85,29.7,Transportation and storage
+J Information and communication,2014,1188,792,1683,18.81,225.72,Information and communication
+L Real estate activities,2014,495,495,594,3.96,19.8,Real estate activities
+M Professional scientific and technical activities,2014,35739,25146,46431,14.85,5360.85,Professional scientific and technical activities
+N Administrative and support service activities,2014,4257,2574,5841,19.8,851.4,Administrative and support service activities
+P Education,2014,396,-99,792,65.34,261.36,Education
+S Other activities,2014,990,-198,2277,62.37,623.7,Other activities
+A Agriculture forestry and fishing,2015,594,NA,1188,55.44,332.64,Agriculture forestry and fishing
+B Mining and quarrying,2015,NA,NA,NA,10.89,NA,Mining and quarrying
+C Manufacturing,2015,67419,53856,80883,9.9,6741.9,Manufacturing
+D Electricity gas steam and air conditioning supply,2015,11286,10791,11682,1.98,225.72,Electricity gas steam and air conditioning supply
+E Water supply; sewerage waste management and remediation activities,2015,3465,693,6237,39.6,1386,Water supply; sewerage and waste management
+F Construction,2015,72963,58509,87417,9.9,7296.3,Construction
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,2015,8811,2970,14751,33.66,2995.74,Wholesale and retail trade; repair of motor vehicles
+H Transportation and storage,2015,198,198,198,4.95,9.9,Transportation and storage
+J Information and communication,2015,99,99,99,0,0,Information and communication
+L Real estate activities,2015,297,297,396,5.9399999999999995,17.82,Real estate activities
+M Professional scientific and technical activities,2015,28017,18414,37620,16.83,4762.89,Professional scientific and technical activities
+N Administrative and support service activities,2015,2574,1188,3861,26.73,694.98,Administrative and support service activities
+P Education,2015,2574,-1782,6930,85.14,2213.64,Education
+S Other activities,2015,99,NA,297,72.27,72.27,Other activities
+A Agriculture forestry and fishing,2016,1287,-693,3267,77.22,1003.86,Agriculture forestry and fishing
+B Mining and quarrying,2016,NA,NA,NA,8.91,NA,Mining and quarrying
+C Manufacturing,2016,68706,56727,80784,20.79,14428.26,Manufacturing
+D Electricity gas steam and air conditioning supply,2016,13563,11484,15642,30.69,4204.53,Electricity gas steam and air conditioning supply
+E Water supply; sewerage waste management and remediation activities,2016,4059,1584,6534,0.99,40.589999999999996,Water supply; sewerage and waste management
+F Construction,2016,72567,58113,86922,50.49,37009.17,Construction
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,2016,13761,NA,27522,9.9,1376.1,Wholesale and retail trade; repair of motor vehicles
+H Transportation and storage,2016,396,198,495,7.92,31.68,Transportation and storage
+J Information and communication,2016,396,NA,891,14.85,59.4,Information and communication
+L Real estate activities,2016,396,297,495,5.9399999999999995,23.759999999999998,Real estate activities
+M Professional scientific and technical activities,2016,30195,19800,40590,17.82,5435.1,Professional scientific and technical activities
+N Administrative and support service activities,2016,2673,1980,3366,44.55,1202.85,Administrative and support service activities
+P Education,2016,99,99,99,12.87,12.87,Education
+S Other activities,2016,NA,NA,NA,55.44,NA,Other activities
+A Agriculture forestry and fishing,2017,891,297,1584,36.63,329.67,Agriculture forestry and fishing
+B Mining and quarrying,2017,NA,NA,99,19.8,NA,Mining and quarrying
+C Manufacturing,2017,65043,57123,73062,5.9399999999999995,3902.58,Manufacturing
+D Electricity gas steam and air conditioning supply,2017,15840,14949,16632,2.9699999999999998,475.2,Electricity gas steam and air conditioning supply
+E Water supply; sewerage waste management and remediation activities,2017,6138,1287,11088,40.589999999999996,2516.58,Water supply; sewerage and waste management
+F Construction,2017,79893,68904,90783,6.93,5592.51,Construction
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,2017,5940,3366,8613,22.77,1366.2,Wholesale and retail trade; repair of motor vehicles
+H Transportation and storage,2017,198,198,198,3.96,7.92,Transportation and storage
+J Information and communication,2017,792,-198,1782,64.35,514.8,Information and communication
+L Real estate activities,2017,495,NA,990,56.43,282.15,Real estate activities
+M Professional scientific and technical activities,2017,33759,22968,44649,15.84,5401.44,Professional scientific and technical activities
+N Administrative and support service activities,2017,5247,3861,6534,12.87,682.11,Administrative and support service activities
+P Education,2017,297,NA,594,48.51,145.53,Education
+S Other activities,2017,396,NA,693,45.54,182.16,Other activities
+A Agriculture forestry and fishing,2018,1287,NA,2673,53.46,694.98,Agriculture forestry and fishing
+B Mining and quarrying,2018,198,198,198,0.99,1.98,Mining and quarrying
+C Manufacturing,2018,79794,56727,102960,14.85,11969.1,Manufacturing
+D Electricity gas steam and air conditioning supply,2018,16236,15642,16830,1.98,324.71999999999997,Electricity gas steam and air conditioning supply
+E Water supply; sewerage waste management and remediation activities,2018,2772,1881,3663,15.84,443.52,Water supply; sewerage and waste management
+F Construction,2018,79200,67617,90684,6.93,5544,Construction
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,2018,3168,2673,3762,7.92,253.44,Wholesale and retail trade; repair of motor vehicles
+H Transportation and storage,2018,297,198,495,26.73,80.19,Transportation and storage
+J Information and communication,2018,2277,-396,4950,60.39,1388.97,Information and communication
+L Real estate activities,2018,297,NA,495,34.65,103.95,Real estate activities
+M Professional scientific and technical activities,2018,22671,18513,26730,8.91,2040.3899999999999,Professional scientific and technical activities
+N Administrative and support service activities,2018,7029,3465,10593,25.74,1827.54,Administrative and support service activities
+P Education,2018,99,99,99,0,0,Education
+S Other activities,2018,297,NA,594,42.57,127.71,Other activities
+A Agriculture forestry and fishing,2019,NA,NA,NA,NA,NA,Agriculture forestry and fishing
+B Mining and quarrying,2019,198,NA,297,39.6,79.2,Mining and quarrying
+C Manufacturing,2019,70092,57717,82467,8.91,6308.28,Manufacturing
+D Electricity gas steam and air conditioning supply,2019,16335,15246,17523,3.96,653.4,Electricity gas steam and air conditioning supply
+E Water supply; sewerage waste management and remediation activities,2019,2178,2079,2277,1.98,43.56,Water supply; sewerage and waste management
+F Construction,2019,66330,54648,78111,8.91,5969.7,Construction
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,2019,12177,198,24057,49.5,6088.5,Wholesale and retail trade; repair of motor vehicles
+H Transportation and storage,2019,NA,NA,NA,NA,NA,Transportation and storage
+J Information and communication,2019,1683,-396,3861,61.38,1043.46,Information and communication
+L Real estate activities,2019,198,198,198,0,0,Real estate activities
+M Professional scientific and technical activities,2019,24453,20394,28611,8.91,2200.77,Professional scientific and technical activities
+N Administrative and support service activities,2019,8613,396,16929,48.51,4220.37,Administrative and support service activities
+P Education,2019,99,99,99,0,0,Education
+S Other activities,2019,198,NA,396,48.51,97.02,Other activities
+A Agriculture forestry and fishing,2020,693,NA,1287,46.53,325.71,Agriculture forestry and fishing
+B Mining and quarrying,2020,NA,NA,NA,NA,NA,Mining and quarrying
+C Manufacturing,2020,69300,58014,80586,7.92,5544,Manufacturing
+D Electricity gas steam and air conditioning supply,2020,18414,16929,19998,3.96,736.56,Electricity gas steam and air conditioning supply
+E Water supply; sewerage waste management and remediation activities,2020,1782,1485,2178,9.9,178.2,Water supply; sewerage and waste management
+F Construction,2020,75735,63360,88110,7.92,6058.8,Construction
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,2020,9504,2970,16038,34.65,3326.4,Wholesale and retail trade; repair of motor vehicles
+H Transportation and storage,2020,198,NA,396,37.62,75.24,Transportation and storage
+J Information and communication,2020,891,-198,2079,64.35,579.15,Information and communication
+L Real estate activities,2020,99,99,99,1.98,1.98,Real estate activities
+M Professional scientific and technical activities,2020,30987,26334,35739,7.92,2478.96,Professional scientific and technical activities
+N Administrative and support service activities,2020,NA,NA,NA,NA,NA,Administrative and support service activities
+P Education,2020,198,198,198,0,0,Education
+S Other activities,2020,495,NA,990,57.42,287.1,Other activities
+A Agriculture forestry and fishing,2021,99,NA,198,57.42,57.42,Agriculture forestry and fishing
+B Mining and quarrying,2021,NA,NA,NA,21.78,NA,Mining and quarrying
+C Manufacturing,2021,76725,67716,85833,5.9399999999999995,4603.5,Manufacturing
+D Electricity gas steam and air conditioning supply,2021,15444,14553,16434,2.9699999999999998,463.32,Electricity gas steam and air conditioning supply
+E Water supply; sewerage waste management and remediation activities,2021,4455,3366,5445,11.879999999999999,534.6,Water supply; sewerage and waste management
+F Construction,2021,94644,78111,111177,8.91,8517.96,Construction
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,2021,9900,1584,18216,42.57,4257,Wholesale and retail trade; repair of motor vehicles
+H Transportation and storage,2021,297,NA,495,39.6,118.8,Transportation and storage
+J Information and communication,2021,1584,-297,3465,60.39,966.24,Information and communication
+L Real estate activities,2021,792,-99,1683,57.42,459.36,Real estate activities
+M Professional scientific and technical activities,2021,36234,28017,44451,11.879999999999999,4348.08,Professional scientific and technical activities
+N Administrative and support service activities,2021,8514,5643,11385,16.83,1447.3799999999999,Administrative and support service activities
+P Education,2021,495,396,495,4.95,24.75,Education
+S Other activities,2021,693,-198,1485,63.36,443.52,Other activities
+A Agriculture forestry and fishing,2022,1386,-198,2970,58.41,817.74,Agriculture forestry and fishing
+B Mining and quarrying,2022,NA,NA,NA,0.99,NA,Mining and quarrying
+C Manufacturing,2022,74250,67221,81378,4.95,3712.5,Manufacturing
+D Electricity gas steam and air conditioning supply,2022,17226,16533,18018,1.98,344.52,Electricity gas steam and air conditioning supply
+E Water supply; sewerage waste management and remediation activities,2022,2475,891,3960,31.68,792,Water supply; sewerage and waste management
+F Construction,2022,98109,85140,110979,6.93,6867.63,Construction
+G Wholesale and retail trade; repair of motor vehicles and motorcycles,2022,9999,1386,18711,43.56,4399.56,Wholesale and retail trade; repair of motor vehicles
+H Transportation and storage,2022,396,198,594,27.72,110.88,Transportation and storage
+J Information and communication,2022,990,-495,2475,76.23,762.3,Information and communication
+L Real estate activities,2022,594,NA,1089,51.48,308.88,Real estate activities
+M Professional scientific and technical activities,2022,45738,33264,58311,13.86,6403.32,Professional scientific and technical activities
+N Administrative and support service activities,2022,17325,5346,29304,34.65,6063.75,Administrative and support service activities
+P Education,2022,396,396,396,1.98,7.92,Education
+S Other activities,2022,693,NA,1485,51.48,360.36,Other activities
