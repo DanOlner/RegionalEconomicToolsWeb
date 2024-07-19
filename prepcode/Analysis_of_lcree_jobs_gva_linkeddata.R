@@ -38,7 +38,7 @@ itl2$GVAperFT <- (itl2$GVA/itl2$jobcountFT)*1000000
 #Let's just get from the source:
 lcree <- read_csv('data/lcree2022_adjustedToMatchGBjobnumbers.csv')
 
-#Sum per ear
+#Sum per year
 yearlytot <- lcree %>% 
   group_by(year) %>% 
   summarise(
@@ -66,7 +66,8 @@ lcree.regional <- itl2 %>%
 
 
 #Taking Labour manifesto number:
-#"At the heart of our approach will be our Green Prosperity Plan where, in partnership with business through our National Wealth Fund, we will invest in the industries of the future. Our plan will create 650,000 jobs across the country by 2030."
+#"At the heart of our approach will be our Green Prosperity Plan where, in partnership with business through our National Wealth Fund, we will invest in the industries of the future. 
+#Our plan will create 650,000 jobs across the country by 2030."
 #So that's about a doubling of green jobs if going by CBI report (Green sector “supported 765,700 Full Time Equivalent (FTE) jobs, equal to nearly 3% of total UK employment”)
 #How many in LCREE…? ~270K though (a) error bars are wide and (b) that’s direct, not the 1:2 spillover ratios the CBI mentions.
 
@@ -78,6 +79,47 @@ labouraim * (lcree.regional %>% filter(GEOGRAPHY_NAME=='South Yorkshire') %>% se
 
 #If that's direct, spillover maybe triples that
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#GREEN JOBS AS A PROPORTION OF TOTAL PER YEAR AND PER SECTION----
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+greenjobs.percent <- itl2 %>% 
+  group_by(DATE,SIC_SECTION_NAME_LCREE) %>% 
+  summarise(
+    jobcountFT = sum(jobcountFT, na.rm = T),
+    lcree_jobcount = sum(lcree_jobcount, na.rm = T),
+    lcree_lowerCI = sum(lcree_lowerCI, na.rm = T),
+    lcree_upperCI = sum(lcree_upperCI, na.rm = T),
+    lcree_jobcount_percent = (lcree_jobcount / jobcountFT) * 100,
+    lcree_jobcount_percent_lowerCI = (lcree_lowerCI / jobcountFT) * 100,
+    lcree_jobcount_percent_upperCI = (lcree_upperCI / jobcountFT) * 100
+  ) %>% ungroup()
+
+
+#Get split of sectors into two groups by size in latest year, for plotting
+sectorsplit <- greenjobs.percent %>% 
+  filter(DATE == max(DATE)) %>% select(lcree_jobcount, SIC_SECTION_NAME_LCREE) %>% 
+  mutate(
+    sectorsplit = ifelse(
+      lcree_jobcount > median(lcree_jobcount), 0, 1
+      )
+  )
+
+greenjobs.percent <- greenjobs.percent %>% 
+  left_join(sectorsplit, by = 'SIC_SECTION_NAME_LCREE')
+
+
+##PLOT: GREEN JOBS AS A PERCENT OF TOTAL JOBS IN SIC SECTION----
+ggplot(greenjobs.percent %>% filter(!grepl(x = SIC_SECTION_NAME_LCREE, pattern = 'agri|mining|other', ignore.case = T)), 
+       aes(x = DATE, y = lcree_jobcount_percent, colour = fct_reorder(SIC_SECTION_NAME_LCREE,lcree_jobcount_percent) )) +
+  geom_line(position = position_dodge(width = 0.75)) +
+  geom_point(position = position_dodge(width = 0.75)) +
+  geom_errorbar(aes(ymin = lcree_jobcount_percent_lowerCI, ymax = lcree_jobcount_percent_upperCI), position = position_dodge(width = 0.75)) +
+  scale_color_brewer(palette = 'Paired', direction = -1) +
+  facet_wrap(~sectorsplit, scales = 'free_y')
+
+  
 
 
 
@@ -158,12 +200,18 @@ GB.greenjobs.gva <- itl2 %>%
                 .names = "percent_of_totalGVA_{.col}")) %>% #find green GVA as proportion of place's total GVA
   ungroup()
 
+
+
+#PLOT: PERCENT OF TOTAL GVA THAT IS GREEN JOBS----
 ggplot(GB.greenjobs.gva, 
        aes(x = DATE, y = percent_of_totalGVA_green_gva_estimate)) +
   geom_line() +
   geom_point(size = 3) +
   geom_errorbar(aes(ymin = percent_of_totalGVA_green_gva_lowerCI, ymax = percent_of_totalGVA_green_gva_upperCI), position = position_dodge(width = 0.75), width = 0.15) +
-  xlab("")
+  xlab("") +
+  ylab("Green GVA as percent of GB total GVA") +
+  ggtitle("Green GVA as percent of GB total GVA") +
+  coord_cartesian(ylim = c(0,1.7))
 
 
 
@@ -475,7 +523,8 @@ p <- ggplot(
   itl2 %>% 
     filter(!grepl('steam|estate|waste|mining|agri',SIC_SECTION,ignore.case=T)) %>% 
     mutate(
-      SY = GEOGRAPHY_NAME == 'South Yorkshire',
+      # SY = GEOGRAPHY_NAME == 'South Yorkshire',
+      SY = GEOGRAPHY_NAME == 'West Yorkshire',
       SIC_SECTION = fct_reorder(SIC_SECTION, GVAASFRACTIONperFT_movingav, .desc = T)
     ),
   # itl2 %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire', SIC_SECTION = fct_reorder(SIC_SECTION, GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav, .desc = T)),
@@ -553,10 +602,12 @@ itl2 <- itl2 %>%
     )
   )
 
+#PLOT: GVA PER FT JOB FOR SIC SECTIONS OVER TIME, SY OVERLAID
 p <- ggplot(
   itl2 %>% 
     # filter(!grepl('steam|estate|waste|mining|agri',SIC_SECTION,ignore.case=T)) %>%
     mutate(
+    # SY = GEOGRAPHY_NAME == 'West Yorkshire',
     SY = GEOGRAPHY_NAME == 'South Yorkshire',
     # SY = grepl('Cambridge',GEOGRAPHY_NAME,ignore.case = T),
     SIC_SECTION_REDUCED = fct_reorder(SIC_SECTION_REDUCED, GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav, .desc = T)
@@ -694,7 +745,7 @@ sample_GVAperFT <- itl2 %>%
 
 #And try another approach
 #Eyeballed until amount overlaps values
-jittered.GVAperFT.repeats <- replicate(100, jitter(sample_GVAperFT$GVAperFT, amount = 9000)) %>% as.vector() 
+jittered.GVAperFT.repeats <- replicate(100, jitter(sample_GVAperFT$GVAperFT, amount = 9000)) %>% as.vector()
 plot(jittered.GVAperFT.repeats)
 
 #Some neg
@@ -717,7 +768,8 @@ hist(weighted.sample.GVAperFT)
 abline(v = job.mean, lwd = 6)
 
 
-#Could then get a guesstimate about what manuf wage spread might be - attracting a regional worker, wage would need to be higher (most likely)
+#Could then get a guesstimate about what manuf wage spread might be - 
+#attracting a regional worker, wage would need to be higher (most likely)
 #It would seem reasonable to use two assumptions:
 #The new job takes its possible spread from the spread of GVA per jobs across all local sectors
 #(i.e. some could higher than manuf mean, some lower)
@@ -731,6 +783,10 @@ job.spread <- rnorm(10000, mean = job.mean, sd = sd(weighted.sample.GVAperFT)/2)
 
 hist(job.spread)
 abline(v = job.mean, lwd = 6)
+
+hist(weighted.sample.GVAperFT)
+
+
 
 #Both?
 ggplot(
@@ -777,8 +833,9 @@ net.newjobvalue <- function(job.spread,jobmarket.spread){
   #(Which is probably just going to be close to the mean diff but let's do anyway, as can get spread)
   return(
     list(
-      net = single.job - displaced.job,
-      displaced = displaced.job
+      new = single.job,
+      displaced = displaced.job,
+      net = single.job - displaced.job
     )
   )
 
@@ -794,6 +851,7 @@ hist(net.newjobspread$net)
 #About £14M or net of average of 14K per new job a year (which I'm guessing stays quite stable?)
 #There's some spread, maybe a million each side, but yes.
 sum(net.newjobspread$net)
+mean(net.newjobspread$net)
 
 #So that's likely the LOWEST extreme with a 1:1 net poaching ratio?
 
@@ -849,4 +907,95 @@ sum(incommutes)/250#65K GVA per job coming in, no other work displacement region
 
 #i.e. adds one person to resident pop
 #Note: breaking down by resident vs workplace pop will be useful, if time
+
+
+
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#GENERALISING THAT CODE TO ANY SECTOR----
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#For which we will need some other functions
+#Just broad sector name for now should do, no?
+FTsample.sy <- makeSampleOf_GVAperFTjob(
+  itl2 %>%
+    filter(
+      grepl('south york', GEOGRAPHY_NAME, ignore.case = T),
+      !grepl('real|elec|mining|other', SIC_SECTION, ignore.case = T),
+      DATE == 2022
+    ),
+  samplesize = 100000
+)
+
+#Just comparing to other places - might need better method to get smooth curve generically
+#But will do for SY
+FTsample2 <- makeSampleOf_GVAperFTjob(
+  itl2 %>%
+    filter(
+      grepl('manc', GEOGRAPHY_NAME, ignore.case = T),
+      # grepl('Inner London - West', GEOGRAPHY_NAME, ignore.case = T),
+      !grepl('real|elec|mining|other', SIC_SECTION, ignore.case = T),
+      DATE == 2022
+    ),
+  samplesize = 100000
+)
+
+
+both <- rbind(
+  data.frame(sampleGVAperFT = FTsample.sy, place = 'SY'),
+  data.frame(sampleGVAperFT = FTsample2, place = '2')
+)
+
+ggplot(both, aes(x = sampleGVAperFT, fill = place)) +
+  geom_density(alpha = 0.2) +
+  geom_vline(xintercept = mean(FTsample.sy), colour = "blue") +
+  geom_vline(xintercept = mean(FTsample2), colour = "red")
+
+
+
+
+
+job.mean <- itl2 %>%
+  filter(
+    grepl('south york', GEOGRAPHY_NAME, ignore.case = T),
+    # grepl(pattern = 'construction', SIC_SECTION, ignore.case = T),
+    # grepl(pattern = 'scient', SIC_SECTION, ignore.case = T),
+    grepl(pattern = 'information', SIC_SECTION, ignore.case = T),
+    DATE == 2022
+  ) %>% 
+  pull(GVAperFT_movingav)
+
+
+job.spread <- rnorm(100000, mean = job.mean, sd = sd(FTsample.sy)/2)
+
+hist(job.spread)
+abline(v = job.mean, lwd = 6)
+
+hist(FTsample.sy)
+
+#Set so if new job is lower than any existing, we take value of that new job as one displaced
+net.newjobspread <- purrr::map(1:1000, ~net.newjobvalue(job.spread, FTsample.sy)) %>% bind_rows
+
+hist(net.newjobspread$net)
+
+#So we're saying a thousand new manuf jobs would, if jobs all poached locally, net GVA of:
+#About £14M or net of average of 14K per new job a year (which I'm guessing stays quite stable?)
+#There's some spread, maybe a million each side, but yes.
+sum(net.newjobspread$net)
+mean(net.newjobspread$net)
+
+#So that's likely the LOWEST extreme with a 1:1 net poaching ratio?
+
+#Compare to displaced jobs amount to get proportion gained
+sum(net.newjobspread$displaced)
+
+#So what is percent extra GVA per job gained? Here in the ballpark of 27%
+(sum(net.newjobspread$net)/sum(net.newjobspread$displaced))*100 
+
+
+
+
+
 

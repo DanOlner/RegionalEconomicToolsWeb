@@ -614,4 +614,60 @@ twod_generictimeplot_multipletimepoints <- function(df, category_var, x_var, y_v
 
 
 
+#Create an estimate of job GVA rates from sparse job data
+#To get better sampling
+makeSampleOf_GVAperFTjob <- function(df, samplesize){
+
+  
+  #Eyeballed until amount overlaps values
+  jittered.GVAperFT.repeats <- replicate(100, jitter(df$GVAperFT, amount = 9000)) %>% as.vector()
+  
+  #Some neg
+  jittered.jobcountFT.repeats <- replicate(100, jitter(df$jobcountFT, amount = 7000)) %>% as.vector() %>% abs()
+  
+  #Return sample from that
+  sample(
+    jittered.GVAperFT.repeats, size = samplesize, replace = T, prob = jittered.jobcountFT.repeats
+  )
+  
+
+}
+
+
+
+net.newjobvalue <- function(job.spread,jobmarket.spread){
+  
+  single.job <- sample(job.spread,1)  
+  # cat(length(jobmarket.spread[jobmarket.spread < single.job]),'\n')
+         
+  #if no job market jobs found, just take minimum value
+  if(length(jobmarket.spread[jobmarket.spread < single.job]) == 0){
+    
+    displaced.job = single.job#set to same GVA as job being taken
+    
+  #   cat('NONE!')
+  } else {
+    
+    displaced.job <- sample(jobmarket.spread[jobmarket.spread < single.job],1)
+  #   cat('SOME!')
+  #   
+  }
+  # 
+  
+  #net GVA difference?
+  #Return both net and the full value of the jobs displaced
+  #So can estimate proportion addition
+  #(Which is probably just going to be close to the mean diff but let's do anyway, as can get spread)
+  return(
+    list(
+      new = single.job,
+      displaced = displaced.job,
+      net = single.job - displaced.job
+    )
+  )
+  
+}
+
+
+
 
