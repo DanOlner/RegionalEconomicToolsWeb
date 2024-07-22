@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Dan Olner">
 
-<title>UK regional economics tools and analysis in R - UK regional economics tools, analysis and ideas</title>
+<title>UK regional economics tools and analysis in R - SectorGrowthInvestment_July2024</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,25 +21,59 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,7 +103,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-sidebar docked nav-fixed">
@@ -78,7 +113,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">UK regional economics tools and analysis in R</span>
     </a>
   </div>
@@ -89,7 +124,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -107,7 +142,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">UK regional economics tools, analysis and ideas</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">SectorGrowthInvestment_July2024</li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -138,13 +173,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./gdp_gaps.html" class="sidebar-item-text sidebar-link">
+  <a href="../gdp_gaps.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">GDP/GVA regional gaps in the UK</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./beattyfothergill.html" class="sidebar-item-text sidebar-link">
+  <a href="../beattyfothergill.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Beatty &amp; Fothergill on productivity: viz</span></a>
   </div>
 </li>
@@ -161,7 +196,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./sector_locationquotients_and_proportions.html" class="sidebar-item-text sidebar-link">
+  <a href="../sector_locationquotients_and_proportions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">UK sectors: LQs &amp; proportion plots</span></a>
   </div>
 </li>
@@ -177,22 +212,28 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-is-this-website" id="toc-what-is-this-website" class="nav-link active" data-scroll-target="#what-is-this-website">What is this website?</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   </ul>
-</nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="SectorGrowthInvestment_July2024.docx"><i class="bi bi-file-word"></i>MS Word</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">UK regional economics tools, analysis and ideas</h1>
+<h1 class="title">SectorGrowthInvestment_July2024</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Dan Olner </p>
+          </div>
+  </div>
     
   
     
@@ -203,29 +244,12 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="what-is-this-website" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-this-website">What is this website?</h2>
-<ul>
-<li>A repository of tools, methods and ideas for analysing UK regional economic data, mainly from official ONS sources.</li>
-<li>With the aim of:</li>
-<li>Supporting policymakers to more clearly see what’s happening in their regional economies, what their history is, how they compare to other places in the UK, and what the main method issues are when interpreting the data.</li>
-<li>Helping to build capacity ‘in-house’ so regional policymakers can become more self-reliant (see <a href="https://www.centreforcities.org/publication/la-evidential/">Centre for Cities’ report LA Evidential</a> for excellent analysis of how to overcome barriers to regional capacity building.)</li>
-<li>This is a live document and will continue to grow in dialogue with its users.</li>
-</ul>
-<p>Current website content (see table of content links on the left):</p>
-<ul>
-<li>GDP and GVA:
-<ul>
-<li><strong>GDP / GVA regional gaps in the UK</strong>: analysis and R code for comparing different types of economic gap between places, showing what difference choice of data makes.</li>
-<li><strong>Beatty &amp; Fothergill analysis of productivity</strong>: visualisations based on the <a href="https://www.shu.ac.uk/centre-regional-economic-social-research/publications/the-productivity-of-industries-and-places">CRESR report</a> ‘Productivity of Industry and Places’, showing how much the economic gap between places changes depending on a range of data choices.</li>
-</ul></li>
-<li>Sectors:
-<ul>
-<li><strong>LQ and proportion plots</strong>: code and method showing how to analysis sectoral composition in regions and how they compare to other places, using location quotients, mapping and ‘proportion plots’ that get under the skin of what LQs are showing.</li>
-</ul></li>
-</ul>
-<p>This project was funded by <a href="https://y-pern.org.uk/">Y-PERN</a> and supported SYMCA’s <a href="https://www.southyorkshire-ca.gov.uk/business/plan-for-good-growth">Plan for Good Growth</a> and <a href="https://www.southyorkshire-ca.gov.uk/business/skills-strategy">Skills Strategy</a> 2024.</p>
-<p>Any questions, please do get in touch via the issues tab on the <a href="https://github.com/DanOlner/RegionalEconomicTools">github repo of this website</a> or email: danolner at gmail dot com or d dot olner at sheffield.ac.uk.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(flextable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>This short report asks: how might the economic value of South Yorkshire change given different sector investment?</p>
 
 
 </section>

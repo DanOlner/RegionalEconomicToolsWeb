@@ -1,11 +1,24 @@
 ---
-title: "UK regional economics tools and analysis in R"
+title: "UK regional economics tools, analysis and ideas"
 ---
 
-# OPEN DATA AND METHODS FOR UK REGIONAL ECONOMIC ANALYSIS
+## What is this website?
 
-* This repository contains code and methods for analysing UK regional economics, mainly from ONS and NOMIS sources.
-* I'm continuing to add more sections over time. [This page]() illustrates how to analyse GVA data to produce location quotients, a discussion of what LQs don't show and proportion plots to solve that problem. (p.s. the best explanation of LQs I've found is in the notes to [this ONS excel sheet](https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locationquotientdataandindustrialspecialisationforlocalauthorities) on industrial specialisation.) [This page](gdp_gaps.html) looks at GVA/GDP gaps between places in the UK.
-* The original code is also [available here](https://github.com/DanOlner/ukcompare), though that repo isn't designed for public consumption.
-* This project was funded by [Y-PERN](https://y-pern.org.uk/) and supported SYMCA's [Plan for Good Growth](https://www.southyorkshire-ca.gov.uk/business/plan-for-good-growth) and [Skills Strategy](https://www.southyorkshire-ca.gov.uk/business/skills-strategy) 2024.
-* Any questions, please do get in touch via the issues tab or email: danolner at gmail dot com or d dot olner at sheffield.ac.uk.
+* A repository of tools, methods and ideas for analysing UK regional economic data, mainly from official ONS sources.
+* With the aim of:
+* Supporting policymakers to more clearly see what's happening in their regional economies, what their history is, how they compare to other places in the UK, and what the main method issues are when interpreting the data.
+* Helping to build capacity 'in-house' so regional policymakers can become more self-reliant (see [Centre for Cities' report LA Evidential](https://www.centreforcities.org/publication/la-evidential/) for excellent analysis of how to overcome barriers to regional capacity building.)
+* This is a live document and will continue to grow in dialogue with its users.
+
+Current website content (see table of content links on the left):
+
+* GDP and GVA:
+    - **GDP / GVA regional gaps in the UK**: analysis and R code for comparing different types of economic gap between places, showing what difference choice of data makes.
+    - **Beatty & Fothergill analysis of productivity**: visualisations based on the [CRESR report](https://www.shu.ac.uk/centre-regional-economic-social-research/publications/the-productivity-of-industries-and-places) 'Productivity of Industry and Places', showing how much the economic gap between places changes depending on a range of data choices.
+* Sectors:
+    - **LQ and proportion plots**: code and method showing how to analysis sectoral composition in regions and how they compare to other places, using location quotients, mapping and 'proportion plots' that get under the skin of what LQs are showing.
+
+
+This project was funded by [Y-PERN](https://y-pern.org.uk/) and supported SYMCA's [Plan for Good Growth](https://www.southyorkshire-ca.gov.uk/business/plan-for-good-growth) and [Skills Strategy](https://www.southyorkshire-ca.gov.uk/business/skills-strategy) 2024.
+
+Any questions, please do get in touch via the issues tab on the [github repo of this website](https://github.com/DanOlner/RegionalEconomicTools) or email: danolner at gmail dot com or d dot olner at sheffield.ac.uk.

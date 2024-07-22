@@ -8,7 +8,8 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: https://github.com/DanOlner/RegionalEconomicTools
+        text: Github repo
   sidebar:
     style: "docked"
     search: true
