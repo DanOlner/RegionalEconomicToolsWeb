@@ -13,3 +13,100 @@ library(flextable)
 # Introduction
 
 This short report asks: how might the economic value of South Yorkshire change given different sector investment? 
+
+
+
+
+From Labour manifesto:
+National Wealth Fund "The fund will have a target of attracting three pounds of private investment for every one pound of public investment, creating jobs across the country."
+Steel industry 2.5B, green hydrogen, 1.8B for supply chains?
+Our plan will create 650,000 jobs across the country by 2030
+Not all green but… 
+So that's about a doubling of green jobs if going by CBI report (Green sector “supported 765,700 Full Time Equivalent (FTE) jobs, equal to nearly 3% of total UK employment”)
+How many in LCREE…? ~270K though (a) error bars are wide and (b) that’s direct, not the 1:2 spillover ratios the CBI mentions.
+
+
+~680K per job created in CIB report vs ~£345K from the DIT report above, again fitting the clean energy GVA/job gap
+
+CBI: £114300 GVA PA for a FTE = £58.615 per hour worked; DIT: £212,000 GVA PA for a FTE = £108.70 per hour worked
+
+But we then want to think about net effects with skills composition / jobs / migration / commuting and what difference those make. Can lay out assumptions and show those differences, including maybe shiny.
+
+Scenario: if SY oversupply of L4, soaking up that does what overall? So this is a supply/demand issue, which we could model with some assumptions. Cf. Low skill equilibrium and connected offsetting issues (including investment removing jobs – come up with number for % of GVA increase via job reduction)
+
+Cf. Noting maybe e.g. historically (Slide 11 in SYMCA growth) manuf GVA has increased (as has GVA per worker mostly) while worker numbers have dropped in the majority of places in the UK. (What about pre-COVID?)
+
+Sector questions: why SY lower than other places? Point to larger issues about how productivity differences measured, can we get closer to reality? (The raw GVA per job numbers actually probably are quite close, except that the way the top level GVA numbers are worked out is…?)
+
+Including: digging into facts on the ground, corroborate what the data says...
+
+Picking what we measure: Larger Q here about “growth spreading more widely” e.g. Doncaster worker commutes to Sheffield, resident spending in Doncaster, GVA in Sheffield firm. Ties to geog issues / commuting etc generally.
+
+Investment-wise, what are the marginal gains to trying to improve overall manufacturing productivity (currently low) compared to investing in already high productivity sectors?
+Noting that manuf productivity has a spread too – only average being shown
+Investment in clean tech is going to cut across sectors. They support each other. Is very small part of overall GVA though, have to still make that clear.
+
+
+Imagine some changes in job/sector composition in SY. There are several types here:
+Sectors grow, more jobs come in
+Sector composition changes, jobs move around
+Various other mixes of movement including to/from inactivity (some laid out on paper in front of me here)
+
+That leads to different sets of measures of change:
+Raw output changes. “SY economy will grow by x% overall if 100 more clean tech jobs in this sector.”
+Productivity changes. Two types maybe:
+“Overall GVA per job will increase by x% if job composition changes in this way.”
+
+One approach:
+Creation of new job in construction: 
+Give it average GVA per FT:
+Gross effects:
+Sector productivity doesn’t change
+Average GVA per FT overall most likely goes up (as does GVA per head)
+Gross/raw GVA increases
+Net effects (All net effects are going to do is take some net values from other lower-productivity sectors):
+If oversupply of local high skill, soaks up some of that
+If skill lack, draws in commute or permanent role
+Labour supply/demand has other effects but we then assume perfect market where compensation = marginal productivity!)
+
+
+
+
+LCREE: 1.27% (CI 1 to 1.54%) overall. So that’s about 1.5ppts lower than CBI estimate that uses overspills, which seems about right.
+And shows the increase over time.
+from CBI report: “For every £1 million contributed by net zero businesses, nearly £2 million more is added through the supply chain and employee spending” [16]
+(Note: direct impacts are 1.3% of economy, which marries with LCREE pretty well.)
+So we can also take a simple 1:2 ratio on average there, if we want to guesstimate broader econ spillovers – 
+but it’s UNCLEAR how much of that would be regional (not that much)
+
+Linking the LCREE data does not allow us to see whether green jobs in manuf are more productive than manuf generally but CBI report and others suggests probably are?
+
+
+Sector linkages - again, need better knowledge of those (cite Coyle on manuf / services?)
+Prof/scientific/tech: might be foundational to the others and their progress. Investment Q there. How to think about?
+
+
+Point that most things are a balance, and net result is empirical question and may vary. See e.g.
+New firm (FDI or not)
+If oversupply of high qual, new firms soak up some people from here. Net effect of losses to other firms.
+Interaction with commuting – if not oversupply locally, pull in more externally (commute or permanent move makes a difference to the measures too)
+Existing firm expands through capital investment; implication for jobs
+Different starting assumptions on job value compared to FDI right?
+Upskilling investment (public) … coming up with some ballpark for that would be useful (cf. That Pwells paper, what’s its point?)
+Capital deepening: inc or dec or shift of jobs?
+
+“Rapid productivity growth in one sector of the economy, reflecting rapid technological progress, can therefore be combined with low overall productivity growth, if freed up labour moves into low productivity growth sectors.” (Wilkes quotes Lord Turner p.27)
+Opposite of under-utilised labour moving into better work...
+The raw GVA still shows up in the sector there though. (Although again, spillovers elsewhere, argh.)
+
+
+Only 1 to 2% is green GVA anywhere. 2% isn’t tiny. But still. (1.1-1.7% overall in 2022)
+Genuine LCREE growth in recent years, big upward slope overall – make that point! SY in the middle, if this IF/THEN is right.
+Broad sectors with Low-carbon / green energy are FEW. That’s pretty key. But they’re also pretty productive sectors generally. SY ICT growth is an interesting case, nothing much that’s green (what prop jobs overall again…?)
+The relative productivity between sectors (for GB as a whole) has actually stayed remarkably stable over time. Plots from line 340 around there.
+
+
+
+
+
+

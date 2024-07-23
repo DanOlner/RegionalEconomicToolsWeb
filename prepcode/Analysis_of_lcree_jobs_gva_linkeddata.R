@@ -935,6 +935,7 @@ FTsample2 <- makeSampleOf_GVAperFTjob(
   itl2 %>%
     filter(
       grepl('manc', GEOGRAPHY_NAME, ignore.case = T),
+      grepl('manc', GEOGRAPHY_NAME, ignore.case = T),
       # grepl('Inner London - West', GEOGRAPHY_NAME, ignore.case = T),
       !grepl('real|elec|mining|other', SIC_SECTION, ignore.case = T),
       DATE == 2022
