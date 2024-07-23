@@ -1,18 +1,50 @@
 ---
 title: "SectorGrowthInvestment_July2024"
 author: "Dan Olner"
+execute:
+  echo: false
+  message: false
+  warning: false
 format: docx
 ---
 
 ```{r}
 library(flextable)
+library(tidyverse)
+library(ggrepel)
+source('../functions/misc_functions.R')
 ```
 
 
 
 # Introduction
 
-This short report asks: how might the economic value of South Yorkshire change given different sector investment? 
+What questions does this try to answer?
+
+
+
+# Lit
+
+Some key facts from existing literature:
+
+
+
+* Several sources cite an achievable ratio of around £1 of public investment to £3 of private 'crowding in'. ^[LSE, Grantham Institute, "Boosting growth and productivity in the United Kingdom through investments in the sustainable economy", January 2024: This cites a 1 to 3 crowding in ratio. Northern Powerhouse, "Net Zero by 2050: One Plan, Two Objectives - How Green Growth Can Build the Northern Powerhouse", July 2024, suggests an average crowding in ratio of £1 to £2.65. The Labour Manifesto aims, through its new National Wealth Fund, "three pounds of private investment for every one pound of public investment".] 
+
+* A recent CBI report on net zero jobs finds investment per new job is around £680,000 ^[CBI, "The UK’s net zero economy: The scale and geography of the net zero economy in the UK". 2024"]. A 2019 Department for International Trade report finds FDI investment per new job is around £345,000 ^[DIT, "Understanding FDI and its impact in the United Kingdom for DIT's investment promotion activities and services". 2021].
+
+
+
+
+LCREE: 1.27% (CI 1 to 1.54%) overall. So that’s about 1.5ppts lower than CBI estimate that uses overspills, which seems about right.
+And shows the increase over time.
+from CBI report: “For every £1 million contributed by net zero businesses, nearly £2 million more is added through the supply chain and employee spending” [16]
+(Note: direct impacts are 1.3% of economy, which marries with LCREE pretty well.)
+So we can also take a simple 1:2 ratio on average there, if we want to guesstimate broader econ spillovers – 
+but it’s UNCLEAR how much of that would be regional (not that much)
+
+
+
 
 
 
@@ -25,10 +57,8 @@ Not all green but…
 So that's about a doubling of green jobs if going by CBI report (Green sector “supported 765,700 Full Time Equivalent (FTE) jobs, equal to nearly 3% of total UK employment”)
 How many in LCREE…? ~270K though (a) error bars are wide and (b) that’s direct, not the 1:2 spillover ratios the CBI mentions.
 
-
-~680K per job created in CIB report vs ~£345K from the DIT report above, again fitting the clean energy GVA/job gap
-
 CBI: £114300 GVA PA for a FTE = £58.615 per hour worked; DIT: £212,000 GVA PA for a FTE = £108.70 per hour worked
+
 
 But we then want to think about net effects with skills composition / jobs / migration / commuting and what difference those make. Can lay out assumptions and show those differences, including maybe shiny.
 
@@ -72,12 +102,6 @@ Labour supply/demand has other effects but we then assume perfect market where c
 
 
 
-LCREE: 1.27% (CI 1 to 1.54%) overall. So that’s about 1.5ppts lower than CBI estimate that uses overspills, which seems about right.
-And shows the increase over time.
-from CBI report: “For every £1 million contributed by net zero businesses, nearly £2 million more is added through the supply chain and employee spending” [16]
-(Note: direct impacts are 1.3% of economy, which marries with LCREE pretty well.)
-So we can also take a simple 1:2 ratio on average there, if we want to guesstimate broader econ spillovers – 
-but it’s UNCLEAR how much of that would be regional (not that much)
 
 Linking the LCREE data does not allow us to see whether green jobs in manuf are more productive than manuf generally but CBI report and others suggests probably are?
 
@@ -107,6 +131,56 @@ The relative productivity between sectors (for GB as a whole) has actually staye
 
 
 
+
+
+ 'North East arrows' saw both GVA and jobs increase. North East plus in the darker corner saw GVA increase proportionally faster than jobs, so GVA per job increased. Checking figure cross ref, look at @fig-manuf-percentchange.
+
+
+
+
+```{r}
+#| fig-width: 12
+#| fig-height: 9
+#| fig-dpi: 750
+#| label: fig-manuf-percentchange
+#| fig-cap: "MANUFACTURING Percent change GVA and jobs in ITL2 zones, moving average between 2015/17 and 2018/20. South Yorkshire in Blue. See text for full breakdown."
+
+#Via YPERNdataexplore
+itl2.gvaperjob <- readRDS('../data/itl2_gvaperjob.rds')
+
+p <- twod_generictimeplot_normalisetozero(
+  # df = itl2.gvaperjob %>% filter(SIC07_description=='Construction', ITL_region_name != 'Inner London - West') %>% mutate(gvaperjob = gvaperjob/1000) %>% 
+  df = itl2.gvaperjob %>% filter(SIC07_description=='Manufacturing', ITL_region_name != 'Inner London - West') %>% mutate(gvaperjob = gvaperjob/1000) %>%
+    rename(`gva/job` = `gva/job_movingav`),#previously calculated and adjusted
+  category_var = ITL_region_name,
+  x_var = gva_movingav,
+  y_var = jobcount_movingav,
+  timevar = year,
+  label_var = `gva/job`,#renamed moving av
+  category_var_value_to_highlight = 'SOUTH YORKSHIRE <<<',
+  start_time = 2016,
+  end_time = 2019
+)
+
+xrange_adjust = diff(range(p[[2]]$x_pct_change)) * 0.1
+yrange_adjust = diff(range(p[[2]]$y_pct_change)) * 0.1
+
+# p[[1]] + coord_fixed(
+#   xlim = c(
+#     min(p[[2]]$x_pct_change) - xrange_adjust,
+#     ifelse(max(p[[2]]$x_pct_change) > 0,max(p[[2]]$x_pct_change) + xrange_adjust,0)#hack for health, need to make generic
+#   ),
+#   ylim = c(
+#     min(p[[2]]$y_pct_change) - yrange_adjust,max(p[[2]]$y_pct_change) + yrange_adjust 
+#   )
+# ) +
+  
+p[[1]] + coord_fixed(xlim = c(-20,35), ylim = c(-20,15))  +
+  xlab("GVA 3 year moving av % change 2015/17 to 18/20") + 
+  ylab("Job count moving av % change 2015/17 to 18/20") 
+  #ggtitle("MANUFACTURING: Percent change GVA and jobs\nITL2 zones, moving average\nSouth Yorkshire in Blue")
+
+```
 
 
 

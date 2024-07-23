@@ -671,3 +671,132 @@ net.newjobvalue <- function(job.spread,jobmarket.spread){
 
 
 
+percent_change <- function(x,y) ((y - x) / x) * 100
+
+
+#Normalise all vectors so origin is zero
+#And scale all by % change between time points
+# Start time, end time.
+# X_var, will be values from that column e.g. GVA
+# Y_var, values e.g. job count
+# Category_Var = either e.g. places or sectors
+#Label var, from the two time points, to display
+twod_generictimeplot_normalisetozero <- function(df, category_var, x_var, y_var, timevar, label_var, start_time, end_time, compasspoints_to_display = c('NE','NW','SE','SW'), category_var_value_to_highlight="NULL"){
+  
+  category_var <- enquo(category_var)   
+  x_var <- enquo(x_var)
+  y_var <- enquo(y_var)
+  timevar <- enquo(timevar)
+  label_var <- enquo(label_var)
+  
+  #Reduce to the two start and end timepoints we want to display
+  twoy <- df %>%
+    filter(
+      !!timevar %in% c(start_time, end_time)
+    ) %>% 
+    arrange(!!timevar)
+  
+  twoy_lags <- twoy %>%
+    arrange(!!category_var,!!timevar) %>%
+    mutate(
+      lag_x_var = !!x_var - lag(!!x_var),
+      lag_y_var = !!y_var - lag(!!y_var)
+    ) %>%
+    filter(!!timevar == end_time) %>% #using final year to mark when going in particular compass direction
+    mutate(
+      compass = case_when(
+        lag_x_var < 0 & lag_y_var < 0 ~ 'SW', 
+        lag_x_var < 0 & lag_y_var > 0 ~ 'NW',
+        lag_x_var > 0 & lag_y_var > 0 ~ 'NE', 
+        lag_x_var > 0 & lag_y_var < 0 ~ 'SE'
+      ) 
+    )
+  
+  twoy <- twoy %>%  
+    left_join( 
+      twoy_lags %>%
+        select(!!category_var,compass),
+      by = quo_name(category_var) 
+    ) 
+  
+  
+  twoy.wide <- twoy %>% filter(compass %in% compasspoints_to_display) %>%
+    mutate(!!timevar := ifelse(!!timevar == min(!!timevar), 'start', 'end')) %>%
+    select(!!category_var,!!timevar,!!x_var,!!y_var,!!label_var) %>%
+    pivot_wider(names_from = !!timevar, values_from = c(!!x_var,!!y_var,!!label_var)) 
+  
+  #Rename wide two year for change vector back to generic names
+  names(twoy.wide) <- c(names(twoy.wide)[1],'x_start','x_end','y_start','y_end','label_start','label_end')
+  
+  #Make percent change values for the vector x and y values
+  twoy.wide <- twoy.wide %>% 
+    mutate(
+      x_pct_change = percent_change(x_start, x_end),
+      y_pct_change = percent_change(y_start, y_end),
+      category_var_val_to_highlight = ifelse(!!category_var == category_var_value_to_highlight, T,F)
+    )
+  
+  #Vectors all centred on zero, percent change for all shown
+  #Annotate with a triangle indicating the half of the plot where GVA per worker will have dropped between time points
+  p <- ggplot() +
+    annotate(geom = "polygon", x = c(-1000, 1000, -1000), y = c(1000, 1000, -1000), fill = "white", alpha = 0.5)
+  
+  
+  p <- p +
+    geom_segment(data = twoy.wide, aes(x = 0, y = 0 ,xend = x_pct_change, yend = y_pct_change), 
+                 # colour = category_var_val_to_highlight),
+                 arrow = arrow(length = unit(0.5, "cm")),
+                 size = 1, alpha = 0.5
+    ) +
+    # scale_color_manual(values=c("red","blue")) +
+    guides(colour=guide_legend(title=" ")) +
+    xlab( paste0(quo_name(x_var),' percent change ',start_time,' to ',end_time) ) +
+    ylab( paste0(quo_name(y_var),' percent change ',start_time,' to ',end_time) ) +
+    geom_vline(xintercept = 0, alpha = 0.1, size =2, colour = 'red') +
+    geom_hline(yintercept = 0, alpha = 0.1, size =2, colour = 'red') 
+  # geom_abline(intercept = 0, slope = 1, alpha = 0.1, size =2, colour = 'black') 
+  # geom_abline(intercept = 0, slope = -1, alpha = 0.1, size =2, colour = 'green') 
+  
+  #Colour aes clashes with one below for labels, which I want to keep
+  #Do hacky overlay instead
+  p <- p + geom_segment(data = twoy.wide %>% filter(category_var_val_to_highlight), 
+                        aes(x = 0, y = 0 ,
+                            xend = x_pct_change, yend = y_pct_change), 
+                        arrow = arrow(length = unit(0.5, "cm")),
+                        size = 2, colour = '#3333ff'
+  )
+  
+  
+  # #Reduce to latest year and merge in values for labels
+  label_df <- twoy %>% filter(!!timevar==max(!!timevar), compass %in% compasspoints_to_display) %>%
+    left_join(
+      twoy.wide %>% select(!!category_var,label_start,label_end,x_pct_change,y_pct_change,category_var_val_to_highlight)
+    ) %>% 
+    mutate(category_var_val_to_highlight = ifelse(category_var_val_to_highlight, 'bold','plain'))
+  
+  p <- p + geom_text_repel(
+    data = label_df,
+    # data = twoy %>% filter(!!timevar==max(!!timevar), compass %in% compasspoints_to_display),
+    aes(x = x_pct_change, y = y_pct_change,fontface = category_var_val_to_highlight,
+        label = paste0(!!category_var, "\n(",quo_name(label_var),": ",round(label_start,2),ifelse(label_start < label_end," >> "," << "),round(label_end,2),")"),
+        # label = paste0(!!category_var, "\n(",quo_name(x_var),": ",round(!!x_var,2),", ",quo_name(y_var),": ",round(!!y_var,2),")"),
+        # label = paste0(!!category_var, "\n(",quo_name(x_var),": ",round(!!x_var,2),", ",quo_name(y_var),": ",round(!!y_var,2),")"),
+        # label = paste0(!!category_var, "\n(x:",round(x_var,2),"%,y:",round(y_var,2),"%)"),
+        colour = compass),
+    alpha=1,
+    nudge_x = .05,
+    box.padding = 1,
+    nudge_y = 0.05,
+    segment.curvature = -0.1,
+    segment.ncp = 0.3,
+    segment.angle = 20,
+    max.overlaps = 21
+  ) +
+    scale_color_manual(values = setNames(c("red", "black",'#7fc97f','#beaed4','#fdc086','#1f78b4'),
+                                         c(start_time, end_time,'NE','SE','NW','SW')))
+  
+  return(list(plot = p, twoyeardata = twoy.wide))
+  
+  
+}
+

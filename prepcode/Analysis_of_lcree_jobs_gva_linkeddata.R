@@ -300,6 +300,7 @@ sectors4plot.RANGE <- sectors.greenjobs.gva %>% filter(DATE == 2022, !grepl(x = 
   # scale_colour_manual(values = c('white','black')) 
   
 
+#PLOT: ITL2 REGION % GREEN GVA BY SECTOR----
 ggplot() +
   geom_bar(data = sectors4plot %>% mutate(GEOGRAPHY_NAME = ifelse(GEOGRAPHY_NAME == 'South Yorkshire', '>>>>>>>>>>>>>>>>>>> SOUTH YORKSHIRE',GEOGRAPHY_NAME)), 
            aes(x = fct_reorder(GEOGRAPHY_NAME,totalGREENgva_percent), 
@@ -316,7 +317,7 @@ ggplot() +
                 ) +
   geom_hline(yintercept = sectors4plot.RANGE$totalGREENgva_percent_lowerCI[sectors4plot.RANGE$GEOGRAPHY_NAME=='South Yorkshire'], size = 2, alpha = 0.2) +
   geom_hline(yintercept = sectors4plot.RANGE$totalGREENgva_percent_upperCI[sectors4plot.RANGE$GEOGRAPHY_NAME=='South Yorkshire'], size = 2, alpha = 0.2) +
-  ggtitle("If/then estimate of ITL2 region % green (LCREE) jobs by sector\nSouth Yorkshire in caps/arrows\nGrey lines are South Yorkshire 95% CIs")
+  ggtitle("If/then estimate of ITL2 region % green (LCREE) GVA by sector\nSouth Yorkshire in caps/arrows\nGrey lines are South Yorkshire 95% CIs")
 
 
 
