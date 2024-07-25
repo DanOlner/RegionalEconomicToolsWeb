@@ -12,7 +12,66 @@ format: docx
 library(flextable)
 library(tidyverse)
 library(ggrepel)
+library(zoo)
 source('../functions/misc_functions.R')
+
+#MINUS IMPUTED RENT, BETTER FOR ACCURATE GVA PER JOB
+itl2 <- readRDS('../data/LCREE_BRES_GVAcurrentprices_combo_2015to2022_MINUS_IMPUTED_RENT.rds') %>% rename(jobcountFT = COUNT) %>% ungroup()
+
+#Reminder: the "if then" we've done here (in LCREE_linkToBres...) - if green jobs had the national proportion in e.g. SY
+#What would be number be given the number of e.g. construction FT jobs there?
+#This results in the LCREE proportion being the same for each place
+#Observe for one year and one sector:
+#Propcheck value is ~7.7% (+-6.7 to 8.7%) for all places in the same year
+# View(itl2 %>% filter(SIC_SECTION_NAME_LCREE =='Construction', DATE == 2022))
+
+#Which means the only regional sectoral green differences here are due to sector size differences in places
+
+#GVA per FT job
+itl2$GVAperFT <- (itl2$GVA/itl2$jobcountFT)*1000000
+
+itl2 <- itl2 %>% 
+  group_by(DATE) %>% 
+  mutate(
+    GVA_TOTAL_GB = sum(GVA) * 1000000,
+    FT_TOTAL_GB = sum(jobcountFT,na.rm = T)
+    ) %>% 
+  ungroup()
+
+#These will be tiny fractions - a more intuitive way to express them is 
+#AS A FRACTION OF AVERAGE GB GVA PER JOB
+#It'll still be a perfectly linear scale
+itl2 <- itl2 %>% 
+  mutate(
+    GBaverageGVAperFT = GVA_TOTAL_GB / FT_TOTAL_GB,
+    GVAperFT_asFractionOfAv = GVAperFT / GBaverageGVAperFT
+    ) 
+
+itl2 <- itl2 %>% 
+  group_by(GEOGRAPHY_NAME,SIC_SECTION) %>% #this assumes dates in order
+  mutate(
+    GVAperFT_movingav = rollapply(GVAperFT,3,mean,na.rm = TRUE,align='right',fill=NA),
+    GVAASFRACTIONperFT_movingav = rollapply(GVAperFT_asFractionOfAv,3,mean,na.rm = TRUE,align='right',fill=NA)
+  ) %>% ungroup()
+
+
+itl2 <- itl2 %>% 
+  mutate(
+    GVAperFT_asPERCENTofGB_times_ten_to_seven  = (GVAperFT / GVA_TOTAL_GB) * 10^7
+  ) %>% ungroup()
+
+
+itl2 <- itl2 %>% 
+  group_by(GEOGRAPHY_NAME,SIC_SECTION) %>% #this assumes dates in order
+  mutate(
+    GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav = rollapply(GVAperFT_asPERCENTofGB_times_ten_to_seven,3,mean,na.rm = TRUE,align='right',fill=NA)
+  ) %>% ungroup()
+
+
+
+
+
+
 ```
 
 
@@ -20,6 +79,8 @@ source('../functions/misc_functions.R')
 # Introduction
 
 What questions does this try to answer?
+
+South Yorkshire (hereafter SY)
 
 
 
@@ -46,7 +107,8 @@ but it’s UNCLEAR how much of that would be regional (not that much)
 
 
 
-
+Drop in something on Pathways to work, what investment cost there is
+https://www.barnsley.gov.uk/services/our-council/barnsley-2030/pathways-to-work-commission/
 
 
 From Labour manifesto:
@@ -62,7 +124,9 @@ CBI: £114300 GVA PA for a FTE = £58.615 per hour worked; DIT: £212,000 GVA PA
 
 But we then want to think about net effects with skills composition / jobs / migration / commuting and what difference those make. Can lay out assumptions and show those differences, including maybe shiny.
 
-Scenario: if SY oversupply of L4, soaking up that does what overall? So this is a supply/demand issue, which we could model with some assumptions. Cf. Low skill equilibrium and connected offsetting issues (including investment removing jobs – come up with number for % of GVA increase via job reduction)
+
+
+Cf. Low skill equilibrium and connected offsetting issues (including investment removing jobs – come up with number for % of GVA increase via job reduction)
 
 Cf. Noting maybe e.g. historically (Slide 11 in SYMCA growth) manuf GVA has increased (as has GVA per worker mostly) while worker numbers have dropped in the majority of places in the UK. (What about pre-COVID?)
 
@@ -133,8 +197,169 @@ The relative productivity between sectors (for GB as a whole) has actually staye
 
 
 
+
+## The productivity of South Yorkshire's broad sectors relative to the rest of the UK
+
+A starting point for thinking about how job investment could change SY's productivity is being clear on where the region sits relative to the rest of the UK. @fig-relativeprod shows this, for broad sectors (combined to match the LCREE survey's sector categories). Sectors are in each pane, most productive on average left to right. All ITL2 zones are shown in dots, for five years of moving average output per job (expressed as a percent of total GB output so comparisons across time are valid). SY is overlaid in large red dots.
+
+Some of the key facts @fig-relativeprod shows:
+
+* The top two green job sectors, manufacturing and construction, have very different productivity per job in SY. Manufacturing has remained at or near the lowest end of all places in the UK. There will of course be firms with much higher productivity, but on average it has been stuck for some time. Construction has been much more typical of the UK as a whole, with some ups and downs. Another important green sector, scientific and technical jobs, while relativelty low, has seen recent relative productivity increases.
+* ICT, as well as being a highly productive sector, has seen SY's output per job rapidly climb into the highest places in the UK.
+* Education has been consistently productive in SY, and continues to increase relative to other places in the UK.
+
+
+What this means for green jobs... ICT cf... 
+
+
+
+```{r}
+#| fig-width: 13
+#| fig-height: 8
+#| fig-dpi: 500
+#| label: fig-relativeprod
+#| fig-cap: "Productivity per job, as % of GB total output. Broken down by SIC section, each point is an ITL2 zone. 3 yr moving average shows change over time. SY overlaid in larger dots."
+
+itl2 <- itl2 %>% 
+  mutate(
+    SIC_SECTION_REDUCED = case_when(
+      grepl('admin',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Admin',
+      grepl('agri',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Agri',
+      grepl('electr',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'power',
+      grepl('information',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'ICT',
+      grepl('manuf',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Manuf',
+      grepl('mining',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Mining',
+      grepl('other',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'other',
+      grepl('scientific',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Scientific',
+      grepl('real estate',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Real est',
+      grepl('transport',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Transport',
+      grepl('water',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Water',
+      grepl('wholesale',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Retail',
+      .default = SIC_SECTION_NAME_LCREE
+    )
+  )
+
+#PLOT: GVA PER FT JOB FOR SIC SECTIONS OVER TIME, SY OVERLAID
+p <- ggplot(
+  itl2 %>% 
+    filter(!grepl('steam|estate|waste|mining|agri',SIC_SECTION,ignore.case=T)) %>%
+    mutate(
+    # SY = GEOGRAPHY_NAME == 'West Yorkshire',
+    DATE = DATE - 2000,
+    SY = GEOGRAPHY_NAME == 'South Yorkshire',
+    # SY = grepl('Cambridge',GEOGRAPHY_NAME,ignore.case = T),
+    SIC_SECTION_REDUCED = fct_reorder(SIC_SECTION_REDUCED, GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav, .desc = T)
+    ),
+  # itl2 %>% mutate(SY = GEOGRAPHY_NAME == 'South Yorkshire', SIC_SECTION = fct_reorder(SIC_SECTION, GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav, .desc = T)),
+  aes(x = DATE, y = GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav, group = GEOGRAPHY_NAME, size = SY, colour = SY)) +
+  # ggforce::geom_sina()
+  # coord_cartesian(xlim = c(2017,2022)) +
+  coord_cartesian(xlim = c(17,22)) +
+  geom_jitter(width = 0.1) +
+  scale_size_manual(values = c(1,5)) +
+  scale_colour_brewer(palette = 'Set1', direction = -1, name = "Sector") +
+  # facet_wrap(~SIC_SECTION, scales = 'free_y') +
+  facet_wrap(~SIC_SECTION_REDUCED, nrow = 1, labeller = labeller(groupwrap = label_wrap_gen(10))) +
+  guides(colour = F, size = F) +
+  ggtitle('GVA per FT job (as proportion of whole GB economy), smoothed 3 yr average. South Yorkshire in large red spots.') +
+  xlab('year') +
+  ylab('GVA per FT as percent of GB whole econ * 10^7 (3 year moving average)')
+  
+
+p
+
+
+
+```
+
+
+
+## Adding a new job in South Yorkshire: what factors determine its economic impact and how we measure it?
+
+This section uses existing output per job in SY to estimate how a *new* job could change the economy on average, given its likely spread of productivity values. As well as the value of the job, the following other factors can be considered: the value of any replaced job, if someone within SY moves to the new post; where in the job landscape the employee came from - from inactive workers, from outside the area, whether commuting.
+
+It is possible to identify two bounds on how much extra GVA a new job will bring to SY. At one extreme, someone already economically active in South Yorkshire gets the job, most likely moving from a lower to higher GVA position - so the net GVA gain for South Yorkshire is smallest. At the other, the new job attracts a new worker to the region, either through inducing a commute, attracting a migrating worker (internal to the UK or not, broadly the same outcome on SY GVA) or drawing in someone from South Yorkshire's existing pool of inactivity (which could include, for example, a graduate based in the region starting a new job). Each of those has different implications for what the ultimate GVA gains look like, on top of which sector the job is in.
+
+Where on average those numbers fall given any investment depends on the larger pull and push factors at play in the region. For example, there is evidence that SY has an oversupply of workers with L4 skills, often in jobs that do not fully exploit the productivity potential. This would lead to more internal candidates for newly created jobs - increasing productivity but lowering the net gain relative to growing the workforce. There are knock-on effects as job composition shifts (moving jobs creates vacancies; job creation spillovers occur etc) but SY's low skill equilibrium will tend to mean there is more unexploited productivity locally to soak up, compared to some other places where skills more closely match jobs.
+
+Other economic geography push/pull factors will be considered below.
+
+Starting with the scenario where a new job is taken by a worker already in SY, take as an example a new job in manufacturing. Assume that additional output per job roughly matches its pay. Leaving certain sectors out ^[FOOTNOTE ON EXCLUDED SECTORS], the likely spread of GVA output per job across *all* SY jobs ranges currently (latest data is 2022) from around £40,000 to £105,000 a year (5% to 95% quantiles from a spread of SY jobs in the main selected sectors) with an average of around £73,000. A credible spread of GVA per job for SY manufacturing around its average output is around £50,000 to £83,000, with an average of £65,000.
+
+If a new manufacturing job is filled from another SY position, assume that the net GVA output (the difference between the old and new job) will always be positive (on the basis that output reflects earnings and the candidate would not move to a less well paying job). Also assume that job is being filled from someone moving from within the range of existing SY jobs (though again, only those with a GVA value below the randomly selected manufacturing job). 
+
+Given that, on average, the net GVA gain would be around £14,300 a year per job, stretching to £35,000 at the 95% percentile. That's an average of around 28% extra GVA compared to the internally displaced jobs.
+
+**The table below repeats these simulations for all broad SIC sections** (matching the LCREE sector categories), ordering by average percent GVA gained per new job if the worker moved from elsewhere in the SY economy. These simulations contain several assumptions, and are aiming to be approximate estimates. Some bullet points on what might be learned from them:
+
+* The first value column - **av new job GVA** - would be the additional GVA from a new job filled by a commuter, a SY graduate, or new migrant (from within or outside the UK) i.e. it wouldn't be net of GVA from other work within South Yorkshire. **av net GVA** is the estimate if job composition changes *within* South Yorkshire, with **percent GVA gained** showing how much extra GVA proportionally would be gained per job (on average) if internal job composition changed.
+* Unsurprisingly, new jobs in higher productivity sectors tend to have higher average proportional GVA gains, if workers with SY move to those jobs.
+* As already mentioned, GVA in the top three sectors of power, real estate and mining are perhaps misleading due to the their oversized apparent productivity per worker (based e.g. for power on very high profit rates), and they have very small job numbers overall (see job count and % in table). It would be necessary to more fully understand productivity in power firms to better estimate what role they could play in SY growth and green growth, but in terms of jobs numbers, there isn't a large base to grow from currently.
+* For all other sectors with more straightforward GVA per worker (from ICT to transport) the absolute and percent net gains are higher the more productive the sector is. Built into the assumptions is that a higher productivity job would more likely release a larger chain of spillovers to other jobs within SY, so internal gains should be higher. Compare ICT to transport directly: a new ICT job could add £105,000, netting £35,000 on average if from internal job shifts. Compare to transport: as @fig-relativeprod shows, productivity per worker has been dropping, most likely due to the sector's large recent job expansion into warehousing activities. An average new transport job adds around £37,000, netting only around £3,000 on average if employing from elsewhere - though note, lower pay jobs like this have a higher probability of attracting workers from SY's pool of inactivity, so the full £37,000 could well be added.
+* This data implies that there is an inverse relationship between sector productivity and the ratio of purely new job to net new job value. For example, a fully new job in transport could bring in ten times more GVA than if displacing another SY job. That ratio drops rapidly for higher productivity jobs, with fully new ICT jobs bringing in three times more GVA than if net. But note the absolute amounts are so much larger for more productive posts.
+
+The next section looks more closely at what different scenarios these numbers might imply, looking at the scale and productivity of sectors (see job counts / percents in the table) and how geographical economic forces shape which of these outcomes are more likely from job investment, and considers what role green jobs play in it.
+
+
+
+```{r}
+
+#Worked out in Analysis_of_lcree_jobs_gva_linked...
+jobnumbers.table <- readRDS('../data/GVAjobnumberestimates.rds') %>% select(-place)
+#jobnumbers.table <- readRDS('data/GVAjobnumberestimates.rds') %>% select(-place)
+
+itl2 <- itl2 %>% 
+  group_by(GEOGRAPHY_NAME,SIC_SECTION_NAME_LCREE) %>% 
+  mutate(
+    gva_movingav = rollapply(GVA,3,mean,na.rm = TRUE,align='right',fill=NA),
+    jobcount_movingav = rollapply(jobcountFT,3,mean,na.rm = TRUE,align='right',fill=NA)
+  ) %>% 
+  ungroup()
+
+#Add in sector jobcount
+jobnumbers.table <- jobnumbers.table %>% 
+  left_join(
+    itl2 %>% filter(GEOGRAPHY_NAME=='South Yorkshire', DATE == 2022) %>% select(SIC_SECTION_REDUCED,jobcount_movingav) %>% 
+      mutate(
+        jobcount_movingav = jobcount_movingav / 1000,
+        jobcount_percent = (jobcount_movingav / sum(jobcount_movingav)) * 100,
+        jobcount_percent = round(jobcount_percent,1),
+        jobcount_movingav = round(jobcount_movingav,1)),
+    by = c('sector' = 'SIC_SECTION_REDUCED')
+  )
+
+#Add job numbers to sector name
+jobnumbers.table$`sector (jobs 1000s/%)` = paste0(jobnumbers.table$sector, " (", jobnumbers.table$jobcount_movingav,", ",jobnumbers.table$jobcount_percent,"%)")
+
+#reorder / sort
+jobnumbers.table <- jobnumbers.table %>% 
+  select(-sector,-jobcount_movingav, -jobcount_percent) %>% 
+  relocate(`sector (jobs 1000s/%)`, .before = `av new job GVA`)
+
+
+set_flextable_defaults(
+  font.size = 10, theme_fun = theme_vanilla,
+  padding = 6,
+  background.color = "#EFEFEF")
+
+#https://stackoverflow.com/a/63928956
+flextable(jobnumbers.table) %>% autofit() %>% fit_to_width(7.5)
+
+
+```
+
+
+# The factors shaping what mix of jobs and geography could result from jobs and sector investment
+
+
+
+## Keeping a focus on 'good growth' that grows both GVA and jobs
+
  'North East arrows' saw both GVA and jobs increase. North East plus in the darker corner saw GVA increase proportionally faster than jobs, so GVA per job increased. Checking figure cross ref, look at @fig-manuf-percentchange.
 
+
+Compare adding say 100 or 1000 manuf jobs, compared to its existing job number base. How would it / could it change the overall average productivity of that sector? Given x or y assumptions?
+Noting that productivity is largely due to TFP issues, not the people. Can make that point in % change manuf section.
 
 
 
@@ -181,6 +406,76 @@ p[[1]] + coord_fixed(xlim = c(-20,35), ylim = c(-20,15))  +
   #ggtitle("MANUFACTURING: Percent change GVA and jobs\nITL2 zones, moving average\nSouth Yorkshire in Blue")
 
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r eval = F}
+#CUTTINZ
+
+#| fig-width: 10
+#| fig-height: 10
+#| fig-dpi: 300
+#| label: fig-sy-propplot
+#| fig-cap: "South Yorkshire prop plot."
+
+## South Yorkshire GVA (relative to UK) and jobs
+
+itl2 <- itl2 %>% 
+  group_by(GEOGRAPHY_NAME,SIC_SECTION_NAME_LCREE) %>% 
+  mutate(
+    gva_movingav = rollapply(GVA,3,mean,na.rm = TRUE,align='right',fill=NA),
+    jobcount_movingav = rollapply(jobcountFT,3,mean,na.rm = TRUE,align='right',fill=NA)
+  ) %>% 
+  ungroup()
+
+
+p <- twod_generictimeplot_multipletimepoints(
+  df = itl2 %>% filter(
+    # grepl(x= GEOGRAPHY_NAME, pattern = 'cheshire', ignore.case = T), 
+    grepl(x= GEOGRAPHY_NAME, pattern = 'south york', ignore.case = T),
+    !grepl(x = SIC_SECTION, pattern = 'other', ignore.case = T),
+    jobcount_movingav > 8000
+    ),
+  category_var = SIC_SECTION_REDUCED,
+  x_var = GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav,
+  # x_var = gva_movingav,
+  y_var = jobcount_movingav,
+  timevar = DATE,
+  label_var = gva_movingav,
+  times = c(2017:2022)
+  # times = c(2017:2019)
+)
+
+p + theme(aspect.ratio=1) +
+  # xlab("GVA (3 year moving average)") +
+  xlab("GVA per FT as percent of GB whole econ * 10^7 (3 year moving average)") +
+  ylab("Job count (3 year moving average)")
+```
+
+
+```{r eval = F}
+#Table for 95th percentile (not really realistic as it's maximising old/new gap)
+jobnumbers.table <- readRDS('../data/GVAjobnumberestimates_95thpercentile.rds')%>% select(-place)
+
+#https://stackoverflow.com/a/63928956
+flextable(jobnumbers.table) %>% autofit() %>% fit_to_width(7.5)
+
+```
+
+
+
+
 
 
 

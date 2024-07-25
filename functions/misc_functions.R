@@ -634,7 +634,7 @@ makeSampleOf_GVAperFTjob <- function(df, samplesize){
 }
 
 
-
+#Get new, displaced and net job values
 net.newjobvalue <- function(job.spread,jobmarket.spread){
   
   single.job <- sample(job.spread,1)  
@@ -667,6 +667,87 @@ net.newjobvalue <- function(job.spread,jobmarket.spread){
   )
   
 }
+
+
+
+newjobnumbers <- function(GVAdf, spreadofalljobs, sectorname, placename, percentile95 = FALSE){
+  
+  cat('place: ',placename, ', sector: ', sectorname, '\n')
+  
+  job.mean <- GVAdf %>%
+    filter(
+      grepl(placename, GEOGRAPHY_NAME, ignore.case = T),
+      grepl(pattern = sectorname, SIC_SECTION_REDUCED, ignore.case = T),
+      DATE == 2022
+    ) %>% 
+    pull(GVAperFT_movingav)
+  
+  job.spread <- rnorm(100000, mean = job.mean, sd = sd(spreadofalljobs)/2)
+  
+  net.newjobspread <- purrr::map(1:10000, ~net.newjobvalue(job.spread, spreadofalljobs)) %>% bind_rows
+  
+  #Get averages by default
+  if(!percentile95){
+  
+    #average of new job GVA
+    av_newjobs_gva = mean(net.newjobspread$new)
+    #Old jobs
+    av_oldjobs = mean(net.newjobspread$displaced)
+    
+    av_netgva = mean(net.newjobspread$net)
+    
+    #What is percent extra GVA per job gained? 
+    percentgained = (sum(net.newjobspread$net)/sum(net.newjobspread$displaced))*100 
+    
+    return(list(
+      place = placename,
+      sector = sectorname,
+      `av new job GVA` = av_newjobs_gva,
+      `av old job GVA` = av_oldjobs,
+      `av net GVA` = av_netgva,
+      `percent gained` = percentgained
+    ))
+  
+    #Or pull out 95th percentiles and use those
+  } else {
+    
+    #average of new job GVA
+    p95 = net.newjobspread %>% filter(net > quantile(net, 0.95))
+    
+    p95_newjobs_gva = mean(p95$new)
+    #Old jobs
+    p95_oldjobs = mean(p95$displaced)
+    
+    p95_netgva = mean(p95$net)
+    
+    #What is percent extra GVA per job gained? 
+    p95_percentgained = (sum(p95$net)/sum(p95$displaced))*100 
+    
+    return(list(
+      place = placename,
+      sector = sectorname,
+      `new job GVA 95` = p95_newjobs_gva,
+      `old job GVA 95` = p95_oldjobs,
+      `net GVA 95` = p95_netgva,
+      `percent gained 95` = p95_percentgained
+    ))
+    
+  }
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

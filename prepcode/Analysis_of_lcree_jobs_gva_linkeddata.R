@@ -619,7 +619,7 @@ p <- ggplot(
   coord_cartesian(xlim = c(2017,2022)) +
   geom_jitter(width = 0.1) +
   scale_size_manual(values = c(1,5)) +
-  scale_colour_brewer(palette = 'Paired', direction = -1, name = "Sector") +
+  scale_colour_brewer(palette = 'Set1', direction = -1, name = "Sector") +
   # facet_wrap(~SIC_SECTION, scales = 'free_y') +
   facet_wrap(~SIC_SECTION_REDUCED, nrow = 1, labeller = labeller(groupwrap = label_wrap_gen(10))) +
   guides(colour = F, size = F) +
@@ -658,8 +658,13 @@ itl2 <- itl2 %>%
 
 # debugonce(twod_generictimeplot_multipletimepoints)
 p <- twod_generictimeplot_multipletimepoints(
-  df = itl2 %>% filter(grepl(x= GEOGRAPHY_NAME, pattern = 'south york', ignore.case = T), !grepl(x = SIC_SECTION, pattern = 'other', ignore.case = T)),
-  category_var = SIC_SECTION,
+  df = itl2 %>% filter(
+    # grepl(x= GEOGRAPHY_NAME, pattern = 'cheshire', ignore.case = T), 
+    grepl(x= GEOGRAPHY_NAME, pattern = 'south york', ignore.case = T),
+    !grepl(x = SIC_SECTION, pattern = 'other', ignore.case = T),
+    jobcount_movingav > 8000
+    ),
+  category_var = SIC_SECTION_REDUCED,
   x_var = GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav,
   # x_var = gva_movingav,
   y_var = jobcount_movingav,
@@ -671,7 +676,7 @@ p <- twod_generictimeplot_multipletimepoints(
 
 p + theme(aspect.ratio=1) +
   # xlab("GVA (3 year moving average)") +
-  xlab("GVA per FT as percent of GB whole econ (3 year moving average)") +
+  xlab("GVA per FT as percent of GB whole econ * 10^7 (3 year moving average)") +
   ylab("Job count (3 year moving average)")
 
 
@@ -766,6 +771,9 @@ weighted.sample.GVAperFT <- sample(
 #Better... long right tail, is right
 # plot(density(weighted.sample.GVAperFT))
 hist(weighted.sample.GVAperFT)
+mean(weighted.sample.GVAperFT)
+quantile(weighted.sample.GVAperFT, probs = c(0.05,0.95))
+
 abline(v = job.mean, lwd = 6)
 
 
@@ -784,6 +792,7 @@ job.spread <- rnorm(10000, mean = job.mean, sd = sd(weighted.sample.GVAperFT)/2)
 
 hist(job.spread)
 abline(v = job.mean, lwd = 6)
+quantile(job.spread, probs = c(0.05,0.95))
 
 hist(weighted.sample.GVAperFT)
 
@@ -824,29 +833,33 @@ single.job - displaced.job
 
 
 #Function to repeat that to get a distribution from random new manufacturing jobs
-net.newjobvalue <- function(job.spread,jobmarket.spread){
-  single.job <- sample(job.spread,1)
-  displaced.job <- sample(jobmarket.spread[jobmarket.spread < single.job],1)
-  
-  #net GVA difference?
-  #Return both net and the full value of the jobs displaced
-  #So can estimate proportion addition
-  #(Which is probably just going to be close to the mean diff but let's do anyway, as can get spread)
-  return(
-    list(
-      new = single.job,
-      displaced = displaced.job,
-      net = single.job - displaced.job
-    )
-  )
 
-}
+#COMMENTING OUT TO USE THE VERSION IN MISCFUNCTIONS.R
+
+# net.newjobvalue <- function(job.spread,jobmarket.spread){
+#   single.job <- sample(job.spread,1)
+#   displaced.job <- sample(jobmarket.spread[jobmarket.spread < single.job],1)
+#   
+#   #net GVA difference?
+#   #Return both net and the full value of the jobs displaced
+#   #So can estimate proportion addition
+#   #(Which is probably just going to be close to the mean diff but let's do anyway, as can get spread)
+#   return(
+#     list(
+#       new = single.job,
+#       displaced = displaced.job,
+#       net = single.job - displaced.job
+#     )
+#   )
+# 
+# }
 
 
 #Repeat!
 net.newjobspread <- purrr::map(1:1000, ~net.newjobvalue(job.spread, weighted.sample.GVAperFT)) %>% bind_rows
 
 hist(net.newjobspread$net)
+quantile(net.newjobspread$net, c(0.05,0.95))
 
 #So we're saying a thousand new manuf jobs would, if jobs all poached locally, net GVA of:
 #About £14M or net of average of 14K per new job a year (which I'm guessing stays quite stable?)
@@ -861,6 +874,103 @@ sum(net.newjobspread$displaced)
 
 #So what is percent extra GVA per job gained? Here in the ballpark of 27%
 (sum(net.newjobspread$net)/sum(net.newjobspread$displaced))*100 
+(sum(net.newjobspread$net[1:250])/sum(net.newjobspread$displaced[1:250]))*100 
+(sum(net.newjobspread$net[251:500])/sum(net.newjobspread$displaced[251:500]))*100 
+(sum(net.newjobspread$net[501:1000])/sum(net.newjobspread$displaced[501:1000]))*100 
+
+
+#Can I get a credible spread of that percent difference please?
+net.newjobspread <- net.newjobspread %>% 
+  mutate(percent_gain = (net / displaced) * 100)
+
+#mean should be same as previous line... err nope!
+mean(net.newjobspread$percent_gain)
+
+hist(net.newjobspread$percent_gain)
+
+#quick sidequest: why are those values different? Look at smaller sample and figure out
+#Just five jobs
+
+#Random point in it
+rndpoint <- sample(nrow(net.newjobspread),1)
+five <- net.newjobspread[rndpoint:(rndpoint+1),]
+
+(sum(five$net)/sum(five$displaced))*100 
+mean(five$percent_gain)
+
+
+#Check random sample from it produces fairly similar results
+chk <- net.newjobspread[sample(nrow(net.newjobspread),50),]
+
+(sum(chk$net)/sum(chk$displaced))*100 
+mean(chk$percent_gain)
+
+
+
+#Yep, regardless of sample, mean of rowwise percent_gain is higher
+#Let's stare at that
+#I think it's probably due to the distribution, which is very left-heavy
+
+#OK, let's just save this single random outcome to use for the basic maths
+#Reduced to two
+# saveRDS(five,'local/randtest.rds')
+# five <- readRDS('local/randtest.rds')
+# 
+# #Displaced jobs:
+# d1 = 62914.07
+# d2 = 33472.19
+# 
+# #Net gain from the two new jobs:
+# n1 = 5110.31
+# n2 = 31392.60
+# 
+# new1 = 68024.38
+# new2 = 64864.79
+# 
+# #So we're just after what % difference the new jobs are from the original displaced
+# #Two different things being asked
+# #If 1000 jobs with random differences in the spread of manuf vs SY jobs generally
+# #What's the total diff in net vs the displaced jobs?
+# #We can sum those I think because that's accounting for the entire spread of the values
+# #And probably what we want
+# 
+# #Which is
+# ((n1+n2) / (d1+d2)) * 100
+# 
+# #Maybe that's the wrong sum? Do we have to sum new and displaced and then find diff?
+# newtot = new1 + new2
+# displacedtot = d1 + d2
+# 
+# nettot = newtot - displacedtot
+# n1 + n2
+# 
+# #Exactly the same. So no, makes no difference
+# (nettot / displacedtot) * 100
+# (sum(five$net)/sum(five$displaced))*100 
+
+
+#Percent total net gain overall and average net gain per job are two different things
+#Can we leave it at that?
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#Oh. It's because the average is of a percentage, which removes the actual magnitude of the values
+#The summed total is closer to what I want
+
+#Checking that it stays fairly consistent when using the miscfunctions.R version
+#Yep, very similar numbers, good
+net.newjobspread <- purrr::map(1:10000, ~net.newjobvalue(job.spread, weighted.sample.GVAperFT)) %>% bind_rows
+
+net.newjobspread <- net.newjobspread %>% 
+  mutate(percent_gain = (net / displaced) * 100)
+
+#Average net gain
+mean(net.newjobspread$net)
+quantile(net.newjobspread$net, c(0.05,0.95))
+
+(sum(net.newjobspread$net)/sum(net.newjobspread$displaced))*100 
+
+#mean(net.newjobspread$percent_gain)
+
 
 
 
@@ -978,26 +1088,109 @@ abline(v = job.mean, lwd = 6)
 hist(FTsample.sy)
 
 #Set so if new job is lower than any existing, we take value of that new job as one displaced
-net.newjobspread <- purrr::map(1:1000, ~net.newjobvalue(job.spread, FTsample.sy)) %>% bind_rows
+net.newjobspread <- purrr::map(1:10000, ~net.newjobvalue(job.spread, FTsample.sy)) %>% bind_rows
 
 hist(net.newjobspread$net)
+
+#average of new job GVA
+mean(net.newjobspread$new)
+#Old job
+mean(net.newjobspread$displaced)
+
 
 #So we're saying a thousand new manuf jobs would, if jobs all poached locally, net GVA of:
 #About £14M or net of average of 14K per new job a year (which I'm guessing stays quite stable?)
 #There's some spread, maybe a million each side, but yes.
 sum(net.newjobspread$net)
 mean(net.newjobspread$net)
+quantile(net.newjobspread$net, 0.95)
 
 #So that's likely the LOWEST extreme with a 1:1 net poaching ratio?
 
 #Compare to displaced jobs amount to get proportion gained
 sum(net.newjobspread$displaced)
 
-#So what is percent extra GVA per job gained? Here in the ballpark of 27%
+#So what is percent extra GVA per job gained? 
 (sum(net.newjobspread$net)/sum(net.newjobspread$displaced))*100 
+#Same, good!
+(mean(net.newjobspread$net)/mean(net.newjobspread$displaced))*100 
+
+#So find diff if using 95th percentile
+netnew95 <- net.newjobspread %>% filter(net > quantile(net, 0.95))#which is just top 500 values out of 10000 obv
+
+#And percent diff then?
+(mean(netnew95$net)/mean(netnew95$displaced))*100 
+
+
+
+#OK, now a version of the above that pulls out those key values we need for every sector and stores in a DF for table making
+#Let's make a function for it.
+
+#We want to put in:
+#1. The distribution of GVA per job for SY overall (with justification for keeping certain sectors out here)
+FTsample.sy <- makeSampleOf_GVAperFTjob(
+  itl2 %>%
+    filter(
+      grepl('south york', GEOGRAPHY_NAME, ignore.case = T),
+      !grepl('real|elec|mining|other', SIC_SECTION, ignore.case = T),
+      DATE == 2022
+    ),
+  samplesize = 100000
+)
+
+#2. Details for getting the job mean and a guess at its spread of values, inside the function so sector can be selected
+
+
+#Test
+newjobnumbers(itl2, FTsample.sy, sectorname = 'J Information and communication', placename = 'South Yorkshire')
+
+#RUN ALL!
+jobnumbers <- purrr::map(unique(itl2$SIC_SECTION_REDUCED), ~newjobnumbers(itl2, FTsample.sy, sectorname = ., placename = 'South Yorkshire')) %>% bind_rows
+
+saveRDS(jobnumbers, 'local/GVAjobnumberestimates.rds')
+
+
+#Version for outputting in table
+jobnumbers.table <- jobnumbers %>% 
+  mutate(
+    `percent gained` = round(`percent gained`,2)
+  ) %>% 
+  mutate(
+    across(`av new job GVA`:`av net GVA`, ~round(., 0))
+  ) %>% 
+  arrange(-`percent gained`) %>% 
+  rename(`percent GVA gained` = `percent gained`)
+
+  
+saveRDS(jobnumbers.table, 'data/GVAjobnumberestimates.rds')
+
+#reload!
+jobnumbers.table <- readRDS('data/GVAjobnumberestimates.rds')
+
+#What's difference between net and just new?
+jobnumbers.table <- jobnumbers.table %>% 
+  mutate(
+    net_v_new_diff = (`av new job GVA` - `av net GVA`),
+    net_v_new_diff_percent = (`av new job GVA`/`av net GVA`)*100
+    )
 
 
 
 
 
+#Repeat for 95th percentile
+jobnumbers <- purrr::map(unique(itl2$SIC_SECTION_REDUCED), ~newjobnumbers(itl2, FTsample.sy, sectorname = ., placename = 'South Yorkshire', percentile95 = TRUE)) %>% bind_rows
 
+#Version for outputting in table
+jobnumbers.table <- jobnumbers %>% 
+  mutate(
+    `percent gained 95` = round(`percent gained 95`,2)
+  ) %>% 
+  mutate(
+    across(`new job GVA 95`:`net GVA 95`, ~round(., 0))
+  ) %>% 
+  arrange(-`percent gained 95`) %>% 
+  rename(`percent GVA gained 95` = `percent gained 95`)
+
+
+saveRDS(jobnumbers.table, 'data/GVAjobnumberestimates_95thpercentile.rds')
