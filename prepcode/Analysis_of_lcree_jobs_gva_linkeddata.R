@@ -4,6 +4,7 @@ library(zoo)
 library(sf)
 library(tmap)
 library(plotly)
+library(PerformanceAnalytics)
 source('functions/misc_functions.R')
 options(scipen = 99)
 
@@ -94,7 +95,17 @@ greenjobs.percent <- itl2 %>%
     lcree_jobcount_percent = (lcree_jobcount / jobcountFT) * 100,
     lcree_jobcount_percent_lowerCI = (lcree_lowerCI / jobcountFT) * 100,
     lcree_jobcount_percent_upperCI = (lcree_upperCI / jobcountFT) * 100
-  ) %>% ungroup()
+  ) %>% 
+  group_by(DATE) %>% 
+  mutate(
+    jobcountFT_percent = (jobcountFT / sum(jobcountFT)) * 100
+  ) %>% 
+  ungroup()
+
+#Check percents are sane... tick
+greenjobs.percent %>% 
+  group_by(DATE) %>% 
+  summarise(sum(jobcountFT_percent))
 
 
 #Get split of sectors into two groups by size in latest year, for plotting
@@ -104,10 +115,32 @@ sectorsplit <- greenjobs.percent %>%
     sectorsplit = ifelse(
       lcree_jobcount > median(lcree_jobcount), 0, 1
       )
-  )
+  ) %>% 
+  select(-lcree_jobcount)
 
 greenjobs.percent <- greenjobs.percent %>% 
   left_join(sectorsplit, by = 'SIC_SECTION_NAME_LCREE')
+
+#Version keeping to just the main green sectors
+#Also add in total sector job numbers for most recent year, and percent of total jobs
+#(Those numbers already worked out above, just need to make new sector text to add it in)
+
+#Needs to take numbers from most recent years then merge back in as labels for all years
+sectorlabels <- greenjobs.percent %>% filter(DATE == max(DATE))
+
+sectorlabels$`sector (jobs 1000s/% in most recent year)` <-
+  paste0(sectorlabels$SIC_SECTION_NAME_LCREE, " (", round(sectorlabels$jobcountFT/1000,1),", ",round(sectorlabels$jobcountFT_percent,1),"%)")
+
+#Merge back in so labels same for all years
+greenjobs.percent <- greenjobs.percent %>% 
+  left_join(
+    sectorlabels %>% select(SIC_SECTION_NAME_LCREE,`sector (jobs 1000s/% in most recent year)`), 
+    by = 'SIC_SECTION_NAME_LCREE'
+    )
+
+#Save that for later use
+saveRDS(greenjobs.percent, 'data/greenjobspercent.rds')
+
 
 
 ##PLOT: GREEN JOBS AS A PERCENT OF TOTAL JOBS IN SIC SECTION----
@@ -119,7 +152,83 @@ ggplot(greenjobs.percent %>% filter(!grepl(x = SIC_SECTION_NAME_LCREE, pattern =
   scale_color_brewer(palette = 'Paired', direction = -1) +
   facet_wrap(~sectorsplit, scales = 'free_y')
 
-  
+
+
+
+##PLOT: VERSION OF ABOVE FOR ABOVE MEDIAN SIZE SECTORS, WITH ADDED MOST RECENT COUNTS + PERCENTAGES OF SECTOR JOBS----
+ggplot(greenjobs.percent %>% 
+         filter(!grepl(x = SIC_SECTION_NAME_LCREE, pattern = 'agri|mining|other', ignore.case = T),
+                sectorsplit == 0
+                # lcree_jobcount_percent > 0.1,#for log scale sanity
+                # lcree_jobcount_percent_lowerCI > 0.1
+                ), 
+       # mutate(lcree_jobcount_percent_lowerCI = ifelse(lcree_jobcount_percent_lowerCI < 0.006917972, 0.0000001, lcree_jobcount_percent_lowerCI)),#for log scale, get rid of zero values / make slightly positive 
+       aes(x = DATE, y = lcree_jobcount_percent, colour = fct_reorder(`sector (jobs 1000s/% in most recent year)`,lcree_jobcount_percent) )) +
+  geom_line(position = position_dodge(width = 0.75)) +
+  geom_point(position = position_dodge(width = 0.75)) +
+  geom_errorbar(aes(ymin = lcree_jobcount_percent_lowerCI, ymax = lcree_jobcount_percent_upperCI), position = position_dodge(width = 0.75)) +
+  scale_color_brewer(palette = 'Paired', direction = -1) +
+  guides(colour=guide_legend(title="sector (total jobs 1000s/% in most recent year)")) +
+  # scale_y_log10() +
+  ylab('Percent of sector that is LCREE')
+
+
+
+#Work out percentage point growth (in sector percent that is LCREE)
+greenjobs.ppt.growth <- greenjobs.percent %>% 
+  group_by(SIC_SECTION_NAME_LCREE) %>% 
+  mutate(
+    lcree_jobcount_ppt_changeovertime = lcree_jobcount_percent - lag(lcree_jobcount_percent),
+    lcree_jobcount_lowerci_ppt_changeovertime = lcree_jobcount_percent_lowerCI - lag(lcree_jobcount_percent_lowerCI),
+    lcree_jobcount_upperci_ppt_changeovertime = lcree_jobcount_percent_upperCI - lag(lcree_jobcount_percent_upperCI)
+  )
+
+#Or actually percent change - if it goes from 2% to 4% we want to know that LCREE job count doubled
+greenjobs.percent.growth <- greenjobs.percent %>% 
+  group_by(SIC_SECTION_NAME_LCREE) %>% 
+  mutate(
+    lcree_jobcount_percent_changeovertime = ((lcree_jobcount_percent - lag(lcree_jobcount_percent))/lag(lcree_jobcount_percent)) * 100,
+    lcree_jobcount_lowerci_percent_changeovertime = ((lcree_jobcount_percent_lowerCI - lag(lcree_jobcount_percent_lowerCI))/lag(lcree_jobcount_percent_lowerCI)) * 100,,
+    lcree_jobcount_upperci_percent_changeovertime = ((lcree_jobcount_percent_upperCI - lag(lcree_jobcount_percent_upperCI))/lag(lcree_jobcount_percent_upperCI)) * 100
+  )
+
+
+
+ggplot(greenjobs.percent.growth %>% 
+         filter(!grepl(x = SIC_SECTION_NAME_LCREE, pattern = 'agri|mining|other|whole|admin|water', ignore.case = T),
+                sectorsplit == 0
+                # lcree_jobcount_percent > 0.1,#for log scale sanity
+                # lcree_jobcount_percent_lowerCI > 0.1
+         ), 
+       # mutate(lcree_jobcount_percent_lowerCI = ifelse(lcree_jobcount_percent_lowerCI < 0.006917972, 0.0000001, lcree_jobcount_percent_lowerCI)),#for log scale, get rid of zero values / make slightly positive 
+       aes(x = DATE, y = lcree_jobcount_percent_changeovertime, colour = fct_reorder(`sector (jobs 1000s/% in most recent year)`,lcree_jobcount_percent) )) +
+  # geom_line(position = position_dodge(width = 0.75)) +
+  geom_point(position = position_dodge(width = 0.75)) +
+  geom_errorbar(aes(ymin = lcree_jobcount_lowerci_percent_changeovertime, ymax = lcree_jobcount_upperci_percent_changeovertime), position = position_dodge(width = 0.75)) +
+  scale_color_brewer(palette = 'Paired', direction = -1) +
+  guides(colour=guide_legend(title="sector (total jobs 1000s/% in most recent year)")) +
+  # scale_y_log10() +
+  ylab('Percent of sector that is LCREE') +
+  geom_hline(yintercept = 0, size = 2, colour = 'grey')
+
+#Facet sectors
+ggplot(greenjobs.percent.growth %>% 
+         filter(!grepl(x = SIC_SECTION_NAME_LCREE, pattern = 'agri|mining|other|whole|admin|water', ignore.case = T),
+                sectorsplit == 0
+                # lcree_jobcount_percent > 0.1,#for log scale sanity
+                # lcree_jobcount_percent_lowerCI > 0.1
+         ), 
+       # mutate(lcree_jobcount_percent_lowerCI = ifelse(lcree_jobcount_percent_lowerCI < 0.006917972, 0.0000001, lcree_jobcount_percent_lowerCI)),#for log scale, get rid of zero values / make slightly positive 
+       aes(x = DATE, y = lcree_jobcount_percent_changeovertime )) +
+  geom_hline(yintercept = 0, size = 2, colour = 'grey') +
+  geom_line() +
+  geom_point() +
+  geom_errorbar(aes(ymin = lcree_jobcount_lowerci_percent_changeovertime, ymax = lcree_jobcount_upperci_percent_changeovertime), width = 0.25) +
+  scale_color_brewer(palette = 'Paired', direction = -1) +
+  guides(colour=guide_legend(title="sector (total jobs 1000s/% in most recent year)")) +
+  # scale_y_log10() +
+  ylab('Percent of sector that is LCREE') +
+  facet_wrap(~fct_reorder(`sector (jobs 1000s/% in most recent year)`,lcree_jobcount_percent))
 
 
 
@@ -284,6 +393,8 @@ sectors4plot.RANGE <- sectors.greenjobs.gva %>% filter(DATE == 2022, !grepl(x = 
   ) %>% 
   ungroup()
 
+saveRDS(sectors4plot.RANGE,'data/itl2_percent_gva_by_sector_rangebars.rds')
+
 
 # ggplot(sectors4plot %>% mutate(GEOGRAPHY_NAME = ifelse(GEOGRAPHY_NAME == 'South Yorkshire', '>>>>>>>>>>>>>>>>>>> SOUTH YORKSHIRE',GEOGRAPHY_NAME)), 
 #        aes(x = fct_reorder(GEOGRAPHY_NAME,totalGREENgva_percent), y = percent_of_totalGVA_green_gva_estimate, fill = fct_reorder(SIC_SECTION_NAME_LCREE,percent_of_totalGVA_green_gva_estimate))) +
@@ -298,6 +409,8 @@ sectors4plot.RANGE <- sectors.greenjobs.gva %>% filter(DATE == 2022, !grepl(x = 
   #   aes(colour = SY, x = fct_reorder(GEOGRAPHY_NAME,totalGREENgva_percent), y = percent_of_totalGVA_green_gva_estimate, fill = fct_reorder(SIC_SECTION_NAME_LCREE,percent_of_totalGVA_green_gva_estimate)),
   #   position="stack", stat="identity", size = 0.5) +
   # scale_colour_manual(values = c('white','black')) 
+
+saveRDS(sectors4plot,'data/itl2_percent_gva_by_sector.rds')
   
 
 #PLOT: ITL2 REGION % GREEN GVA BY SECTOR----
@@ -606,10 +719,11 @@ itl2 <- itl2 %>%
 #PLOT: GVA PER FT JOB FOR SIC SECTIONS OVER TIME, SY OVERLAID
 p <- ggplot(
   itl2 %>% 
-    # filter(!grepl('steam|estate|waste|mining|agri',SIC_SECTION,ignore.case=T)) %>%
+    filter(!grepl('steam|estate|waste|mining|agri',SIC_SECTION,ignore.case=T)) %>%
     mutate(
+    SY = GEOGRAPHY_NAME == 'East Yorkshire and Northern Lincolnshire',
     # SY = GEOGRAPHY_NAME == 'West Yorkshire',
-    SY = GEOGRAPHY_NAME == 'South Yorkshire',
+    # SY = GEOGRAPHY_NAME == 'South Yorkshire',
     # SY = grepl('Cambridge',GEOGRAPHY_NAME,ignore.case = T),
     SIC_SECTION_REDUCED = fct_reorder(SIC_SECTION_REDUCED, GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav, .desc = T)
     ),
@@ -709,6 +823,52 @@ p + theme(aspect.ratio=1) +
 
 
 # View(itl2 %>% filter(DATE==2022,grepl(x= GEOGRAPHY_NAME, pattern = 'south york', ignore.case = T), !grepl(x = SIC_SECTION, pattern = 'real', ignore.case = T)))
+
+
+#Get job count proportions per place... looking for correlations between sectors
+props.per.place <- itl2 %>% 
+  filter(DATE == 2022) %>% 
+  group_by(GEOGRAPHY_NAME) %>% 
+    mutate(
+      jobcount_percent = (jobcountFT / sum(jobcountFT)) * 100
+    ) %>% 
+  ungroup() %>% 
+  select(GEOGRAPHY_NAME,SIC_SECTION,SIC_SECTION_REDUCED,jobcount_percent)
+
+
+#Wide version for checking cors
+props.per.place.wide <- props.per.place %>% 
+  select(GEOGRAPHY_NAME,SIC_SECTION_REDUCED,jobcount_percent) %>% 
+  pivot_wider(names_from = SIC_SECTION_REDUCED, values_from = jobcount_percent)
+
+# pairs(props.per.place.wide %>% select(-GEOGRAPHY_NAME))
+
+
+#https://r-coder.com/correlation-plot-r/
+chart.Correlation(props.per.place.wide %>% select(-GEOGRAPHY_NAME), histogram = TRUE, method = "pearson")
+
+
+
+#What about cors of output per worker?
+#Can use directly
+props.per.place.prod <- itl2 %>% 
+  filter(DATE == 2022) %>% 
+  select(GEOGRAPHY_NAME,SIC_SECTION,SIC_SECTION_REDUCED,GVAperFT_asPERCENTofGB_times_ten_to_seven)
+
+
+#Wide version for checking cors
+props.per.place.prod.wide <- props.per.place.prod %>% 
+  select(GEOGRAPHY_NAME,SIC_SECTION_REDUCED,GVAperFT_asPERCENTofGB_times_ten_to_seven) %>% 
+  pivot_wider(names_from = SIC_SECTION_REDUCED, values_from = GVAperFT_asPERCENTofGB_times_ten_to_seven)
+
+pairs(props.per.place.wide %>% select(-GEOGRAPHY_NAME))
+
+
+#https://r-coder.com/correlation-plot-r/
+chart.Correlation(props.per.place.prod.wide %>% select(-GEOGRAPHY_NAME), histogram = TRUE, method = "pearson")
+
+#Weirdly not very much rels. Mull.
+
 
 
 
