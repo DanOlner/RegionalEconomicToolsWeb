@@ -323,9 +323,15 @@ ggplot(GB.greenjobs.gva,
   coord_cartesian(ylim = c(0,1.7))
 
 
+#Percent growth!
+GB.greenjobs.gva <- GB.greenjobs.gva %>% 
+  mutate(percentgrowth = ((percent_of_totalGVA_green_gva_estimate-lag(percent_of_totalGVA_green_gva_estimate))/lag(percent_of_totalGVA_green_gva_estimate))*100)
 
+#average in first few years
+mean(GB.greenjobs.gva$percentgrowth[2:4])
 
-
+#average in last three years
+mean(GB.greenjobs.gva$percentgrowth[6:8])
 
 
 #What's the geography?
@@ -1333,6 +1339,11 @@ jobnumbers.table <- jobnumbers.table %>%
     net_v_new_diff = (`av new job GVA` - `av net GVA`),
     net_v_new_diff_percent = (`av new job GVA`/`av net GVA`)*100
     )
+
+
+#mean value minus the Unreaonable Sectors
+mean(jobnumbers.table$`av new job GVA`[!grepl('power|real|mining',jobnumbers.table$sector)])
+
 
 
 

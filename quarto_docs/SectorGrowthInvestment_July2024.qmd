@@ -1,5 +1,5 @@
 ---
-title: "SectorGrowthInvestment_July2024"
+title: "South Yorkshire sectors: the economic impact of new jobs, including in low carbon jobs. July/Aug 2024"
 author: "Dan Olner"
 execute:
   echo: false
@@ -78,34 +78,26 @@ itl2 <- itl2 %>%
 
 # Introduction
 
-What questions does this try to answer?
+This report investigates the following questions:
 
-South Yorkshire (hereafter SY)
+* What factors are important to using investment to grow South Yorkshire's (hereafter SY) different economic sectors?
+* How might GVA outcomes differ depending on those investment choices?
+* What role could green jobs play in this picture?
 
+A more positive investment landscape is emerging post-election in the UK. The Labour manifesto committed to a £2.5 billion National Wealth Fund including support for the steel industry, green hydrogen and supply chain development, with an aim for 650,000 new jobs by 2030 - a good chunk of which would be green jobs. 
 
+There is a renewed focus on industrial strategy, using public funds to 'crowd in' private investment in the pursuit of strategic goals. Several sources cite an achievable ratio of around £1 of public investment to £3 of private 'crowding in'^[LSE, Grantham Institute, "Boosting growth and productivity in the United Kingdom through investments in the sustainable economy", January 2024: This cites a 1 to 3 crowding in ratio. Northern Powerhouse, "Net Zero by 2050: One Plan, Two Objectives - How Green Growth Can Build the Northern Powerhouse", July 2024, suggests an average crowding in ratio of £1 to £2.65. The Labour Manifesto aims, through its new National Wealth Fund, "three pounds of private investment for every one pound of public investment".]. 
 
-# Background
+This report considers what investment outcomes could be - and what the main 'dials' policymakers might consider - given this strategic context.
 
-Some key facts from existing literature:
+The sections below examine:
 
-
-
-* Several sources cite an achievable ratio of around £1 of public investment to £3 of private 'crowding in'. ^[LSE, Grantham Institute, "Boosting growth and productivity in the United Kingdom through investments in the sustainable economy", January 2024: This cites a 1 to 3 crowding in ratio. Northern Powerhouse, "Net Zero by 2050: One Plan, Two Objectives - How Green Growth Can Build the Northern Powerhouse", July 2024, suggests an average crowding in ratio of £1 to £2.65. The Labour Manifesto aims, through its new National Wealth Fund, "three pounds of private investment for every one pound of public investment".] 
-
-* A recent CBI report on net zero jobs finds investment per new job is around £680,000 ^[CBI, "The UK’s net zero economy: The scale and geography of the net zero economy in the UK". 2024]. A 2019 Department for International Trade report finds FDI investment per new job is around £345,000 ^[DIT, "Understanding FDI and its impact in the United Kingdom for DIT's investment promotion activities and services". 2021].
-
-
-
-From Labour manifesto:
-National Wealth Fund "The fund will have a target of attracting three pounds of private investment for every one pound of public investment, creating jobs across the country."
-Steel industry 2.5B, green hydrogen, 1.8B for supply chains?
-Our plan will create 650,000 jobs across the country by 2030
-Not all green but… 
-So that's about a doubling of green jobs if going by CBI report (Green sector “supported 765,700 Full Time Equivalent (FTE) jobs, equal to nearly 3% of total UK employment”)
-How many in LCREE…? ~270K though (a) error bars are wide and (b) that’s direct, not the 1:2 spillover ratios the CBI mentions.
-
-
-
+1. The 'Low Carbon and Renewable Energy' economy in the UK and its implications for SY.
+2. The current picture of SY's sectoral productivity and what that implies for investment choices.
+3. A look at how GVA growth and job number change can vary, to consider what kind of job and sector growth to aim for.
+4. Modelling 'adding a new job to SY': a first approximation to explore how the location, activity status and skill levels of workers interacts with new jobs and where GVA gets counted.
+5. Bringing all that together: identifying the dials to turn
+6. How to measure outcomes from those dials, how to measure 'success', and what difference the choices in the previous sections make to that
 
 
 
@@ -114,10 +106,16 @@ How many in LCREE…? ~270K though (a) error bars are wide and (b) that’s dire
 
 The Office of National Statistics survey, 'Low Carbon and Renewable Energy Economy' or LCREE, asks businesses what proportion of turnover and jobs are in a range of green activities, and has data going back to 2015. 
 
-Linking the LCREE survey to GVA data shows that in the most recent year 1.27% (1 to 1.54% 95% CI) of the economy currently comes from LCREE jobs. The 2024 CBI net zero report finds around the same using Data City data - direct economic impacts of green jobs is 1.3% of the economy - but it also finds economic spillovers triple the GVA impact nationally. 
+Linking the LCREE survey to GVA data shows that in the most recent year 1.27% (1 to 1.54% 95% CI) of the economy currently comes from LCREE jobs. The 2024 CBI net zero report finds around the same using Data City data - direct economic impacts of green jobs is 1.27% (1 to 1.54% 95% CI) of the economy - but it also finds economic spillovers triple the GVA impact nationally. The same is true for job count. LCREE finds direct green jobs are at around 270,000 (210-330K 95% CI), with the CBI report roughly tripled that with spillovers included (765,000).
+
 @fig-lcreejobpercent shows what percentage of jobs in that sector are 'LCREE' (showing sectors with the biggest percent). For the majority it is very low, but the key five sectors with substantial LCREE jobs are (in order of percent) power, construction, manufacturing, water, and scientific/technical.
 
 These top five LCREE sectors vary in size: while the power sector has the largest percent of LCREE jobs, it is only 0.5% of total jobs, whereas manufacturing and construction account for 6% and 10% of total jobs respectively.
+
+LCREE job numbers have accelerated since COVID - an average rate of 6.25% in the last three years of data, compared to 1.45% in the first three. While this only takes its direct GVA up to 1.27% of the UK's economy, if that growth rate holds, it represents an important step change. The final section reflects more on what this means for investing for productivity in SY. 
+
+The 2024 CBI net zero report suggest LCREE type jobs are 1.6 times more productive than average. While this is likely mostly due to which sectors dominate LCREE jobs, rather than green jobs themselves being higher productivity, it is nevertheless true that investment in the most prominent LCREE jobs would be on average more productive. In SY, however, two of the region's highly productive sectors have very few LCREE jobs: ICT and education. The analysis below considers how understanding sector linkages may help in thinking through how productive sectors in SY can reinforce each other's strengths.
+
 
 
 ```{r}
@@ -148,17 +146,6 @@ ggplot(greenjobs.percent %>%
 
 
 @fig-itl2gvalcree links LCREE to GVA data at regional level, and presents an 'if / then' scenario: if LCREE GVA and jobs existed in proportion to sector size in each location, what would the likely spread of GVA be? (Note, this is not showing what SY's actual LCREE job count is.) It includes 95% likelihood range for SY for this if/then scenario. The true concentration of LCREE jobs will not be so even (see the recent Northern Powerhouse report for analysis of this ^[Northern Powerhouse, "Net Zero by 2050: One Plan, Two Objectives - How Green Growth Can Build the Northern Powerhouse", July 2024]) but it gives an indication of which sectors and what economic scale LCREE jobs could take.
-
-
-
-Only 1 to 2% is green GVA anywhere. 2% isn’t tiny. But still. (1.1-1.7% overall in 2022)
-Genuine LCREE growth in recent years, big upward slope overall – make that point! SY in the middle, if this IF/THEN is right.
-Broad sectors with Low-carbon / green energy are FEW. That’s pretty key. But they’re also pretty productive sectors generally. SY ICT growth is an interesting case, nothing much that’s green (what prop jobs overall again…?)
-The relative productivity between sectors (for GB as a whole) has actually stayed remarkably stable over time. Plots from line 340 around there.
-
-
-The 2024 CBI net zero report suggest LCREE type jobs are 1.6 times more productive than average. While this is likely mostly due to which sectors dominate LCREE jobs, rather than green jobs themselves being higher productivity, it is nevertheless true that investment in LCREE jobs would be on average more productive. In SY, however, two broad sectors that have very few LCREE jobs are ICT and education.
-
 
 
 
@@ -275,11 +262,82 @@ p
 
 
 
-## Adding a new job in South Yorkshire: what factors determine its economic impact and how we measure it?
+
+
+# Keeping a focus on 'good growth' that grows both GVA and jobs
+
+@fig-manuf-percentchange makes the point that investment can lead to very different outcomes for GVA versus jobs - a key point to consider if policy is aiming for 'good growth' that, as much as possible, supports jobs as well as productivity growth.
+
+In @fig-manuf-percentchange:
+
+* Percent change of total manufacturing GVA over time is plotted against percent change in job count, for all ITL2 zones including South Yorkshire (in blue).  
+* Labels are coloured by 'compass direction' - for example, green 'North East' arrows saw both GVA **and** jobs growth, whereas purple 'South East' arrows saw GVA grow while job count shrank.
+* Arrows in the dark diagonal section of the plot show places where productivity (GVA per job, shown in the labels) **increased**. A portion of places increased productivity while increasing **both** GVA and job count (including SY). Another chunk (all those pointing 'south east') grew both productivity and GVA while job counts **dropped**. Two pointing 'south west' grew productivity because job count dropped proportionall slower than GVA.
+
+The data here is underscoring a basic point: total factor productivity for a sector can come from several sources, and investment is not guaranteed to boost jobs. Indeed, if discussing green investment, some sectors may well be very vulnerable to job losses while productivity and carbon output improves. 
+
+Capital deepening is likely essential for overall productivity improvements, but how to achieve this in a 'good growth' way? Wilkes quotes Lord Turner pointing out that “rapid productivity growth in one sector of the economy, reflecting rapid technological progress, can be combined with low overall productivity growth, if freed up labour moves into low productivity growth sectors”^[Wilkes, G., "Productivity: firing on all cylinders Why restoring growth is a matter for every UK sector". 2021 p.27]. This is the opposite of under-utilised labour moving into better work. 
+
+And???
+
+
+
+```{r}
+#| fig-width: 12
+#| fig-height: 9
+#| fig-dpi: 750
+#| label: fig-manuf-percentchange
+#| fig-cap: "MANUFACTURING Percent change GVA and jobs in ITL2 zones, moving average between 2015/17 and 2018/20. South Yorkshire in Blue. See text for full breakdown."
+
+#Via YPERNdataexplore
+itl2.gvaperjob <- readRDS('../data/itl2_gvaperjob.rds')
+
+p <- twod_generictimeplot_normalisetozero(
+  # df = itl2.gvaperjob %>% filter(SIC07_description=='Construction', ITL_region_name != 'Inner London - West') %>% mutate(gvaperjob = gvaperjob/1000) %>% 
+  df = itl2.gvaperjob %>% filter(SIC07_description=='Manufacturing', ITL_region_name != 'Inner London - West') %>% mutate(gvaperjob = gvaperjob/1000) %>%
+    rename(`gva/job` = `gva/job_movingav`),#previously calculated and adjusted
+  category_var = ITL_region_name,
+  x_var = gva_movingav,
+  y_var = jobcount_movingav,
+  timevar = year,
+  label_var = `gva/job`,#renamed moving av
+  category_var_value_to_highlight = 'SOUTH YORKSHIRE <<<',
+  start_time = 2016,
+  end_time = 2019
+)
+
+xrange_adjust = diff(range(p[[2]]$x_pct_change)) * 0.1
+yrange_adjust = diff(range(p[[2]]$y_pct_change)) * 0.1
+
+# p[[1]] + coord_fixed(
+#   xlim = c(
+#     min(p[[2]]$x_pct_change) - xrange_adjust,
+#     ifelse(max(p[[2]]$x_pct_change) > 0,max(p[[2]]$x_pct_change) + xrange_adjust,0)#hack for health, need to make generic
+#   ),
+#   ylim = c(
+#     min(p[[2]]$y_pct_change) - yrange_adjust,max(p[[2]]$y_pct_change) + yrange_adjust 
+#   )
+# ) +
+  
+p[[1]] + coord_fixed(xlim = c(-20,35), ylim = c(-20,15))  +
+  xlab("GVA 3 year moving av % change 2015/17 to 18/20") + 
+  ylab("Job count moving av % change 2015/17 to 18/20") 
+  #ggtitle("MANUFACTURING: Percent change GVA and jobs\nITL2 zones, moving average\nSouth Yorkshire in Blue")
+
+```
+
+
+
+
+
+
+# Adding a new job in South Yorkshire: what factors determine its economic impact and how we measure it?
 
 This section uses existing output per job in SY to estimate how a *new* job could change the economy on average, given its likely spread of productivity values. As well as the value of the job, the following other factors can be considered: the value of any replaced job, if someone within SY moves to the new post; where in the job landscape the employee came from - from inactive workers, from outside the area, whether commuting.
 
-It is possible to identify two bounds on how much extra GVA a new job will bring to SY. At one extreme, someone already economically active in South Yorkshire gets the job, most likely moving from a lower to higher GVA position - so the net GVA gain for South Yorkshire is smallest. At the other, the new job attracts a new worker to the region, either through inducing a commute, attracting a migrating worker (internal to the UK or not, broadly the same outcome on SY GVA) or drawing in someone from South Yorkshire's existing pool of inactivity (which could include, for example, a graduate based in the region starting a new job). Each of those has different implications for what the ultimate GVA gains look like, on top of which sector the job is in.
+The numbers are a first approximation using reasonable assumptions based on the data about job value spreads, in order to explore how the location, activity status and skill levels of workers interacts with new jobs and where GVA gets counted.
+
+It is possible to identify two bounds on how much extra GVA a new job will bring to SY, with the reality being somewhere between them. At one extreme, someone already economically active in South Yorkshire gets the job, most likely moving from a lower to higher GVA position - so the net GVA gain for South Yorkshire is smallest. At the other, the new job attracts a new worker to the region, either through inducing a commute, attracting a migrating worker (internal to the UK or not, broadly the same outcome on SY GVA) or drawing in someone from South Yorkshire's existing pool of inactivity (which could include, for example, a graduate based in the region starting a new job). Each of those has different implications for what the ultimate GVA gains look like, on top of which sector the job is in.
 
 Where on average those numbers fall given any investment depends on the larger pull and push factors at play in the region. For example, there is evidence that SY has an oversupply of workers with L4 skills, often in jobs that do not fully exploit their productivity potential. This would lead to more candidates from SY for the newly created jobs - increasing productivity but lowering the net gain relative to growing the workforce. There are knock-on effects as job composition shifts (moving jobs creates vacancies; job creation spillovers occur etc) but SY's low skill equilibrium will tend to mean there is more unexploited productivity locally to soak up, compared to some other places where skills more closely match jobs.
 
@@ -350,96 +408,43 @@ flextable(jobnumbers.table) %>% autofit() %>% fit_to_width(7.5)
 ```
 
 
-# Keeping a focus on 'good growth' that grows both GVA and jobs
-
-
-@fig-manuf-percentchange makes the point that investment can lead to very different outcomes for GVA versus jobs - a key point to consider if policy is aiming for 'good growth' that, as much as possible, supports jobs as well as productivity growth.
-
-In @fig-manuf-percentchange:
-
-* Percent change of total manufacturing GVA over time is plotted against percent change in job count, for all ITL2 zones including South Yorkshire (in blue).  
-* Labels are coloured by 'compass direction' - for example, green 'North East' arrows saw both GVA **and** jobs growth, whereas purple 'South East' arrows saw GVA grow while job count shrank.
-* Arrows in the dark diagonal section of the plot show places where productivity (GVA per job, shown in the labels) **increased**. A portion of places increased productivity while increasing **both** GVA and job count (including SY). Another chunk (all those pointing 'south east') grew both productivity and GVA while job counts **dropped**. Two pointing 'south west' grew productivity because job count dropped proportionall slower than GVA.
-
-The data here is underscoring a basic point: total factor productivity for a sector can come from several sources, and investment is not guaranteed to boost jobs. Indeed, if discussing green investment, some sectors may well be very vulnerable to job losses while productivity and carbon output improves. 
-
-And....?
-
-
-
-Compare adding say 100 or 1000 manuf jobs, compared to its existing job number base. How would it / could it change the overall average productivity of that sector? Given x or y assumptions?
-
-
-
-
-```{r}
-#| fig-width: 12
-#| fig-height: 9
-#| fig-dpi: 750
-#| label: fig-manuf-percentchange
-#| fig-cap: "MANUFACTURING Percent change GVA and jobs in ITL2 zones, moving average between 2015/17 and 2018/20. South Yorkshire in Blue. See text for full breakdown."
-
-#Via YPERNdataexplore
-itl2.gvaperjob <- readRDS('../data/itl2_gvaperjob.rds')
-
-p <- twod_generictimeplot_normalisetozero(
-  # df = itl2.gvaperjob %>% filter(SIC07_description=='Construction', ITL_region_name != 'Inner London - West') %>% mutate(gvaperjob = gvaperjob/1000) %>% 
-  df = itl2.gvaperjob %>% filter(SIC07_description=='Manufacturing', ITL_region_name != 'Inner London - West') %>% mutate(gvaperjob = gvaperjob/1000) %>%
-    rename(`gva/job` = `gva/job_movingav`),#previously calculated and adjusted
-  category_var = ITL_region_name,
-  x_var = gva_movingav,
-  y_var = jobcount_movingav,
-  timevar = year,
-  label_var = `gva/job`,#renamed moving av
-  category_var_value_to_highlight = 'SOUTH YORKSHIRE <<<',
-  start_time = 2016,
-  end_time = 2019
-)
-
-xrange_adjust = diff(range(p[[2]]$x_pct_change)) * 0.1
-yrange_adjust = diff(range(p[[2]]$y_pct_change)) * 0.1
-
-# p[[1]] + coord_fixed(
-#   xlim = c(
-#     min(p[[2]]$x_pct_change) - xrange_adjust,
-#     ifelse(max(p[[2]]$x_pct_change) > 0,max(p[[2]]$x_pct_change) + xrange_adjust,0)#hack for health, need to make generic
-#   ),
-#   ylim = c(
-#     min(p[[2]]$y_pct_change) - yrange_adjust,max(p[[2]]$y_pct_change) + yrange_adjust 
-#   )
-# ) +
-  
-p[[1]] + coord_fixed(xlim = c(-20,35), ylim = c(-20,15))  +
-  xlab("GVA 3 year moving av % change 2015/17 to 18/20") + 
-  ylab("Job count moving av % change 2015/17 to 18/20") 
-  #ggtitle("MANUFACTURING: Percent change GVA and jobs\nITL2 zones, moving average\nSouth Yorkshire in Blue")
-
-```
-
-
-
-
-
-
-
-
-# Bringing all that together
+# Bringing all that together: identifying the dials to turn
 
 This section synthesises the above to consider the following:
 
+* The gains from different types of investment, given some key assumptions
 * How the balance of geographical forces can impact on productivity outcomes (both in GVA accounting terms and otherwise)
-* What the gains from different types of investment could be, given some key assumptions 
 * Implications from this analysis for green job investment
 
-The balance of where jobs will be filled from will be a function of how attractive it is in comparison to similar roles elsewhere. While some higher productivity manufacturing jobs may attract workers from outside SY (commuting or migrating), the current average spread of manufacturing productivity relative to other places suggests it won't attract ON AVERAGE
+Consider a series of 'dials' that policy could turn, and also a series of variables that policy has less direct control over but can be treated as dials for now. The outcome of those can then be measured (though some discussion of the vital importance of measure choice is below).
 
-So an argument there for concentrating on solving SY's own specific manufacturing 'productivity puzzle'
+* **Dial 1: Cost of investment per new job.** The 2024 CBI net zero report finds investment per new green job has been around £680,000^[CBI, "The UK’s net zero economy: The scale and geography of the net zero economy in the UK". 2024]. A 2019 Department for International Trade report finds FDI investment per new job is around £345,000^[DIT, "Understanding FDI and its impact in the United Kingdom for DIT's investment promotion activities and services". 2021]. If those figures are in the right order of magnitude, and using the average SY GVA per job of around £88,700, time to positive returns in SY jobs would on average be four to eight years, all else equal.
+* **Dial 2: Public investment cost and the ratio to private 'crowding in'**. The sources cited above average around a 1 to 3 ratio as achievable[^Empirical evidence for this?]. If true, and tying to the last point, *on average* public investment of between £115,000 and £225,000 could crowd in one job's worth of public/private investment.
+* **Dial 3: which sector to invest in**, and how much can that investment focus on higher productivity jobs *within* that sector? The table above indicates average GVA per job for different broad sectors, and net GVA if the new job pulls from SY's existing workforce. Increasing **average** SY productivity per worker will happen if the job is above average productivity by any amount (whether net or fully new, because the former keeps the denominator the same). Total output will increase more if attracting new workers to the region (or e.g. employing a new graduate).
+* **Dial 4: the balance of investment focus**. This ranges between supporting entirely new firms in the region through to supporting SMEs to analyse factors holding productivity back - which includes but isn't limited to skills investment, and also includes investment in other productivity factors. This dial also connects strongly to the 'good growth' points above: investment across all production factors is necessary, but will affect the balance of GVA versus affect on worker numbers.
+    - This dial also covers investment in supporting SY people out of inactivity into employment, education or training. It needs special consideration in how it leads to measured outcomes, because it could potentially *lower* apparent average productivity. This is true for dial 4 generally: there are times when certain measures might appear to worsen while achieving desirable policy outcomes. (More on this below.)
+* **Dial 5: the balance of pulling from SY's existing workforce versus attracting external workers**. This is not in policymakers' direct power to control, of course - but certain jobs including tradeable jobs in higher-productivity sectors will be more likely to pull in new workers. That interacts with job values in neighbouring regions - a particular issue for *average* manufacturing, though if higher-value jobs can be prioritised, that will both improve average productivity and act as a more effective external 'pull'. It is still worth considering where policy would ideally want this dial to be set - what balance of growing the workforce versus supporting the existing SY workforce is optimal?
 
-Once region becomes attractive, self-reinforcing
+There are a range of other factors to consider that affect those dials:
 
-How much in power of policymakers?
+* Different capital intensity for different jobs to be productive changes the investment picture. (Contrast ICT with manufacturing.)
+* "A mix of demand-side and supply-side policies, which are sectorally and geographically sensitive, underpinned by collaboration and networking across firms, and broader partnership working, are needed to help escape low skill traps"^[Green, A., "Low skill traps in sectors and geographies: underlying factors and means of escape". 2016].
 
+The geographical factors are partly a matter of accounting - where GVA gets counted and whether it is net of other lost GVA as job composition changes. They are also partly a matter of policy - whether to invest in skill and capital improvements in the region, or whether to attempt to grow by attracting new workers. The latter is, however, also a function of economic forces - whether SY can generate enough overall momentum to produce larger flows of commuters and migrants (internal to the UK or otherwise).
 
+The accounting factor - that bringing in external workers produces such a large GVA gain compared to the net effects of improving job composition *within* South Yorkshire - needs consideration. Should different measurement methods be used that can better support 'good growth' goals? The final section briefly considers this. 
+
+SY's manufacturing sector needs perhaps unique consideration when it comes to combining all the above factors. The balance of where jobs are filled from will be a function of how attractive it is in comparison to similar roles elsewhere. While some higher productivity manufacturing jobs may attract workers from outside SY, given the region's manufacturing productivity is currently so low, it may struggle to do so.
+
+As well as suggesting investment in across-the-board productivity improvements, this points to a need to dig deeper into the nature of SY's own manufacturing 'productivity puzzle'. Overall productivity can be increased through above-average GVA output from new jobs, successful capital deepening (though with the possibility of job losses), skills support and direct research to understand factors holding especially SMEs back. If done successfully, it will be economically self-reinforcing.
+
+That does still leave this question: investment-wise, what are the marginal gains of improving SY's low manufacturing productivity compared to investing in already high productivity sectors? Both are needed, so the choice is not binary, but thinking about this way could help focus further research.
+
+The LCREE element of investing in jobs and sectors is double edged. As mentioned above, LCREE jobs and GVA growth has accelerated since COVID - an average rate of 6.25% in the last three years of data, compared to 1.45% in the first three. But this only takes its GVA up to 1.27% of the UK's economy (1 to 1.54% 95% CI). LCREE jobs are mostly in already higher-productivity sectors, so investing in them aids the goal of increasing SY's average productivity, while also supporting green goals. But improving SY's overall productivity will require looking beyond direct LCREE jobs to ask how it can be improved across the board, especially in sectors like manufacturing where SY continues to struggle.
+
+A perennial issue also is our lack of detailed understanding of how sectors inter-relate. This is especially important if attempting to promote LCREE jobs and sectors generally - what is the ecosystem? It is also a vital question more generally. For instance, the Sheffield based company Fourjaw makes manufacturing analytics software; in a recent case study, they optimised a company's machines enough to increase productivity by 10%^[See lnkd.in/d8NfN_WY] - an example where ICT and manufacturing reinforce each other. Equally, as Diane Coyle argues, manufacturing and services are in the same way not cleanly separable, and increasingly so.
+
+Some of that is captured in models of spillover used, for example, by the 2024 CBI net zero report and DIT's FDI report, generally finding a 1 to 3 ratio of direct versus spillover gains - but these are top down using input-output data, not based on any detailed ground-level understanding of how sectors interact. Combining both data analysis with on the ground work would be a good way forward.
 
 
 
@@ -453,150 +458,5 @@ This is partly a consequence of the choice of measures that tend to be used to c
 
 Further careful thinking is required to decide how to measure success in SY's productivity goals, to avoid perverse data outcomes and disincentivise desirable policies.
 
-
 Purely an accounting matter (where the GVA is counted) but... vital?? How to address?
-
-
-
-
-
-
-
-```{r eval = F}
-#CUTTINZ
-
-#| fig-width: 10
-#| fig-height: 10
-#| fig-dpi: 300
-#| label: fig-sy-propplot
-#| fig-cap: "South Yorkshire prop plot."
-
-## South Yorkshire GVA (relative to UK) and jobs
-
-itl2 <- itl2 %>% 
-  group_by(GEOGRAPHY_NAME,SIC_SECTION_NAME_LCREE) %>% 
-  mutate(
-    gva_movingav = rollapply(GVA,3,mean,na.rm = TRUE,align='right',fill=NA),
-    jobcount_movingav = rollapply(jobcountFT,3,mean,na.rm = TRUE,align='right',fill=NA)
-  ) %>% 
-  ungroup()
-
-
-p <- twod_generictimeplot_multipletimepoints(
-  df = itl2 %>% filter(
-    # grepl(x= GEOGRAPHY_NAME, pattern = 'cheshire', ignore.case = T), 
-    grepl(x= GEOGRAPHY_NAME, pattern = 'south york', ignore.case = T),
-    !grepl(x = SIC_SECTION, pattern = 'other', ignore.case = T),
-    jobcount_movingav > 8000
-    ),
-  category_var = SIC_SECTION_REDUCED,
-  x_var = GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav,
-  # x_var = gva_movingav,
-  y_var = jobcount_movingav,
-  timevar = DATE,
-  label_var = gva_movingav,
-  times = c(2017:2022)
-  # times = c(2017:2019)
-)
-
-p + theme(aspect.ratio=1) +
-  # xlab("GVA (3 year moving average)") +
-  xlab("GVA per FT as percent of GB whole econ * 10^7 (3 year moving average)") +
-  ylab("Job count (3 year moving average)")
-```
-
-
-```{r eval = F}
-#Table for 95th percentile (not really realistic as it's maximising old/new gap)
-jobnumbers.table <- readRDS('../data/GVAjobnumberestimates_95thpercentile.rds')%>% select(-place)
-
-#https://stackoverflow.com/a/63928956
-flextable(jobnumbers.table) %>% autofit() %>% fit_to_width(7.5)
-
-```
-
-
-
-# BITZSSSZZ
-
-
-
-
-Drop in something on Pathways to work, what investment cost there is
-https://www.barnsley.gov.uk/services/our-council/barnsley-2030/pathways-to-work-commission/
-
-
-
-
-
-CBI: £114300 GVA PA for a FTE = £58.615 per hour worked; DIT: £212,000 GVA PA for a FTE = £108.70 per hour worked
-
-
-But we then want to think about net effects with skills composition / jobs / migration / commuting and what difference those make. Can lay out assumptions and show those differences, including maybe shiny.
-
-
-
-Cf. Low skill equilibrium and connected offsetting issues (including investment removing jobs – come up with number for % of GVA increase via job reduction)
-
-
-Sector questions: why SY lower than other places? Point to larger issues about how productivity differences measured, can we get closer to reality? (The raw GVA per job numbers actually probably are quite close, except that the way the top level GVA numbers are worked out is…?)
-
-Including: digging into facts on the ground, corroborate what the data says...
-
-Picking what we measure: Larger Q here about “growth spreading more widely” e.g. Doncaster worker commutes to Sheffield, resident spending in Doncaster, GVA in Sheffield firm. Ties to geog issues / commuting etc generally.
-
-Investment-wise, what are the marginal gains to trying to improve overall manufacturing productivity (currently low) compared to investing in already high productivity sectors?
-Noting that manuf productivity has a spread too – only average being shown
-Investment in clean tech is going to cut across sectors. They support each other. Is very small part of overall GVA though, have to still make that clear.
-
-
-Imagine some changes in job/sector composition in SY. There are several types here:
-Sectors grow, more jobs come in
-Sector composition changes, jobs move around
-Various other mixes of movement including to/from inactivity (some laid out on paper in front of me here)
-
-That leads to different sets of measures of change:
-Raw output changes. “SY economy will grow by x% overall if 100 more clean tech jobs in this sector.”
-Productivity changes. Two types maybe:
-“Overall GVA per job will increase by x% if job composition changes in this way.”
-
-One approach:
-Creation of new job in construction: 
-Give it average GVA per FT:
-Gross effects:
-Sector productivity doesn’t change
-Average GVA per FT overall most likely goes up (as does GVA per head)
-Gross/raw GVA increases
-Net effects (All net effects are going to do is take some net values from other lower-productivity sectors):
-If oversupply of local high skill, soaks up some of that
-If skill lack, draws in commute or permanent role
-Labour supply/demand has other effects but we then assume perfect market where compensation = marginal productivity!)
-
-
-
-
-
-
-Sector linkages - again, need better knowledge of those (cite Coyle on manuf / services?)
-Prof/scientific/tech: might be foundational to the others and their progress. Investment Q there. How to think about?
-
-
-Point that most things are a balance, and net result is empirical question and may vary. See e.g.
-New firm (FDI or not)
-If oversupply of high qual, new firms soak up some people from here. Net effect of losses to other firms.
-Interaction with commuting – if not oversupply locally, pull in more externally (commute or permanent move makes a difference to the measures too)
-Existing firm expands through capital investment; implication for jobs
-Different starting assumptions on job value compared to FDI right?
-Upskilling investment (public) … coming up with some ballpark for that would be useful (cf. That Pwells paper, what’s its point?)
-Capital deepening: inc or dec or shift of jobs?
-
-“Rapid productivity growth in one sector of the economy, reflecting rapid technological progress, can therefore be combined with low overall productivity growth, if freed up labour moves into low productivity growth sectors.” (Wilkes quotes Lord Turner p.27)
-Opposite of under-utilised labour moving into better work...
-The raw GVA still shows up in the sector there though. (Although again, spillovers elsewhere, argh.)
-
-
-
-
-
-
 
