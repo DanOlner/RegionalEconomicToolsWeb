@@ -30,6 +30,82 @@ itl2$GVAperFT <- (itl2$GVA/itl2$jobcountFT)*1000000
 #Will probably need to smooth...
 
 
+
+#SOME QUICK SECTOR CHECKS----
+
+#Get some proportion numbers from that - want e.g. to see scale of power sector
+#reduce names
+unique(itl2$SIC_SECTION_NAME_LCREE)
+
+itl2 <- itl2 %>% 
+  mutate(
+    SIC_SECTION_REDUCED = case_when(
+      grepl('admin',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Admin',
+      grepl('agri',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Agri',
+      grepl('electr',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'power',
+      grepl('information',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'ICT',
+      grepl('manuf',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Manuf',
+      grepl('mining',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Mining',
+      grepl('other',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'other',
+      grepl('scientific',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Scientific',
+      grepl('real estate',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Real est',
+      grepl('transport',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Transport',
+      grepl('water',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Water',
+      grepl('wholesale',SIC_SECTION_NAME_LCREE,ignore.case = T) ~ 'Retail',
+      .default = SIC_SECTION_NAME_LCREE
+    )
+  )
+
+
+itl2.jobcountLQ <- itl2 %>% 
+  split(.$DATE) %>% 
+  map(add_location_quotient_and_proportions, 
+      regionvar = GEOGRAPHY_NAME,
+      lq_var = SIC_SECTION_REDUCED,
+      valuevar = jobcountFT) %>% 
+  bind_rows()
+
+
+#Sector total proportions over time?
+#Pick a random place - sector total prop will be the same for each, doesn't matter
+ggplot(itl2.jobcountLQ %>% filter(!grepl('agri|mining|other',SIC_SECTION_REDUCED,ignore.case = T), GEOGRAPHY_NAME == 'Bedfordshire and Hertfordshire'), 
+       aes(x = DATE, y = sector_total_proportion * 100, colour = fct_reorder(SIC_SECTION_REDUCED,sector_total_proportion) )) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(palette = 'Paired', direction = -1) 
+  # scale_y_log10()
+
+
+#Just doing a sanity check on those job counts
+#Have they really not changed that much?
+#Pick a recent year
+chk <- itl2.jobcountLQ %>% filter(DATE==2022)
+
+#Sector total proportions should sum to 1, same numbers in each place... tick
+chk %>% 
+  group_by(GEOGRAPHY_NAME) %>% 
+  summarise(sum(sector_total_proportion))
+
+#...and a sanity check on individual places
+ggplot(itl2.jobcountLQ %>% filter(!grepl('agri|mining',SIC_SECTION_REDUCED,ignore.case = T), GEOGRAPHY_NAME == 'Bedfordshire and Hertfordshire'), 
+       aes(x = DATE, y = sector_total_proportion * 100, colour = fct_reorder(SIC_SECTION_REDUCED,sector_total_proportion) )) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(palette = 'Paired', direction = -1) 
+
+
+#So can I see the numbers there, both nationally and for SY and other places?
+#Power did what?
+chk %>% filter(SIC_SECTION_REDUCED == 'power') %>% select(GEOGRAPHY_NAME,sector_regional_proportion,sector_total_proportion,jobcountFT) %>% View
+
+
+#Check on power numbers change over time nationally (pick random place, all same numbers)
+itl2.jobcountLQ %>% 
+  filter(GEOGRAPHY_NAME == 'Bedfordshire and Hertfordshire', grepl('power',SIC_SECTION_REDUCED,ignore.case = T)) %>% 
+  select(SIC_SECTION_REDUCED,sector_regional_proportion,sector_total_proportion,jobcountFT) %>% 
+  View
+
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #TOTAL GREEN JOBS PER YEAR----
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -725,11 +801,11 @@ itl2 <- itl2 %>%
 #PLOT: GVA PER FT JOB FOR SIC SECTIONS OVER TIME, SY OVERLAID
 p <- ggplot(
   itl2 %>% 
-    filter(!grepl('steam|estate|waste|mining|agri',SIC_SECTION,ignore.case=T)) %>%
+    # filter(!grepl('steam|estate|waste|mining|agri',SIC_SECTION,ignore.case=T)) %>%
     mutate(
-    SY = GEOGRAPHY_NAME == 'East Yorkshire and Northern Lincolnshire',
+    # SY = GEOGRAPHY_NAME == 'East Yorkshire and Northern Lincolnshire',
     # SY = GEOGRAPHY_NAME == 'West Yorkshire',
-    # SY = GEOGRAPHY_NAME == 'South Yorkshire',
+    SY = GEOGRAPHY_NAME == 'South Yorkshire',
     # SY = grepl('Cambridge',GEOGRAPHY_NAME,ignore.case = T),
     SIC_SECTION_REDUCED = fct_reorder(SIC_SECTION_REDUCED, GVAperFT_asPERCENTofGB_times_ten_to_seven_movingav, .desc = T)
     ),
@@ -875,6 +951,20 @@ chart.Correlation(props.per.place.prod.wide %>% select(-GEOGRAPHY_NAME), histogr
 
 #Weirdly not very much rels. Mull.
 
+
+
+#Straightforward comparison of GVA per job
+#2022 latest year
+ggplot(
+  itl2 %>% 
+    filter(DATE == max(DATE)) %>% 
+             mutate(
+               facetsplit = ifelse(SIC_SECTION_REDUCED %in% c('power','Real est','Water','Mining'),'primary','the rest'),
+               SY = GEOGRAPHY_NAME == 'South Yorkshire'
+               ), 
+       aes(x = fct_reorder(SIC_SECTION_REDUCED,-GVAperFT_movingav), y = GVAperFT_movingav, colour = SY, size = SY)) +
+  geom_jitter(width = 0.15) +
+  facet_wrap(~facetsplit, scales = 'free')
 
 
 
