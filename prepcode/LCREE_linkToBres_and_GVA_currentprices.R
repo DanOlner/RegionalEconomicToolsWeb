@@ -581,7 +581,6 @@ saveRDS(itl2,'data/LCREE_BRES_GVAcurrentprices_combo_2015to2022.rds')
 
 
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #VERSION EXCLUDING IMPUTED RENT: GVA for SIC SECTIONS----
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

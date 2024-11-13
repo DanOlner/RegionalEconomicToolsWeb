@@ -145,7 +145,7 @@ Seeing how rank position of GVA per hour worked has changed at three points - **
 
 #Add marker for South Yorkshire
 perhourworked <- perhourworked %>% 
-  mutate(selectedregion = region == 'South Yorkshire')
+  mutate(selectedregion = region == 'West Yorkshire')
 
 #Plot: first coalition years to pre covid
 p <- ggplot(perhourworked %>% filter(year %in% c(2006,2012,2018)), aes(x = factor(year), y = rank_movingav, group = region, color = factor(year))) +
@@ -156,7 +156,7 @@ p <- ggplot(perhourworked %>% filter(year %in% c(2006,2012,2018)), aes(x = facto
   xlab('year (average centre)') +
   guides(colour="none", shape = "none", size = "none") +
   theme_bw() +
-  ggtitle("GVA per hour: ITL2 zones rank position over time, SY is triangle.")
+  ggtitle("GVA per hour: ITL2 zones rank position over time, WY is triangle.")
 
 ggplotly(p, tooltip = c('region','rank_movingav'))
 
